@@ -46,5 +46,9 @@ int main(int argc, char **argv) {
   printf("Loading %s..\n", imgfile);
   char *heap = load(imgfile, &size);
   printf("Loaded %ld byes\n", size);
-  return engage(heap, size, 0xE0, 0, 0x1C);
+  if (size != MEM_SIZE) {
+    printf("Image size must be: %d\n", MEM_SIZE);
+    exit(1);
+  }
+  return engage(heap, 0xE0, 0, 0x1C);
 }

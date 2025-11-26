@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "vm.h"
 
+const cell_t MEM_SIZE = SHRT_MAX;
+
 void breach(char* format, ...) {
   va_list args;
   printf("[ERROR]: ");
@@ -12,14 +14,16 @@ void breach(char* format, ...) {
   exit(1);
 }
 
-int engage(
-  char *mem, int size, int start_ip, int stack, int rstack)
+cell_t engage(char *mem,
+              cell_t start_ip,
+              cell_t stack,
+              cell_t rstack)
 {
   cell_t*   sp = (cell_t*) (mem + stack);
   cell_t*   rp = (cell_t*) (mem + rstack);
   opcode_t* ip = (opcode_t*) (mem + start_ip);
 
-  while (((char*)ip - mem) < size ) {
+  while (((char*)ip - mem) < MEM_SIZE) {
     opcode_t code = *ip++;
     switch (code) {
       case OP_ADD: {

@@ -2,6 +2,7 @@
 #define VM_H
 
 #include <stdint.h>
+#include <limits.h>
 
 #define PUSH(val)   ( *sp++  = (val) )
 #define POP         ( *(--sp) )
@@ -9,8 +10,10 @@
 #define RPUSH(val)  ( *rp++ = (val) )
 #define RPOP        ( *(--rp) )
 
-typedef int32_t cell_t;
+typedef int16_t cell_t;
 typedef uint8_t opcode_t;
+
+extern const cell_t MEM_SIZE;
 
 typedef enum {
   OP_ADD  = 0x01,
@@ -40,8 +43,10 @@ typedef enum {
   OP_HLT  = 0x17,
 } Op;
 
-cell_t engage(
-  char *mem, int size, int start_ip, int stack, int rstack);
+cell_t engage(char *mem,
+              cell_t start_ip,
+              cell_t stack,
+              cell_t rstack);
 
 void breach(char* format, ...);
 
