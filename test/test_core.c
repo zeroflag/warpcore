@@ -638,6 +638,66 @@ void test_jnz() {
   }));
 }
 
+void test_shl() {
+  assert(0 == eval((char[SIZE]) {
+    LIT16(0),
+    LIT16(1),
+    OP_SHL,
+    OP_HLT
+  }));
+
+  assert(2 == eval((char[SIZE]) {
+    LIT16(1),
+    LIT16(1),
+    OP_SHL,
+    OP_HLT
+  }));
+
+  assert(16 == eval((char[SIZE]) {
+    LIT16(8),
+    LIT16(1),
+    OP_SHL,
+    OP_HLT
+  }));
+
+  assert(16 == eval((char[SIZE]) {
+    LIT16(4),
+    LIT16(2),
+    OP_SHL,
+    OP_HLT
+  }));
+}
+
+void test_sar() {
+  assert(0 == eval((char[SIZE]) {
+    LIT16(0),
+    LIT16(1),
+    OP_SAR,
+    OP_HLT
+  }));
+
+  assert(0 == eval((char[SIZE]) {
+    LIT16(1),
+    LIT16(1),
+    OP_SAR,
+    OP_HLT
+  }));
+
+  assert(32 == eval((char[SIZE]) {
+    LIT16(256),
+    LIT16(3),
+    OP_SAR,
+    OP_HLT
+  }));
+
+  assert(-128 == eval((char[SIZE]) {
+    LIT16(-2048),
+    LIT16(4),
+    OP_SAR,
+    OP_HLT
+  }));
+}
+
 int main() {
   test_add();
   test_mul();
@@ -664,6 +724,8 @@ int main() {
   test_and();
   test_xor();
   test_jnz();
+  test_shl();
+  test_sar();
   printf("\033[1;32mAll tests passed!\033[0m\n");
   return 0;
 }

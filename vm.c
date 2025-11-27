@@ -204,6 +204,16 @@ cell_t engage(char *mem,
         sp++;
         break;
       }
+      case OP_SHL: {
+        *(sp-2) <<= *(sp-1);
+        sp--;
+        break;
+      }
+      case OP_SAR: {
+        *(sp-2) >>= *(sp-1);
+        sp--;
+        break;
+      }
       case OP_HLT: {
         return POP;
       }
