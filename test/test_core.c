@@ -664,6 +664,6 @@ int main() {
   test_and();
   test_xor();
   test_jnz();
-  printf("All tests passed.\n");
+  printf("\033[1;32mAll tests passed!\033[0m\n");
   return 0;
 }
