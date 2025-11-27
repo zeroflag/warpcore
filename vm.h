@@ -54,9 +54,10 @@ typedef enum {
   OP_EMIT = 0x1E,
   OP_LIT  = 0x1F,
   OP_MOD  = 0x20,
+  OP_KEY  = 0x21,
 
-  OP_DPT  = 0x21,
-  OP_HLT  = 0x22,
+  OP_DPT  = 0x22,
+  OP_HLT  = 0x23,
 } Op;
 
 cell_t engage(char *mem,
