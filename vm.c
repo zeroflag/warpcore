@@ -183,8 +183,12 @@ cell_t engage(char *mem,
         ip = (opcode_t *) (mem + address);
         break;
       }
-      case OP_PRN: {
+      case OP_DOT: {
         printf("%d", POP);
+        break;
+      }
+      case OP_EMIT: {
+        printf("%c", POP);
         break;
       }
       case OP_CR: {

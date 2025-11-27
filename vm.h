@@ -49,13 +49,14 @@ typedef enum {
   OP_CALL = 0x1A,
   OP_RET  = 0x1B,
 
-  OP_PRN  = 0x1C,
+  OP_DOT  = 0x1C,
   OP_CR   = 0x1D,
-  OP_LIT  = 0x1E,
-  OP_MOD  = 0x1F,
+  OP_EMIT = 0x1E,
+  OP_LIT  = 0x1F,
+  OP_MOD  = 0x20,
 
-  OP_DPT  = 0x20,
-  OP_HLT  = 0x21,
+  OP_DPT  = 0x21,
+  OP_HLT  = 0x22,
 } Op;
 
 cell_t engage(char *mem,
