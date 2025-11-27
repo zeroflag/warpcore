@@ -313,6 +313,60 @@ void test_inv() {
   }));
 }
 
+void test_or() {
+  assert(-1 == eval((char[SIZE]) {
+    LIT16(-1),
+    LIT16(-1),
+    OP_OR,
+    OP_HLT
+  }));
+  assert(-1 == eval((char[SIZE]) {
+    LIT16(0),
+    LIT16(-1),
+    OP_OR,
+    OP_HLT
+  }));
+  assert(-1 == eval((char[SIZE]) {
+    LIT16(-1),
+    LIT16(0),
+    OP_OR,
+    OP_HLT
+  }));
+  assert(0 == eval((char[SIZE]) {
+    LIT16(0),
+    LIT16(0),
+    OP_OR,
+    OP_HLT
+  }));
+}
+
+void test_and() {
+  assert(-1 == eval((char[SIZE]) {
+    LIT16(-1),
+    LIT16(-1),
+    OP_AND,
+    OP_HLT
+  }));
+  assert(0 == eval((char[SIZE]) {
+    LIT16(0),
+    LIT16(-1),
+    OP_AND,
+    OP_HLT
+  }));
+  assert(0 == eval((char[SIZE]) {
+    LIT16(-1),
+    LIT16(0),
+    OP_AND,
+    OP_HLT
+  }));
+  assert(0 == eval((char[SIZE]) {
+    LIT16(0),
+    LIT16(0),
+    OP_AND,
+    OP_HLT
+  }));
+}
+
 void test_jnz() {
   assert(55 == eval((char[SIZE]) {
     LIT16(10),
@@ -346,6 +400,8 @@ int main() {
   test_mrot();
   test_tuck();
   test_inv();
+  test_or();
+  test_and();
   test_jnz();
   printf("All tests passed.\n");
   return 0;
