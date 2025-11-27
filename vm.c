@@ -134,6 +134,11 @@ cell_t engage(char *mem,
         sp--;
         break;
       }
+      case OP_NEQ: {
+        *(sp-2) = *(sp-2) != *(sp-1) ? -1 : 0;
+        sp--;
+        break;
+      }
       case OP_LT: {
         *(sp-2) = *(sp-2) < *(sp-1) ? -1 : 0;
         sp--;
