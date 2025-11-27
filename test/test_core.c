@@ -305,6 +305,33 @@ void test_tuck() {
   }));
 }
 
+void test_lt() {
+  assert(-1 == eval((char[SIZE]) {
+    LIT16(5),
+    LIT16(10),
+    OP_LT,
+    OP_HLT
+  }));
+  assert(0 == eval((char[SIZE]) {
+    LIT16(10),
+    LIT16(5),
+    OP_LT,
+    OP_HLT
+  }));
+  assert(0 == eval((char[SIZE]) {
+    LIT16(5),
+    LIT16(5),
+    OP_LT,
+    OP_HLT
+  }));
+  assert(-1 == eval((char[SIZE]) {
+    LIT16(-20),
+    LIT16(-10),
+    OP_LT,
+    OP_HLT
+  }));
+}
+
 void test_gt() {
   assert(-1 == eval((char[SIZE]) {
     LIT16(5),
@@ -426,6 +453,7 @@ int main() {
   test_rot();
   test_mrot();
   test_tuck();
+  test_lt();
   test_gt();
   test_inv();
   test_or();
