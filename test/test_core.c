@@ -148,6 +148,7 @@ void test_swap() {
     OP_SWAP,
     OP_HLT
   }));
+  
   assert(11 == eval((char[SIZE]) {
     LIT16(6),
     LIT16(11),
@@ -155,6 +156,7 @@ void test_swap() {
     OP_DROP,
     OP_HLT
   }));
+
   assert(2 == eval((char[SIZE]) {
     LIT16(6),
     LIT16(11),
@@ -171,6 +173,7 @@ void test_nip() {
     OP_NIP,
     OP_HLT
   }));
+
   assert(1 == eval((char[SIZE]) {
     LIT16(3),
     LIT16(4),
@@ -187,6 +190,7 @@ void test_over() {
     OP_OVER,
     OP_HLT
   }));
+
   assert(7 == eval((char[SIZE]) {
     LIT16(3),
     LIT16(7),
@@ -194,6 +198,7 @@ void test_over() {
     OP_DROP,
     OP_HLT
   }));
+
   assert(3 == eval((char[SIZE]) {
     LIT16(3),
     LIT16(7),
@@ -212,6 +217,7 @@ void test_rot() {
     OP_ROT,
     OP_HLT
   }));
+
   assert(30 == eval((char[SIZE]) {
     LIT16(10),
     LIT16(20),
@@ -220,6 +226,7 @@ void test_rot() {
     OP_DROP,
     OP_HLT
   }));
+
   assert(20 == eval((char[SIZE]) {
     LIT16(10),
     LIT16(20),
@@ -229,6 +236,7 @@ void test_rot() {
     OP_DROP,
     OP_HLT
   }));
+
   assert(3 == eval((char[SIZE]) {
     LIT16(10),
     LIT16(20),
@@ -247,6 +255,7 @@ void test_mrot() {
     OP_MROT,
     OP_HLT
   }));
+  
   assert(10 == eval((char[SIZE]) {
     LIT16(10),
     LIT16(20),
@@ -255,6 +264,7 @@ void test_mrot() {
     OP_DROP,
     OP_HLT
   }));
+
   assert(30 == eval((char[SIZE]) {
     LIT16(10),
     LIT16(20),
@@ -264,6 +274,7 @@ void test_mrot() {
     OP_DROP,
     OP_HLT
   }));
+
   assert(3 == eval((char[SIZE]) {
     LIT16(10),
     LIT16(20),
@@ -281,6 +292,7 @@ void test_tuck() {
     OP_TUCK,
     OP_HLT
   }));
+
   assert(10 == eval((char[SIZE]) {
     LIT16(10),
     LIT16(20),
@@ -288,6 +300,7 @@ void test_tuck() {
     OP_DROP,
     OP_HLT
   }));
+
   assert(20 == eval((char[SIZE]) {
     LIT16(10),
     LIT16(20),
@@ -296,6 +309,7 @@ void test_tuck() {
     OP_DROP,
     OP_HLT
   }));
+
   assert(3 == eval((char[SIZE]) {
     LIT16(10),
     LIT16(20),
@@ -312,18 +326,21 @@ void test_lte() {
     OP_LTE,
     OP_HLT
   }));
+
   assert(0 == eval((char[SIZE]) {
     LIT16(10),
     LIT16(5),
     OP_LTE,
     OP_HLT
   }));
+
   assert(-1 == eval((char[SIZE]) {
     LIT16(5),
     LIT16(5),
     OP_LTE,
     OP_HLT
   }));
+
   assert(-1 == eval((char[SIZE]) {
     LIT16(-20),
     LIT16(-10),
@@ -339,18 +356,21 @@ void test_lt() {
     OP_LT,
     OP_HLT
   }));
+
   assert(0 == eval((char[SIZE]) {
     LIT16(10),
     LIT16(5),
     OP_LT,
     OP_HLT
   }));
+
   assert(0 == eval((char[SIZE]) {
     LIT16(5),
     LIT16(5),
     OP_LT,
     OP_HLT
   }));
+
   assert(-1 == eval((char[SIZE]) {
     LIT16(-20),
     LIT16(-10),
@@ -366,18 +386,21 @@ void test_gt() {
     OP_GT,
     OP_HLT
   }));
+
   assert(0 == eval((char[SIZE]) {
     LIT16(2),
     LIT16(5),
     OP_GT,
     OP_HLT
   }));
+  
   assert(0 == eval((char[SIZE]) {
     LIT16(5),
     LIT16(5),
     OP_GT,
     OP_HLT
   }));
+  
   assert(-1 == eval((char[SIZE]) {
     LIT16(-10),
     LIT16(-20),
@@ -393,18 +416,21 @@ void test_gte() {
     OP_GTE,
     OP_HLT
   }));
+
   assert(0 == eval((char[SIZE]) {
     LIT16(5),
     LIT16(10),
     OP_GTE,
     OP_HLT
   }));
+
   assert(-1 == eval((char[SIZE]) {
     LIT16(5),
     LIT16(5),
     OP_GTE,
     OP_HLT
   }));
+
   assert(-1 == eval((char[SIZE]) {
     LIT16(-10),
     LIT16(-20),
@@ -420,18 +446,21 @@ void test_eq() {
     OP_EQ,
     OP_HLT
   }));
+
   assert(0 == eval((char[SIZE]) {
     LIT16(5),
     LIT16(10),
     OP_EQ,
     OP_HLT
   }));
+
   assert(0 == eval((char[SIZE]) {
     LIT16(-1214),
     LIT16(0),
     OP_EQ,
     OP_HLT
   }));
+
   assert(-1 == eval((char[SIZE]) {
     LIT16(-1230),
     LIT16(-1230),
@@ -447,18 +476,21 @@ void test_neq() {
     OP_NEQ,
     OP_HLT
   }));
+
   assert(-1 == eval((char[SIZE]) {
     LIT16(5),
     LIT16(10),
     OP_NEQ,
     OP_HLT
   }));
+
   assert(-1 == eval((char[SIZE]) {
     LIT16(-1214),
     LIT16(0),
     OP_NEQ,
     OP_HLT
   }));
+
   assert(0 == eval((char[SIZE]) {
     LIT16(-1230),
     LIT16(-1230),
@@ -482,18 +514,21 @@ void test_or() {
     OP_OR,
     OP_HLT
   }));
+
   assert(-1 == eval((char[SIZE]) {
     LIT16(0),
     LIT16(-1),
     OP_OR,
     OP_HLT
   }));
+
   assert(-1 == eval((char[SIZE]) {
     LIT16(-1),
     LIT16(0),
     OP_OR,
     OP_HLT
   }));
+  
   assert(0 == eval((char[SIZE]) {
     LIT16(0),
     LIT16(0),
@@ -509,18 +544,21 @@ void test_and() {
     OP_AND,
     OP_HLT
   }));
+  
   assert(0 == eval((char[SIZE]) {
     LIT16(0),
     LIT16(-1),
     OP_AND,
     OP_HLT
   }));
+  
   assert(0 == eval((char[SIZE]) {
     LIT16(-1),
     LIT16(0),
     OP_AND,
     OP_HLT
   }));
+  
   assert(0 == eval((char[SIZE]) {
     LIT16(0),
     LIT16(0),
