@@ -98,37 +98,6 @@ cell_t engage(char *mem,
         ip += sizeof(cell_t);
         break;
       }
-      case OP_JZ: {
-        if (POP == 0) {
-          ip += (int8_t)*ip;
-        } else {
-          ip += sizeof(int8_t);
-        }
-        break; 
-      }
-      case OP_JNZ: {
-        if (POP != 0) {
-          ip += (int8_t)*ip;
-        } else {
-          ip += sizeof(int8_t);
-        }
-        break; 
-      }
-      case OP_JMP: {
-        ip += (int8_t)*ip;
-        break;
-      }
-      case OP_CALL: {
-        RPUSH((cell_t) (mem - (char*)ip + sizeof(uint16_t)));
-        uint16_t address = ((uint16_t)*ip) | ((uint16_t)(*ip+1) << 8);
-        ip = (opcode_t *) (mem + address);
-        break;
-      }
-      case OP_RET: {
-        cell_t address = RPOP;
-        ip = (opcode_t *) (mem + address);
-        break;
-      }
       case OP_EQ: {
         *(sp-2) = *(sp-2) == *(sp-1) ? -1 : 0;
         sp--;
@@ -171,6 +140,37 @@ cell_t engage(char *mem,
       case OP_AND: {
         *(sp-2) &= *(sp-1);
         sp--;
+        break;
+      }
+      case OP_JZ: {
+        if (POP == 0) {
+          ip += (int8_t)*ip;
+        } else {
+          ip += sizeof(int8_t);
+        }
+        break; 
+      }
+      case OP_JNZ: {
+        if (POP != 0) {
+          ip += (int8_t)*ip;
+        } else {
+          ip += sizeof(int8_t);
+        }
+        break; 
+      }
+      case OP_JMP: {
+        ip += (int8_t)*ip;
+        break;
+      }
+      case OP_CALL: {
+        RPUSH((cell_t) (mem - (char*)ip + sizeof(uint16_t)));
+        uint16_t address = ((uint16_t)*ip) | ((uint16_t)(*ip+1) << 8);
+        ip = (opcode_t *) (mem + address);
+        break;
+      }
+      case OP_RET: {
+        cell_t address = RPOP;
+        ip = (opcode_t *) (mem + address);
         break;
       }
       case OP_PRN: {
