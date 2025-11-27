@@ -105,6 +105,29 @@ void test_div() {
   }));
 }
 
+void test_mod() {
+  assert(0 == eval((char[SIZE]) {
+    LIT16(12),
+    LIT16(4),
+    OP_MOD,
+    OP_HLT
+  }));
+
+  assert(3 == eval((char[SIZE]) {
+    LIT16(12),
+    LIT16(9),
+    OP_MOD,
+    OP_HLT
+  }));
+
+  assert(2 == eval((char[SIZE]) {
+    LIT16(12),
+    LIT16(5),
+    OP_MOD,
+    OP_HLT
+  }));
+}
+
 void test_depth() {
   assert(0 == eval((char[SIZE]) {
     OP_DPT,
@@ -620,6 +643,7 @@ int main() {
   test_mul();
   test_sub();
   test_div();
+  test_mod();
   test_depth();
   test_drop();
   test_dup();

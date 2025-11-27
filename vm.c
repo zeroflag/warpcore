@@ -147,6 +147,11 @@ cell_t engage(char *mem,
         sp--;
         break;
       }
+      case OP_MOD: {
+        *(sp-2) %= *(sp-1);
+        sp--;
+        break;
+      }
       case OP_JZ: {
         if (POP == 0) {
           ip += (int8_t)*ip;
