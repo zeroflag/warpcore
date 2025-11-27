@@ -305,6 +305,33 @@ void test_tuck() {
   }));
 }
 
+void test_lte() {
+  assert(-1 == eval((char[SIZE]) {
+    LIT16(5),
+    LIT16(10),
+    OP_LTE,
+    OP_HLT
+  }));
+  assert(0 == eval((char[SIZE]) {
+    LIT16(10),
+    LIT16(5),
+    OP_LTE,
+    OP_HLT
+  }));
+  assert(-1 == eval((char[SIZE]) {
+    LIT16(5),
+    LIT16(5),
+    OP_LTE,
+    OP_HLT
+  }));
+  assert(-1 == eval((char[SIZE]) {
+    LIT16(-20),
+    LIT16(-10),
+    OP_LTE,
+    OP_HLT
+  }));
+}
+
 void test_lt() {
   assert(-1 == eval((char[SIZE]) {
     LIT16(5),
@@ -481,6 +508,7 @@ int main() {
   test_mrot();
   test_tuck();
   test_lt();
+  test_lte();
   test_gt();
   test_gte();
   test_inv();
@@ -490,5 +518,3 @@ int main() {
   printf("All tests passed.\n");
   return 0;
 }
-
-

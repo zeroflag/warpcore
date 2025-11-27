@@ -134,6 +134,11 @@ cell_t engage(char *mem,
         sp--;
         break;
       }
+      case OP_LTE: {
+        *(sp-2) = *(sp-2) <= *(sp-1) ? -1 : 0;
+        sp--;
+        break;
+      }
       case OP_GT: {
         *(sp-2) = *(sp-2) > *(sp-1) ? -1 : 0;
         sp--;
