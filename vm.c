@@ -14,7 +14,7 @@ void breach(char* format, ...) {
   exit(1);
 }
 
-cell_t engage(char *mem,
+cell_t engage(uint8_t *mem,
               cell_t start_ip,
               cell_t stack,
               cell_t rstack)
@@ -23,7 +23,7 @@ cell_t engage(char *mem,
   cell_t*   rp = (cell_t*) (mem + rstack);
   opcode_t* ip = (opcode_t*) (mem + start_ip);
 
-  while (((char*)ip - mem) < MEM_SIZE) {
+  while (((uint8_t*)ip - mem) < MEM_SIZE) {
     opcode_t code = *ip++;
     switch (code) {
       case OP_ADD: {
@@ -152,6 +152,19 @@ cell_t engage(char *mem,
         sp--;
         break;
       }
+      case OP_STO: {
+        cell_t addr = POP;
+        cell_t val  = POP;
+        mem[addr] = val & 0xFF; // low
+        mem[addr +1] = (val >> 8) & 0xFF; // high
+        break;
+      }
+      case OP_FTCH: {
+        cell_t addr = POP;
+        cell_t val = (uint16_t)mem[addr] | ((uint16_t)mem[addr +1] << 8);
+        PUSH(val);
+        break;
+      }
       case OP_JZ: {
         if (POP == 0) {
           ip += (int8_t)*ip;
@@ -173,7 +186,7 @@ cell_t engage(char *mem,
         break;
       }
       case OP_CALL: {
-        RPUSH((cell_t) (mem - (char*)ip + sizeof(uint16_t)));
+        RPUSH((cell_t) (mem - (uint8_t*)ip + sizeof(uint16_t)));
         uint16_t address = ((uint16_t)*ip) | ((uint16_t)(*ip+1) << 8);
         ip = (opcode_t *) (mem + address);
         break;

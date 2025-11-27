@@ -17,7 +17,7 @@ char *fd_map(int fd, int size) {
               PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 }
 
-char *load(char* fname, long *out_size) {
+uint8_t *load(char* fname, long *out_size) {
   int fd = open(fname, O_RDWR);
   if (fd != -1) {
     *out_size = fd_size(fd);
@@ -26,7 +26,7 @@ char *load(char* fname, long *out_size) {
       breach("Cannot get fstat on image: %s\n", fname);
     }
 
-    char *data = fd_map(fd, *out_size);
+    uint8_t *data = (uint8_t*) fd_map(fd, *out_size);
     if (data == MAP_FAILED) {
       close(fd);
       breach("Cannot mmap image: %s\n", fname);
@@ -44,11 +44,11 @@ int main(int argc, char **argv) {
   long size;
   char *imgfile = argc == 2 ? argv[1] : "image.dat";
   printf("Loading %s..\n", imgfile);
-  char *heap = load(imgfile, &size);
+  uint8_t *mem = load(imgfile, &size);
   printf("Loaded %ld byes\n", size);
   if (size != MEM_SIZE) {
     printf("Image size must be: %d\n", MEM_SIZE);
     exit(1);
   }
-  return engage(heap, 0xE0, 0, 0x1C);
+  return engage(mem, 0xE0, 0, 0x1C);
 }

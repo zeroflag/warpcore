@@ -60,10 +60,13 @@ typedef enum {
   OP_HLT  = 0x23,
 
   OP_SHL  = 0x24,
-  OP_SAR  = 0x25
+  OP_SAR  = 0x25,
+
+  OP_STO  = 0x26,
+  OP_FTCH = 0x27,
 } Op;
 
-cell_t engage(char *mem,
+cell_t engage(uint8_t *mem,
               cell_t start_ip,
               cell_t stack,
               cell_t rstack);
