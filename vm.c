@@ -132,13 +132,18 @@ cell_t engage(char *mem,
         *(sp-1) = ~ *(sp-1);
         break;
       }
+      case OP_AND: {
+        *(sp-2) &= *(sp-1);
+        sp--;
+        break;
+      }
       case OP_OR: {
         *(sp-2) |= *(sp-1);
         sp--;
         break;
       }
-      case OP_AND: {
-        *(sp-2) &= *(sp-1);
+      case OP_XOR: {
+        *(sp-2) ^= *(sp-1);
         sp--;
         break;
       }
