@@ -129,6 +129,11 @@ cell_t engage(char *mem,
         ip = (opcode_t *) (mem + address);
         break;
       }
+      case OP_GT: {
+        *(sp-2) = *(sp-2) > *(sp-1) ? -1 : 0;
+        sp--;
+        break;
+      }
       case OP_INV: {
         *(sp-1) = ~ *(sp-1);
         break;
