@@ -56,7 +56,7 @@ typedef enum {
   OP_MOD  = 0x20,
   OP_KEY  = 0x21,
 
-  OP_DPT  = 0x22,
+  OP_SP   = 0x22,
   OP_HLT  = 0x23,
 
   OP_SHL  = 0x24,

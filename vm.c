@@ -207,7 +207,7 @@ cell_t engage(uint8_t *mem,
         printf("\n");
         break;
       }
-      case OP_DPT: {
+      case OP_SP: {
         *sp = sp - (cell_t*)(mem + stack);
         sp++;
         break;
