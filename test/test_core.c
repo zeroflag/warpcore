@@ -784,7 +784,7 @@ void test_comma_byte() {
   assert(1 == eval((uint8_t[SIZE]) {
     OP_DP,
     LIT16(10),
-    OP_CCMA,
+    OP_CCOMA,
     OP_DP,
     OP_SWAP,
     OP_SUB,
@@ -794,7 +794,7 @@ void test_comma_byte() {
   assert((9871 & 0xFF) == eval((uint8_t[SIZE]) {
     OP_DP,
     LIT16(9871),
-    OP_CCMA,
+    OP_CCOMA,
     OP_FTCH,
     OP_HLT
   }));
