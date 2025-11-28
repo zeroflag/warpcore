@@ -74,7 +74,7 @@ typedef enum {
 
   OP_COMA  = 0x2B,
   OP_CCMA  = 0x2C,
-  OP_DEPT  = 0x2D,
+  OP_DEPTH = 0x2D,
 
   OP_RPUSH = 0x2E,
   OP_RPOP  = 0x2F,

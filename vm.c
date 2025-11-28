@@ -219,7 +219,7 @@ cell_t engage(uint8_t *mem,
         sp = new_sp;
         break;
       }
-      case OP_DEPT: {
+      case OP_DEPTH: {
         *sp = sp - (cell_t*)(mem + stack);
         sp++;
         break;
