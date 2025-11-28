@@ -10,6 +10,9 @@
 #define RPUSH(val)  ( *rp++ = (val) )
 #define RPOP        ( *(--rp) )
 
+#define LO(val)    ((val) & 0xFF)
+#define HI(val)    (((val) >> 8) & 0xFF)
+
 typedef int16_t cell_t;
 typedef uint8_t opcode_t;
 

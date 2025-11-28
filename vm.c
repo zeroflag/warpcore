@@ -160,8 +160,8 @@ cell_t engage(uint8_t *mem,
       case OP_STO: {
         cell_t addr = POP;
         cell_t val  = POP;
-        mem[addr] = val & 0xFF; // low
-        mem[addr +1] = (val >> 8) & 0xFF; // high
+        mem[addr] = LO(val);
+        mem[addr +1] = HI(val);
         break;
       }
       case OP_FTCH: {
@@ -225,8 +225,8 @@ cell_t engage(uint8_t *mem,
       }
       case OP_COMA: {
         cell_t val = POP;
-        *dp      = val & 0xFF; // low
-        *(dp +1) = (val >> 8) & 0xFF; // high
+        *dp = LO(val);
+        *(dp +1) = HI(val);
         dp += 2;
         break;
       }
