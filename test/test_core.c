@@ -737,7 +737,7 @@ void test_fetchstore() {
     LIT16(1000),
     OP_STO,
     LIT16(1000),
-    OP_FTCH,
+    OP_FETCH,
     OP_HLT
   }));
 
@@ -746,7 +746,7 @@ void test_fetchstore() {
     LIT16(1000),
     OP_STO,
     LIT16(1000),
-    OP_FTCH,
+    OP_FETCH,
     OP_HLT
   }));
 
@@ -755,7 +755,7 @@ void test_fetchstore() {
     LIT16(1000),
     OP_STO,
     LIT16(1000),
-    OP_FTCH,
+    OP_FETCH,
     OP_HLT
   }));
 }
@@ -775,7 +775,7 @@ void test_comma() {
     OP_DP,
     LIT16(9871),
     OP_COMA,
-    OP_FTCH,
+    OP_FETCH,
     OP_HLT
   }));
 }
@@ -795,7 +795,7 @@ void test_comma_byte() {
     OP_DP,
     LIT16(9871),
     OP_CCOMA,
-    OP_FTCH,
+    OP_FETCH,
     OP_HLT
   }));
 }

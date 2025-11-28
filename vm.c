@@ -164,7 +164,7 @@ cell_t engage(uint8_t *mem,
         mem[addr +1] = HI(val);
         break;
       }
-      case OP_FTCH: {
+      case OP_FETCH: {
         cell_t addr = POP;
         cell_t val = (uint16_t)mem[addr] | ((uint16_t)mem[addr +1] << 8);
         PUSH(val);

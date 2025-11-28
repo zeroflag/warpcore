@@ -67,7 +67,7 @@ typedef enum {
   OP_SAR   = 0x26,
 
   OP_STO   = 0x27,
-  OP_FTCH  = 0x28,
+  OP_FETCH = 0x28,
 
   OP_DP    = 0x29,
   OP_TODP  = 0x2A,
