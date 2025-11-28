@@ -771,11 +771,20 @@ void test_comma() {
     OP_HLT
   }));
 
-  assert(10 == eval((uint8_t[SIZE]) {
+  assert(9871 == eval((uint8_t[SIZE]) {
     OP_DP,
-    LIT16(10),
+    LIT16(9871),
     OP_COMA,
     OP_FTCH,
+    OP_HLT
+  }));
+}
+
+void test_todp() {
+  assert(4567 == eval((uint8_t[SIZE]) {
+    LIT16(4567),
+    OP_TODP,
+    OP_DP,
     OP_HLT
   }));
 }
@@ -812,6 +821,7 @@ int main() {
   test_sar();
   test_fetchstore();
   test_comma();
+  test_todp();
   printf("\033[1;32mAll tests passed!\033[0m\n");
   return 0;
 }

@@ -69,8 +69,10 @@ typedef enum {
   OP_FTCH = 0x27,
 
   OP_DP   = 0x28,
-  OP_COMA = 0x29,
-  OP_DEPT = 0x2A,
+  OP_TODP = 0x29,
+
+  OP_COMA = 0x2A,
+  OP_DEPT = 0x2B,
 } Op;
 
 cell_t engage(uint8_t *mem,
