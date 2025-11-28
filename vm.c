@@ -166,19 +166,11 @@ cell_t engage(uint8_t *mem,
         break;
       }
       case OP_JZ: {
-        if (POP == 0) {
-          ip += (int8_t)*ip;
-        } else {
-          ip += sizeof(int8_t);
-        }
+        ip += (POP == 0) ? (int8_t)*ip : 1;
         break; 
       }
       case OP_JNZ: {
-        if (POP != 0) {
-          ip += (int8_t)*ip;
-        } else {
-          ip += sizeof(int8_t);
-        }
+        ip += (POP != 0) ? (int8_t)*ip : 1;
         break; 
       }
       case OP_JMP: {

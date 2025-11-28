@@ -171,7 +171,7 @@ void test_swap() {
     OP_SWAP,
     OP_HLT
   }));
-  
+
   assert(11 == eval((uint8_t[SIZE]) {
     LIT16(6),
     LIT16(11),
@@ -278,7 +278,7 @@ void test_mrot() {
     OP_MROT,
     OP_HLT
   }));
-  
+
   assert(10 == eval((uint8_t[SIZE]) {
     LIT16(10),
     LIT16(20),
@@ -416,14 +416,14 @@ void test_gt() {
     OP_GT,
     OP_HLT
   }));
-  
+
   assert(0 == eval((uint8_t[SIZE]) {
     LIT16(5),
     LIT16(5),
     OP_GT,
     OP_HLT
   }));
-  
+
   assert(-1 == eval((uint8_t[SIZE]) {
     LIT16(-10),
     LIT16(-20),
@@ -551,7 +551,7 @@ void test_or() {
     OP_OR,
     OP_HLT
   }));
-  
+
   assert(0 == eval((uint8_t[SIZE]) {
     LIT16(0),
     LIT16(0),
@@ -567,21 +567,21 @@ void test_and() {
     OP_AND,
     OP_HLT
   }));
-  
+
   assert(0 == eval((uint8_t[SIZE]) {
     LIT16(0),
     LIT16(-1),
     OP_AND,
     OP_HLT
   }));
-  
+
   assert(0 == eval((uint8_t[SIZE]) {
     LIT16(-1),
     LIT16(0),
     OP_AND,
     OP_HLT
   }));
-  
+
   assert(0 == eval((uint8_t[SIZE]) {
     LIT16(0),
     LIT16(0),
@@ -597,21 +597,21 @@ void test_xor() {
     OP_XOR,
     OP_HLT
   }));
-  
+
   assert(-1 == eval((uint8_t[SIZE]) {
     LIT16(0),
     LIT16(-1),
     OP_XOR,
     OP_HLT
   }));
-  
+
   assert(-1 == eval((uint8_t[SIZE]) {
     LIT16(-1),
     LIT16(0),
     OP_XOR,
     OP_HLT
   }));
-  
+
   assert(0 == eval((uint8_t[SIZE]) {
     LIT16(0),
     LIT16(0),
@@ -626,13 +626,30 @@ void test_jnz() {
     LIT16(0),
     OP_OVER,
     OP_ADD,
-    OP_SWAP,  
-    LIT16(1), 
-    OP_SUB,   
+    OP_SWAP,
+    LIT16(1),
+    OP_SUB,
     OP_SWAP,
     OP_OVER,
-    OP_JNZ,
-    -10,
+    OP_JNZ, -10,
+    OP_NIP,
+    OP_HLT
+  }));
+}
+
+void test_jz() {
+  assert(55 == eval((uint8_t[SIZE]) {
+    LIT16(10),
+    LIT16(0),
+    OP_OVER,
+    OP_ADD,
+    OP_SWAP,
+    LIT16(1),
+    OP_SUB,
+    OP_SWAP,
+    OP_OVER,
+    OP_JZ,   4,
+    OP_JMP, -12,
     OP_NIP,
     OP_HLT
   }));
@@ -753,6 +770,7 @@ int main() {
   test_and();
   test_xor();
   test_jnz();
+  test_jz();
   test_shl();
   test_sar();
   test_fetchstore();
