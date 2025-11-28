@@ -8,9 +8,10 @@
 #define LIT16(x) OP_LIT, B0(x), B1(x)
 
 #define SIZE SHRT_MAX
+#define STACK 50
 
 cell_t eval(uint8_t* code) {
-  return engage(code, 0, 50, 100, 1024);
+  return engage(code, 0, STACK, 100, 1024);
 }
 
 void test_add() {
@@ -144,12 +145,12 @@ void test_depth() {
 }
 
 void test_sp() {
-  assert(50 == eval((uint8_t[SIZE]) {
+  assert(STACK == eval((uint8_t[SIZE]) {
     OP_SP,
     OP_HLT
   }));
 
-  assert(50 + 3 * sizeof(cell_t) == eval((uint8_t[SIZE]) {
+  assert(STACK + 3 * sizeof(cell_t) == eval((uint8_t[SIZE]) {
     LIT16(10),
     LIT16(20),
     LIT16(30),
