@@ -5,6 +5,9 @@
 
 const cell_t MEM_SIZE = SHRT_MAX;
 
+const cell_t TRUE  = -1;
+const cell_t FALSE =  0;
+
 void breach(char* format, ...) {
   va_list args;
   printf("[ERROR]: ");
@@ -99,32 +102,32 @@ cell_t engage(uint8_t *mem,
         break;
       }
       case OP_EQ: {
-        *(sp-2) = *(sp-2) == *(sp-1) ? -1 : 0;
+        *(sp-2) = *(sp-2) == *(sp-1) ? TRUE : FALSE;
         sp--;
         break;
       }
       case OP_NEQ: {
-        *(sp-2) = *(sp-2) != *(sp-1) ? -1 : 0;
+        *(sp-2) = *(sp-2) != *(sp-1) ? TRUE : FALSE;
         sp--;
         break;
       }
       case OP_LT: {
-        *(sp-2) = *(sp-2) < *(sp-1) ? -1 : 0;
+        *(sp-2) = *(sp-2) < *(sp-1) ? TRUE : FALSE;
         sp--;
         break;
       }
       case OP_LTE: {
-        *(sp-2) = *(sp-2) <= *(sp-1) ? -1 : 0;
+        *(sp-2) = *(sp-2) <= *(sp-1) ? TRUE : FALSE;
         sp--;
         break;
       }
       case OP_GT: {
-        *(sp-2) = *(sp-2) > *(sp-1) ? -1 : 0;
+        *(sp-2) = *(sp-2) > *(sp-1) ? TRUE : FALSE;
         sp--;
         break;
       }
       case OP_GTE: {
-        *(sp-2) = *(sp-2) >= *(sp-1) ? -1 : 0;
+        *(sp-2) = *(sp-2) >= *(sp-1) ? TRUE : FALSE;
         sp--;
         break;
       }
