@@ -130,11 +130,26 @@ void test_mod() {
 
 void test_depth() {
   assert(0 == eval((uint8_t[SIZE]) {
-    OP_SP,
+    OP_DEPT,
     OP_HLT
   }));
 
   assert(3 == eval((uint8_t[SIZE]) {
+    LIT16(10),
+    LIT16(20),
+    LIT16(30),
+    OP_DEPT,
+    OP_HLT
+  }));
+}
+
+void test_sp() {
+  assert(50 == eval((uint8_t[SIZE]) {
+    OP_SP,
+    OP_HLT
+  }));
+
+  assert(50 + 3 * sizeof(cell_t) == eval((uint8_t[SIZE]) {
     LIT16(10),
     LIT16(20),
     LIT16(30),
@@ -150,7 +165,7 @@ void test_drop() {
     LIT16(30),
     OP_DROP,
     OP_DROP,
-    OP_SP,
+    OP_DEPT,
     OP_HLT
   }));
 }
@@ -184,7 +199,7 @@ void test_swap() {
     LIT16(6),
     LIT16(11),
     OP_SWAP,
-    OP_SP,
+    OP_DEPT,
     OP_HLT
   }));
 }
@@ -201,7 +216,7 @@ void test_nip() {
     LIT16(3),
     LIT16(4),
     OP_NIP,
-    OP_SP,
+    OP_DEPT,
     OP_HLT
   }));
 }
@@ -265,7 +280,7 @@ void test_rot() {
     LIT16(20),
     LIT16(30),
     OP_ROT,
-    OP_SP,
+    OP_DEPT,
     OP_HLT
   }));
 }
@@ -303,7 +318,7 @@ void test_mrot() {
     LIT16(20),
     LIT16(30),
     OP_MROT,
-    OP_SP,
+    OP_DEPT,
     OP_HLT
   }));
 }
@@ -337,7 +352,7 @@ void test_tuck() {
     LIT16(10),
     LIT16(20),
     OP_TUCK,
-    OP_SP,
+    OP_DEPT,
     OP_HLT
   }));
 }
@@ -771,6 +786,7 @@ int main() {
   test_div();
   test_mod();
   test_depth();
+  test_sp();
   test_drop();
   test_dup();
   test_swap();

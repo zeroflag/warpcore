@@ -209,7 +209,12 @@ cell_t engage(uint8_t *mem,
         printf("\n");
         break;
       }
-      case OP_SP: { // TODO ez nem jo
+      case OP_SP: {
+        *sp = (uint8_t*) sp - mem;
+        sp++;
+        break;
+      }
+      case OP_DEPT: {
         *sp = sp - (cell_t*)(mem + stack);
         sp++;
         break;
