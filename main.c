@@ -50,5 +50,5 @@ int main(int argc, char **argv) {
     printf("Image size must be: %d\n", MEM_SIZE);
     exit(1);
   }
-  return engage(mem, 0xE0, 0, 0x1C);
+  return engage(mem, 0x80, 0, 0x40, 0x400);
 }

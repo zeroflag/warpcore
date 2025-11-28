@@ -10,7 +10,7 @@
 #define SIZE SHRT_MAX
 
 cell_t eval(uint8_t* code) {
-  return engage(code, 0, 50, 100);
+  return engage(code, 0, 50, 100, 1024);
 }
 
 void test_add() {

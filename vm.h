@@ -64,12 +64,15 @@ typedef enum {
 
   OP_STO  = 0x26,
   OP_FTCH = 0x27,
+
+  OP_DP   = 0x28,
 } Op;
 
 cell_t engage(uint8_t *mem,
               cell_t start_ip,
               cell_t stack,
-              cell_t rstack);
+              cell_t rstack,
+              cell_t heap);
 
 void breach(char* format, ...);
 

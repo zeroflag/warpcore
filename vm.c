@@ -20,10 +20,12 @@ void breach(char* format, ...) {
 cell_t engage(uint8_t *mem,
               cell_t start_ip,
               cell_t stack,
-              cell_t rstack)
+              cell_t rstack,
+              cell_t heap)
 {
   cell_t*   sp = (cell_t*) (mem + stack);
   cell_t*   rp = (cell_t*) (mem + rstack);
+  cell_t*   dp = (cell_t*) (mem + heap);
   opcode_t* ip = (opcode_t*) (mem + start_ip);
 
   while (((uint8_t*)ip - mem) < MEM_SIZE) {
@@ -209,6 +211,11 @@ cell_t engage(uint8_t *mem,
       }
       case OP_SP: {
         *sp = sp - (cell_t*)(mem + stack);
+        sp++;
+        break;
+      }
+      case OP_DP: {
+        *sp = dp - (cell_t*)(mem + heap);
         sp++;
         break;
       }
