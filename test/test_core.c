@@ -744,6 +744,26 @@ void test_fetchstore() {
   }));
 }
 
+void test_comma() {
+  assert(2 == eval((uint8_t[SIZE]) {
+    OP_DP,
+    LIT16(10),
+    OP_COMA,
+    OP_DP,
+    OP_SWAP,
+    OP_SUB,
+    OP_HLT
+  }));
+
+  assert(10 == eval((uint8_t[SIZE]) {
+    OP_DP,
+    LIT16(10),
+    OP_COMA,
+    OP_FTCH,
+    OP_HLT
+  }));
+}
+
 int main() {
   test_add();
   test_mul();
@@ -774,6 +794,7 @@ int main() {
   test_shl();
   test_sar();
   test_fetchstore();
+  test_comma();
   printf("\033[1;32mAll tests passed!\033[0m\n");
   return 0;
 }
