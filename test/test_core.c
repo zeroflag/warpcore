@@ -799,11 +799,21 @@ void test_comma_byte() {
     OP_HLT
   }));
 }
+
 void test_todp() {
   assert(4567 == eval((uint8_t[SIZE]) {
     LIT16(4567),
     OP_TODP,
     OP_DP,
+    OP_HLT
+  }));
+}
+
+void test_tosp() {
+  assert(8976 == eval((uint8_t[SIZE]) {
+    LIT16(8976),
+    OP_TOSP,
+    OP_SP,
     OP_HLT
   }));
 }
@@ -842,6 +852,7 @@ int main() {
   test_comma();
   test_comma_byte();
   test_todp();
+  test_tosp();
   printf("\033[1;32mAll tests passed!\033[0m\n");
   return 0;
 }

@@ -23,9 +23,9 @@ cell_t engage(uint8_t *mem,
               cell_t rstack,
               cell_t heap)
 {
-  cell_t*   sp = (cell_t*) (mem + stack);
-  cell_t*   rp = (cell_t*) (mem + rstack);
-  uint8_t*  dp = (uint8_t*) (mem + heap);
+  cell_t*   sp = (cell_t*)   (mem + stack);
+  cell_t*   rp = (cell_t*)   (mem + rstack);
+  uint8_t*  dp = (uint8_t*)  (mem + heap);
   opcode_t* ip = (opcode_t*) (mem + start_ip);
 
   while (((uint8_t*)ip - mem) < MEM_SIZE) {
@@ -212,6 +212,11 @@ cell_t engage(uint8_t *mem,
       case OP_SP: {
         *sp = (uint8_t*) sp - mem;
         sp++;
+        break;
+      }
+      case OP_TOSP: {
+        cell_t* new_sp = (cell_t*)(mem + POP);
+        sp = new_sp;
         break;
       }
       case OP_DEPT: {

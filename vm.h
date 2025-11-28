@@ -60,20 +60,21 @@ typedef enum {
   OP_KEY  = 0x21,
 
   OP_SP   = 0x22,
-  OP_HLT  = 0x23,
+  OP_TOSP = 0x23,
+  OP_HLT  = 0x24,
 
-  OP_SHL  = 0x24,
-  OP_SAR  = 0x25,
+  OP_SHL  = 0x25,
+  OP_SAR  = 0x26,
 
-  OP_STO  = 0x26,
-  OP_FTCH = 0x27,
+  OP_STO  = 0x27,
+  OP_FTCH = 0x28,
 
-  OP_DP   = 0x28,
-  OP_TODP = 0x29,
+  OP_DP   = 0x29,
+  OP_TODP = 0x2A,
 
-  OP_COMA = 0x2A,
-  OP_CCMA = 0x2B,
-  OP_DEPT = 0x2C,
+  OP_COMA = 0x2B,
+  OP_CCMA = 0x2C,
+  OP_DEPT = 0x2D,
 } Op;
 
 cell_t engage(uint8_t *mem,
