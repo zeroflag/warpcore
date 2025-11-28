@@ -780,6 +780,25 @@ void test_comma() {
   }));
 }
 
+void test_comma_byte() {
+  assert(1 == eval((uint8_t[SIZE]) {
+    OP_DP,
+    LIT16(10),
+    OP_CCMA,
+    OP_DP,
+    OP_SWAP,
+    OP_SUB,
+    OP_HLT
+  }));
+
+  assert((9871 & 0xFF) == eval((uint8_t[SIZE]) {
+    OP_DP,
+    LIT16(9871),
+    OP_CCMA,
+    OP_FTCH,
+    OP_HLT
+  }));
+}
 void test_todp() {
   assert(4567 == eval((uint8_t[SIZE]) {
     LIT16(4567),
@@ -821,6 +840,7 @@ int main() {
   test_sar();
   test_fetchstore();
   test_comma();
+  test_comma_byte();
   test_todp();
   printf("\033[1;32mAll tests passed!\033[0m\n");
   return 0;

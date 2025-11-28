@@ -234,6 +234,12 @@ cell_t engage(uint8_t *mem,
         dp += 2;
         break;
       }
+      case OP_CCMA: {
+        cell_t val = POP;
+        *dp = LO(val);
+        dp++;
+        break;
+      }
       case OP_SHL: {
         *(sp-2) <<= *(sp-1);
         sp--;
