@@ -255,6 +255,14 @@ cell_t engage(uint8_t *mem,
         sp--;
         break;
       }
+      case OP_RPUSH: {
+        RPUSH(POP);
+        break;
+      }
+      case OP_RPOP: {
+        PUSH(RPOP);
+        break;
+      }
       case OP_HLT: {
         return POP;
       }

@@ -818,6 +818,34 @@ void test_tosp() {
   }));
 }
 
+void test_rstack() {
+  assert(1289 == eval((uint8_t[SIZE]) {
+    LIT16(1289),
+    LIT16(2030),
+    OP_RPUSH,
+    OP_HLT
+  }));
+
+  assert(1 == eval((uint8_t[SIZE]) {
+    LIT16(1289),
+    LIT16(2030),
+    OP_RPUSH,
+    OP_DEPT,
+    OP_HLT
+  }));
+
+  assert(80 == eval((uint8_t[SIZE]) {
+    LIT16(10),
+    LIT16(20),
+    OP_RPUSH,
+    OP_DUP,
+    OP_MUL,
+    OP_RPOP,
+    OP_SUB,
+    OP_HLT
+  }));
+}
+
 int main() {
   test_add();
   test_mul();
@@ -853,6 +881,7 @@ int main() {
   test_comma_byte();
   test_todp();
   test_tosp();
+  test_rstack();
   printf("\033[1;32mAll tests passed!\033[0m\n");
   return 0;
 }
