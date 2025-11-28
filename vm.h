@@ -44,7 +44,7 @@ typedef enum {
   OP_LTE   = 0x14,
   OP_EQ    = 0x15,
   OP_NEQ   = 0x16,
-  
+
   OP_JMP   = 0x17,
   OP_JZ    = 0x18,
   OP_JNZ   = 0x19,
@@ -53,7 +53,9 @@ typedef enum {
   OP_RET   = 0x1B,
 
   OP_DOT   = 0x1C,
-  OP_CR    = 0x1D,
+
+  OP_NOP   = 0x1D,
+
   OP_EMIT  = 0x1E,
   OP_LIT   = 0x1F,
   OP_MOD   = 0x20,
