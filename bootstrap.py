@@ -130,6 +130,8 @@ def create_macros():
   macros["BEGIN"] = lambda: push(dp)
   macros["UNTIL"] = lambda: (compile_primitive("JZ"), # XXX
                              compile_num8(pop() - dp))
+  macros["AGAIN"] = lambda: (compile_primitive("JMP"), # XXX
+                             compile_num8(pop() - dp))
 
   macros["WHILE"] = lambda: compile_branch("JZ")
   macros["REPEAT"] = lambda: (swap(),
