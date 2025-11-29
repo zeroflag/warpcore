@@ -76,30 +76,24 @@ def dump(mem, output):
   with open(output, 'wb') as f:
     f.write(bytearray(mem))
 
+def compile_branch(branch_type):
+  global dp
+  compile_primitive(branch_type)
+  push(dp)
+  compile_num8(0)
+
+def fill_branch_address():
+  global dp
+  address = pop()
+  mem[address] = dp - address
 
 def create_macros():
-  global dp
-  def macro_if():
-    compile_primitive("JZ")
-    push(dp)
-    compile_num8(0)
+  macros["IF"] = lambda: compile_branch("JZ")
+  macros["THEN"] = lambda: fill_branch_address()
+  macros["ELSE"] = lambda: (compile_branch("JZ"),
+                            swap(),
+                            fill_branch_address())
 
-  def macro_else():
-    compile_primitive("JMP")
-    push(dp)
-    compile_num8(0)
-    swap()
-    address = pop()
-    mem[address] = dp - address
-
-  def macro_then():
-    address = pop()
-    mem[address] = dp - address
-
-  macros["IF"] = macro_if
-  macros["THEN"] = macro_then
-  macros["ELSE"] = macro_else
-    
 if __name__ == "__main__":
   input_file = sys.argv[1]
   output_file = sys.argv[2]
