@@ -30,7 +30,7 @@ def read_primitives():
         primitives[m.group(3)] = int(m.group(2), 16)
 
 def compile_token(token):
-  print("compiling %s" % token)
+  print("[0x%X] Compiling %s" % (dp, token))
   if token in words:
     compile_word(words[token])
   elif token in primitives:
@@ -91,11 +91,15 @@ def fill_branch_address():
   mem[address] = dp - address
 
 def create_macros():
+  global dp
   macros["IF"] = lambda: compile_branch("JZ")
   macros["THEN"] = lambda: fill_branch_address()
   macros["ELSE"] = lambda: (compile_branch("JMP"),
                             swap(),
                             fill_branch_address())
+  macros["BEGIN"] = lambda: push(dp)
+  macros["UNTIL"] = lambda: (compile_primitive("JZ"), # XXX
+                             compile_num8(pop() - dp))
 
 def make_header():
   global dp
