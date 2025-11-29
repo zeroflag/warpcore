@@ -182,6 +182,12 @@ cell_t engage(uint8_t *mem,
         PUSH(val);
         break;
       }
+      case OP_CFTCH: {
+        cell_t addr = POP;
+        cell_t val = mem[addr];
+        PUSH(val);
+        break;
+      }
       case OP_JZ: {
         ip += (POP == 0) ? (int8_t)*ip : 1;
         break; 

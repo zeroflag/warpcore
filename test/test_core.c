@@ -737,7 +737,7 @@ void test_fetchstore() {
     LIT16(1000),
     OP_CSTO,
     LIT16(1000),
-    OP_FETCH,
+    OP_CFTCH,
     OP_HLT
   }));
 
