@@ -11,7 +11,7 @@
 int verbose = 0;
 char* image_path = "image.dat";
 
-void vprint(const char *format, ...) {
+void dprint(const char *format, ...) {
   if (!verbose) return;
   va_list args;
   va_start(args, format);
@@ -86,9 +86,9 @@ void parse_args(int argc, char **argv) {
 int main(int argc, char **argv) {
   parse_args(argc, argv);
   long size;
-  vprint("Loading %s..\n", image_path);
+  dprint("Loading %s..\n", image_path);
   uint8_t *mem = load(image_path, &size);
-  vprint("Loaded %ld byes\n", size);
+  dprint("Loaded %ld byes\n", size);
   if (size != MEM_SIZE) {
     fprintf(stderr, "Image size must be: %d\n", MEM_SIZE);
     exit(1);
@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
   int major = mem[0] >> 4;
   int minor = mem[0] & 15;
   if (major == 1) {
-    vprint("Image version: %d.%d\n", major, minor);
+    dprint("Image version: %d.%d\n", major, minor);
     return engage(mem, 0x01, 0x04, 0x44, 0x164);
   } else {
     fprintf(stderr, "Unsupported image version: %d.%d\n", major, minor);
