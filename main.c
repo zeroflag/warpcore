@@ -5,7 +5,19 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
 #include "vm.h"
+
+int verbose = 0;
+char* image_path = "image.dat";
+
+void vprint(const char *format, ...) {
+  if (!verbose) return;
+  va_list args;
+  va_start(args, format);
+  vprintf(format, args);
+  va_end(args);
+}
 
 int fd_size(int fd) {
   struct stat fst;
@@ -60,23 +72,35 @@ uint8_t *load(char* fname, long *out_size) {
 
   0x0164  ...           Heap / Dictionary (grows upward)
 */
+
+void parse_args(int argc, char **argv) {
+  for (int i = 1; i < argc; i++) {
+    if (strcmp(argv[i], "-v") == 0) {
+       verbose = 1;
+    } else {
+       image_path = argv[i];
+    }
+  }
+}
+
 int main(int argc, char **argv) {
+  parse_args(argc, argv);
   long size;
-  char *imgfile = argc == 2 ? argv[1] : "image.dat";
-  printf("Loading %s..\n", imgfile);
-  uint8_t *mem = load(imgfile, &size);
-  printf("Loaded %ld byes\n", size);
+  vprint("Loading %s..\n", image_path);
+  uint8_t *mem = load(image_path, &size);
+  vprint("Loaded %ld byes\n", size);
   if (size != MEM_SIZE) {
-    printf("Image size must be: %d\n", MEM_SIZE);
+    fprintf(stderr, "Image size must be: %d\n", MEM_SIZE);
     exit(1);
   }
 
   int major = mem[0] >> 4;
   int minor = mem[0] & 15;
   if (major == 1) {
-    printf("Image version: %d.%d\n", major, minor);
+    vprint("Image version: %d.%d\n", major, minor);
     return engage(mem, 0x01, 0x04, 0x44, 0x164);
   } else {
-    printf("Unsupported image version: %d.%d\n", major, minor);
+    fprintf(stderr, "Unsupported image version: %d.%d\n", major, minor);
+    exit(1);
   }
 }

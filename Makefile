@@ -7,18 +7,28 @@ OUT = warp
 
 TEST_SRCS := $(wildcard test/*.c)
 TEST_OBJS = $(TEST_SRC:.c=.o)
-TEST_OUT = test/run_tests
+TEST_EXEC = test/run_tests
+TEST_OUTP = test/out.txt
 
-all: clean vm test
+BOLD_GREEN = \033[1;32m
+RESET = \033[0m
+
+all: clean vm test-core test-bootstrap
 
 vm:
 	$(CC) $(CFLAGS) -o $(OUT) $(SRCS) "main.c"
 
-test:
-	$(CC) $(CFLAGS) -o $(TEST_OUT) $(TEST_SRCS) $(SRCS)
-	./$(TEST_OUT)
+test-core:
+	$(CC) $(CFLAGS) -o $(TEST_EXEC) $(TEST_SRCS) $(SRCS)
+	./$(TEST_EXEC)
+
+test-bootstrap:
+	./test/test_bootstrap > $(TEST_OUTP)
+	diff -u ./test/expected.txt $(TEST_OUTP)
+	@echo "$(BOLD_GREEN)✓ Bootstrap Test passed.$(RESET)"
+	rm -f $(TEST_OUTP)
 
 clean:
-	rm -f $(OUT) $(OBJS) $(TEST_OBJS) $(TEST_OUT)
+	rm -f $(OUT) $(OBJS) $(TEST_OBJS) $(TEST_EXEC) $(TEST_OUTP)
 
-.PHONY: all clean test
+.PHONY: all clean test-core test-bootstrap

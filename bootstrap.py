@@ -31,7 +31,7 @@ def read_primitives():
         primitives[m.group(3)] = int(m.group(2), 16)
 
 def compile_token(token):
-  print("[0x%X] Compiling %s" % (dp, token))
+  #print("[0x%X] Compiling %s" % (dp, token))
   if token in words:
     compile_call(words[token])
   elif token in primitives:
@@ -93,7 +93,7 @@ def fill_branch_address():
   mem[address] = dp - address
 
 def def_word(name):
-  print("Defining word: %s" % name)
+  # print("Defining word: %s" % name)
   words[name] = dp
 
 def compile_entry(address):
@@ -132,5 +132,5 @@ if __name__ == "__main__":
     make_header()
     tokens = parse(f.read())
     compile(tokens)
-    print("Writing output: %s" % output_file)
+    #print("Writing output: %s" % output_file)
     dump(mem, output_file)
