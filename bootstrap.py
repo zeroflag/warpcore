@@ -39,7 +39,11 @@ def compile_token(token):
   elif token in macros:
     macros[token]()
   else:
-    compile_lit(int(token))
+    if token.lower().startswith("0x"):
+      base = 16
+    else:
+      base = 10
+    compile_lit(int(token, base))
 
 def compile_call(address):
   compile_primitive("CALL")
