@@ -48,38 +48,39 @@ typedef enum {
   OP_JMP   = 0x17,  // "JMP"
   OP_JZ    = 0x18,  // "JZ"
   OP_JNZ   = 0x19,  // "JNZ"
+  OP_LJMP  = 0x1A,  // "LJMP"
 
-  OP_CALL  = 0x1A,  // "ENTER"
-  OP_RET   = 0x1B,  // "EXIT"
+  OP_CALL  = 0x1B,  // "ENTER"
+  OP_RET   = 0x1C,  // "EXIT"
 
-  OP_DOT   = 0x1C,  // "."
+  OP_DOT   = 0x1D,  // "."
 
-  OP_NOP   = 0x1D,  // "NOP"
+  OP_NOP   = 0x1E,  // "NOP"
 
-  OP_EMIT  = 0x1E,  // "EMIT"
-  OP_LIT   = 0x1F,  // "LIT"
-  OP_MOD   = 0x20,  // "%"
-  OP_KEY   = 0x21,  // "KEY"
+  OP_EMIT  = 0x1F,  // "EMIT"
+  OP_LIT   = 0x20,  // "LIT"
+  OP_MOD   = 0x21,  // "%"
+  OP_KEY   = 0x22,  // "KEY"
 
-  OP_SP    = 0x22,  // "SP"
-  OP_TOSP  = 0x23,  // "SP!"
-  OP_HLT   = 0x24,  // "HALT"
+  OP_SP    = 0x23,  // "SP"
+  OP_TOSP  = 0x24,  // "SP!"
+  OP_HLT   = 0x25,  // "HALT"
 
-  OP_SHL   = 0x25,  // "LSHIFT"
-  OP_SAR   = 0x26,  // "RSHIFT"
+  OP_SHL   = 0x26,  // "LSHIFT"
+  OP_SAR   = 0x27,  // "RSHIFT"
 
-  OP_STO   = 0x27,  // "!"
-  OP_FETCH = 0x28,  // "@"
+  OP_STO   = 0x28,  // "!"
+  OP_FETCH = 0x29,  // "@"
 
-  OP_DP    = 0x29,  // "DP"
-  OP_TODP  = 0x2A,  // "DP!"
+  OP_DP    = 0x2A,  // "DP"
+  OP_TODP  = 0x2B,  // "DP!"
 
-  OP_COMA  = 0x2B,  // ","
-  OP_CCOMA = 0x2C,  // "C,"
-  OP_DEPTH = 0x2D,  // "DEPTH"
+  OP_COMA  = 0x2C,  // ","
+  OP_CCOMA = 0x2D,  // "C,"
+  OP_DEPTH = 0x2E,  // "DEPTH"
 
-  OP_RPUSH = 0x2E,  // ">R"
-  OP_RPOP  = 0x2F,  // "R>"
+  OP_RPUSH = 0x2F,  // ">R"
+  OP_RPOP  = 0x30,  // "R>"
 } Op;
 
 cell_t engage(uint8_t *mem,
