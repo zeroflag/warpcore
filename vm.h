@@ -51,7 +51,7 @@ typedef enum {
   OP_LJMP  = 0x1A,  // "LJMP"
 
   OP_CALL  = 0x1B,  // "CALL"
-  OP_RET   = 0x1C,  // "RET"
+  OP_RET   = 0x1C,  // "EXIT"
 
   OP_DOT   = 0x1D,  // "."
 

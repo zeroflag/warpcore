@@ -111,7 +111,7 @@ def create_macros():
   macros["UNTIL"] = lambda: (compile_primitive("JZ"), # XXX
                              compile_num8(pop() - dp))
   macros[":"] = lambda: def_word(tokens.pop(0))
-  macros[";"] = lambda: compile_primitive("RET")
+  macros[";"] = lambda: compile_primitive("EXIT")
   macros["ENTRY"] = lambda: compile_entry(dp)
 
 def make_header():

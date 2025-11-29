@@ -8,6 +8,28 @@
 #include <string.h>
 #include "vm.h"
 
+/*
+  Image Format:
+  OFFSET  SIZE          DESCRIPTION
+  ------  ------------  -----------------------------------------
+  0x0000  BYTE          Version:
+                        high 4bit = major: 1
+                        low  4bit = minor: 0
+
+  0x0001  BYTE          OP_LJMP
+  0x0002  WORD          Absolute address to jump
+
+  0x0004  32 * CELL     Data stack initial content (32 cells)
+                        Typically 32 * 2 bytes = 64 bytes
+
+  0x0044  16 * CELL     Return stack initial content (16 cells)
+                        Typically 16 * 2 bytes = 32 bytes
+
+  0x0064  256 bytes     Scratch buffer (TIB, PAD, temporary space)
+
+  0x0164  ...           Heap / Dictionary (grows upward)
+*/
+
 int verbose = 0;
 char* image_path = "image.dat";
 
@@ -52,27 +74,6 @@ uint8_t *load(char* fname, long *out_size) {
   }
 }
 
-/*
-  OFFSET  SIZE          DESCRIPTION
-  ------  ------------  -----------------------------------------
-  0x0000  BYTE          Version:
-                        high 4bit = major: 1
-                        low  4bit = minor: 0
-
-  0x0001  BYTE          OP_LJMP
-  0x0002  WORD          Absolute address to jump
-
-  0x0004  32 * CELL     Data stack initial content (32 cells)
-                        Typically 32 * 2 bytes = 64 bytes
-
-  0x0044  16 * CELL     Return stack initial content (16 cells)
-                        Typically 16 * 2 bytes = 32 bytes
-
-  0x0064  256 bytes     Scratch buffer (TIB, PAD, temporary space)
-
-  0x0164  ...           Heap / Dictionary (grows upward)
-*/
-
 void parse_args(int argc, char **argv) {
   for (int i = 1; i < argc; i++) {
     if (strcmp(argv[i], "-v") == 0) {
@@ -96,6 +97,7 @@ int main(int argc, char **argv) {
 
   int major = mem[0] >> 4;
   int minor = mem[0] & 15;
+
   if (major == 1) {
     dprint("Image version: %d.%d\n", major, minor);
     return engage(mem, 0x01, 0x04, 0x44, 0x164);
