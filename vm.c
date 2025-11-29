@@ -265,7 +265,8 @@ cell_t engage(uint8_t *mem,
       }
       case OP_NOP: {}
       default: {
-        breach("Unknown opcode: %x\n", code);
+        breach("Unknown opcode: %x at ip=%d\n",
+               code, ip - mem - start_ip);
         return 1;
       }
     }
