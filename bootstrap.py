@@ -93,7 +93,7 @@ def fill_branch_address():
 def create_macros():
   macros["IF"] = lambda: compile_branch("JZ")
   macros["THEN"] = lambda: fill_branch_address()
-  macros["ELSE"] = lambda: (compile_branch("JZ"),
+  macros["ELSE"] = lambda: (compile_branch("JMP"),
                             swap(),
                             fill_branch_address())
 
