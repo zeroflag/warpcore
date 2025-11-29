@@ -735,7 +735,7 @@ void test_fetchstore() {
   assert(42 == eval((uint8_t[SIZE]) {
     LIT16(42),
     LIT16(1000),
-    OP_STO,
+    OP_CSTO,
     LIT16(1000),
     OP_FETCH,
     OP_HLT

@@ -70,17 +70,18 @@ typedef enum {
   OP_SAR   = 0x27,  // "RSHIFT"
 
   OP_STO   = 0x28,  // "!"
-  OP_FETCH = 0x29,  // "@"
+  OP_CSTO  = 0x29,  // "C!"
+  OP_FETCH = 0x2A,  // "@"
 
-  OP_DP    = 0x2A,  // "DP"
-  OP_TODP  = 0x2B,  // "DP!"
+  OP_DP    = 0x2B,  // "DP"
+  OP_TODP  = 0x2C,  // "DP!"
 
-  OP_COMA  = 0x2C,  // ","
-  OP_CCOMA = 0x2D,  // "C,"
-  OP_DEPTH = 0x2E,  // "DEPTH"
+  OP_COMA  = 0x2D,  // ","
+  OP_CCOMA = 0x2E,  // "C,"
+  OP_DEPTH = 0x2F,  // "DEPTH"
 
-  OP_RPUSH = 0x2F,  // ">R"
-  OP_RPOP  = 0x30,  // "R>"
+  OP_RPUSH = 0x30,  // ">R"
+  OP_RPOP  = 0x31,  // "R>"
 } Op;
 
 cell_t engage(uint8_t *mem,
