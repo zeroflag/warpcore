@@ -190,13 +190,13 @@ cell_t engage(uint8_t *mem,
       }
       case OP_CALL: {
         RPUSH((cell_t) (mem - (uint8_t*)ip + sizeof(uint16_t)));
-        uint16_t address = ((uint16_t)*ip) | ((uint16_t)(*ip+1) << 8);
-        ip = (opcode_t *) (mem + address);
+        cell_t addr = ((uint16_t)*ip) | ((uint16_t)*(ip+1) << 8);
+        ip = (opcode_t *) (mem + addr);
         break;
       }
       case OP_RET: {
-        cell_t address = RPOP;
-        ip = (opcode_t *) (mem + address);
+        cell_t addr = RPOP;
+        ip = (opcode_t *) (mem + addr);
         break;
       }
       case OP_KEY: {

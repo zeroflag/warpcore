@@ -50,8 +50,8 @@ typedef enum {
   OP_JNZ   = 0x19,  // "JNZ"
   OP_LJMP  = 0x1A,  // "LJMP"
 
-  OP_CALL  = 0x1B,  // "ENTER"
-  OP_RET   = 0x1C,  // "EXIT"
+  OP_CALL  = 0x1B,  // "CALL"
+  OP_RET   = 0x1C,  // "RET"
 
   OP_DOT   = 0x1D,  // "."
 

@@ -9,6 +9,7 @@ primitives = {}
 words = {}
 macros = {}
 stack = []
+tokens = []
 
 def push(val): stack.append(val)
 def pop(): return stack.pop()
@@ -32,7 +33,7 @@ def read_primitives():
 def compile_token(token):
   print("[0x%X] Compiling %s" % (dp, token))
   if token in words:
-    compile_word(words[token])
+    compile_call(words[token])
   elif token in primitives:
     compile_primitive(token)
   elif token in macros:
@@ -40,8 +41,9 @@ def compile_token(token):
   else:
     compile_lit(int(token))
 
-def compile_word(address):
-  pass
+def compile_call(address):
+  compile_primitive("CALL")
+  compile_num16(address)
 
 def compile_primitive(opcode):
   global dp
@@ -72,8 +74,8 @@ def parse(source):
   return source.split()
 
 def compile(tokens):
-  for tok in tokens:
-    compile_token(tok)
+  while tokens:
+    compile_token(tokens.pop(0))
 
 def dump(mem, output):
   with open(output, 'wb') as f:
@@ -90,8 +92,16 @@ def fill_branch_address():
   address = pop()
   mem[address] = dp - address
 
+def def_word(name):
+  print("Defining word: %s" % name)
+  words[name] = dp
+
+def compile_entry(address):
+  mem[2] = address & 0xFF
+  mem[3] = (address >> 8) & 0xFF
+  
 def create_macros():
-  global dp
+  global dp, tokens
   macros["IF"] = lambda: compile_branch("JZ")
   macros["THEN"] = lambda: fill_branch_address()
   macros["ELSE"] = lambda: (compile_branch("JMP"),
@@ -100,14 +110,18 @@ def create_macros():
   macros["BEGIN"] = lambda: push(dp)
   macros["UNTIL"] = lambda: (compile_primitive("JZ"), # XXX
                              compile_num8(pop() - dp))
+  macros[":"] = lambda: def_word(tokens.pop(0))
+  macros[";"] = lambda: compile_primitive("RET")
+  macros["ENTRY"] = lambda: compile_entry(dp)
 
 def make_header():
   global dp
+  entry = 0x164
   mem[dp] = 0b00010000 # version
   dp += 1
   compile_primitive("LJMP")
-  compile_num16(0x164)
-  dp = 0x164
+  compile_num16(entry)
+  dp = entry
 
 if __name__ == "__main__":
   input_file = sys.argv[1]
@@ -116,6 +130,7 @@ if __name__ == "__main__":
     read_primitives()
     create_macros()
     make_header()
-    compile(parse(f.read()))
+    tokens = parse(f.read())
+    compile(tokens)
     print("Writing output: %s" % output_file)
     dump(mem, output_file)
