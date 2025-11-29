@@ -22,8 +22,6 @@ def read_primitives():
       if m:
         primitives[m.group(3)] = int(m.group(2), 16)
 
-read_primitives()
-
 def compile_token(token):
   print("compiling %s" % token)
   if token in words:
@@ -66,6 +64,7 @@ if __name__ == "__main__":
   input_file = sys.argv[1]
   output_file = sys.argv[2]
   with open(input_file) as f:
+    read_primitives()
     compile(parse(f.read()))
     print("Writing output: %s" % output_file)
     dump(mem, output_file)
