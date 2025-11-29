@@ -12,7 +12,7 @@ const cell_t FALSE =  0;
 
 void breach(char* format, ...) {
   va_list args;
-  printf("[ERROR]: ");
+  fprintf(stderr, "[ERROR] ");
   va_start(args, format);
   vfprintf(stderr, format, args);
   va_end(args);
