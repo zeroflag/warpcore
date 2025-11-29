@@ -45,9 +45,9 @@ typedef enum {
   OP_EQ    = 0x15,  // "="
   OP_NEQ   = 0x16,  // "<>"
 
-  OP_JMP   = 0x17,  // "BRANCH"
-  OP_JZ    = 0x18,  // "BRANCHZ"
-  OP_JNZ   = 0x19,  // "BRANCHNZ"
+  OP_JMP   = 0x17,  // "JMP"
+  OP_JZ    = 0x18,  // "JZ"
+  OP_JNZ   = 0x19,  // "JNZ"
 
   OP_CALL  = 0x1A,  // "ENTER"
   OP_RET   = 0x1B,  // "EXIT"
