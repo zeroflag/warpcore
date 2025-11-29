@@ -70,5 +70,13 @@ int main(int argc, char **argv) {
     printf("Image size must be: %d\n", MEM_SIZE);
     exit(1);
   }
-  return engage(mem, 0x01, 0x04, 0x44, 0x164);
+
+  int major = mem[0] >> 4;
+  int minor = mem[0] & 15;
+  if (major == 1) {
+    printf("Image version: %d.%d\n", major, minor);
+    return engage(mem, 0x01, 0x04, 0x44, 0x164);
+  } else {
+    printf("Unsupported image version: %d.%d\n", major, minor);
+  }
 }
