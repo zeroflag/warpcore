@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "vm.h"
 
+#define DEBUG 0
+
 const cell_t MEM_SIZE = SHRT_MAX;
 
 const cell_t TRUE  = -1;
@@ -31,7 +33,9 @@ cell_t engage(uint8_t *mem,
 
   while (((uint8_t*)ip - mem) < MEM_SIZE) {
     opcode_t code = *ip++;
-    /* printf("OPCODE: 0x%X\n", code); */
+    #if DEBUG
+      printf("[0x%X] OPCODE: 0x%X\n", (cell_t)(ip - mem), code);
+    #endif
     switch (code) {
       case OP_ADD: {
         *(sp-2) += *(sp-1);
