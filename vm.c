@@ -31,6 +31,7 @@ cell_t engage(uint8_t *mem,
 
   while (((uint8_t*)ip - mem) < MEM_SIZE) {
     opcode_t code = *ip++;
+    /* printf("OPCODE: 0x%X\n", code); */
     switch (code) {
       case OP_ADD: {
         *(sp-2) += *(sp-1);
@@ -189,7 +190,7 @@ cell_t engage(uint8_t *mem,
         break;
       }
       case OP_CALL: {
-        RPUSH((cell_t) (mem - (uint8_t*)ip + sizeof(uint16_t)));
+        RPUSH((cell_t) ((uint8_t*)ip - mem + sizeof(uint16_t)));
         cell_t addr = ((uint16_t)*ip) | ((uint16_t)*(ip+1) << 8);
         ip = (opcode_t *) (mem + addr);
         break;
