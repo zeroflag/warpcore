@@ -30,6 +30,13 @@ def read_primitives():
       if m:
         primitives[m.group(3)] = int(m.group(2), 16)
 
+def tonum(token):
+  if token.lower().startswith("0x"):
+    base = 16
+  else:
+    base = 10
+  return int(token, base)
+        
 def compile_token(token):
   #print("[0x%X] Compiling %s" % (dp, token))
   if token in words:
@@ -39,11 +46,7 @@ def compile_token(token):
   elif token in macros:
     macros[token]()
   else:
-    if token.lower().startswith("0x"):
-      base = 16
-    else:
-      base = 10
-    compile_lit(int(token, base))
+    compile_lit(tonum(token))
 
 def compile_call(address):
   compile_primitive("CALL")
@@ -96,6 +99,19 @@ def fill_branch_address():
   address = pop()
   mem[address] = dp - address
 
+def def_const(name, val):
+  def_word(name)
+  compile_lit(tonum(val))
+  compile_primitive("EXIT")
+  
+def def_var(name):
+  # LIT @SLOT EXIT SLOT
+  global dp
+  def_word(name)
+  compile_lit(dp + 4) # after EXIT
+  compile_primitive("EXIT")
+  dp += 2
+
 def def_word(name):
   # print("Defining word: %s" % name)
   words[name] = dp
@@ -114,6 +130,9 @@ def create_macros():
   macros["BEGIN"] = lambda: push(dp)
   macros["UNTIL"] = lambda: (compile_primitive("JZ"), # XXX
                              compile_num8(pop() - dp))
+
+  macros["CONSTANT"] = lambda: def_const(tokens.pop(0), tokens.pop(0))
+  macros["VARIABLE"] = lambda: def_var(tokens.pop(0))
   macros[":"] = lambda: def_word(tokens.pop(0))
   macros[";"] = lambda: compile_primitive("EXIT")
   macros["ENTRY"] = lambda: compile_entry(dp)

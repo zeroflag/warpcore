@@ -11,6 +11,7 @@ TEST_EXEC = test/run_tests
 TEST_OUTP = test/out.txt
 
 BOLD_GREEN = \033[1;32m
+BOLD_RED   := \033[1;31m
 RESET = \033[0m
 
 all: clean vm test-core test-bootstrap
@@ -24,11 +25,14 @@ test-core:
 
 test-bootstrap:
 	./test/test_bootstrap > $(TEST_OUTP)
-	diff -u ./test/expected.txt $(TEST_OUTP)
-	@echo "$(BOLD_GREEN)✓ Bootstrap Test passed.$(RESET)"
-	rm -f $(TEST_OUTP)
+	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
+		echo "$(BOLD_RED)✗ Bootstrap tests failed.$(RESET)"; \
+		exit 1; \
+	}
+	@echo "$(BOLD_GREEN)✓ Bootstrap tests passed.$(RESET)"
+	@rm -f $(TEST_OUTP)
 
 clean:
-	rm -f $(OUT) $(OBJS) $(TEST_OBJS) $(TEST_EXEC) $(TEST_OUTP)
+	@rm -f $(OUT) $(OBJS) $(TEST_OBJS) $(TEST_EXEC) $(TEST_OUTP)
 
 .PHONY: all clean test-core test-bootstrap
