@@ -131,6 +131,11 @@ def create_macros():
   macros["UNTIL"] = lambda: (compile_primitive("JZ"), # XXX
                              compile_num8(pop() - dp))
 
+  macros["WHILE"] = lambda: compile_branch("JZ")
+  macros["REPEAT"] = lambda: (swap(),
+                              compile_primitive("JMP"), # XXX
+                              compile_num8(pop() - dp),
+                              fill_branch_address())
   macros["CONSTANT"] = lambda: def_const(tokens.pop(0), tokens.pop(0))
   macros["VARIABLE"] = lambda: def_var(tokens.pop(0))
   macros[":"] = lambda: def_word(tokens.pop(0))
