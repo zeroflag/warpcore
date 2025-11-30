@@ -82,7 +82,9 @@ int main(int argc, char **argv) {
   int major = mem[0] >> 4, minor = mem[0] & 15;
   if (major == 1) {
     dprint("Image version: %d.%d.\n", major, minor);
-    return engage(mem, 0x01, 0x04, 0x44, 0x164);
+    cell_t result = engage(mem, 0x01, 0x04, 0x44, 0x164);
+    msync(mem, MEM_SIZE, MS_SYNC);
+    return result;
   } else {
     breach("Unsupported image version: %d.%d\n", major, minor);
   }

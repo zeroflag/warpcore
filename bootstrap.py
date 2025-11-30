@@ -165,10 +165,17 @@ def make_header():
   dp = entry
 
 if __name__ == "__main__":
+  read_primitives()
+
+  if len(sys.argv) != 3:
+    for name, opcode in primitives.items():
+      sep = " " * (12 - len(name))
+      print("# %s%s0x%0.2X   PRIMITIVE" % (name, sep, opcode))
+    sys.exit()
+
   input_file = sys.argv[1]
   output_file = sys.argv[2]
   with open(input_file) as f:
-    read_primitives()
     create_macros()
     make_header()
     tokens = parse(f.read())
