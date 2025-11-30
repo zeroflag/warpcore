@@ -33,6 +33,7 @@ VARIABLE STEPPER
 
 : CHR= C@ SWAP C@ = ;
 : NON-ZERO? C@ 0 <> ;
+
 : STRING=
   BEGIN
     2DUP CHR= 
@@ -63,6 +64,7 @@ VARIABLE STEPPER
   DROP ;
 
 : SKIP BEGIN KEY DUP SPACE? WHILE DROP REPEAT STORE ;
+
 : WORD
   RESET SKIP
   BEGIN
@@ -83,7 +85,7 @@ VARIABLE STEPPER
   REPEAT
   C@ C, ;
 
-: PRIMITIVE
+: DEF-PRIMITIVE
   DP
   LAST @ , 
   LAST !
@@ -148,56 +150,56 @@ ENTRY
 ( TODO )
 0x800 DP!
 
-# +           0x01   PRIMITIVE
-# -           0x02   PRIMITIVE
-# *           0x03   PRIMITIVE
-# /           0x04   PRIMITIVE
-# DUP         0x05   PRIMITIVE
-# DROP        0x06   PRIMITIVE
-# SWAP        0x07   PRIMITIVE
-# NIP         0x08   PRIMITIVE
-# OVER        0x09   PRIMITIVE
-# ROT         0x0A   PRIMITIVE
-# -ROT        0x0B   PRIMITIVE
-# TUCK        0x0C   PRIMITIVE
-# INVERT      0x0D   PRIMITIVE
-# AND         0x0E   PRIMITIVE
-# OR          0x0F   PRIMITIVE
-# XOR         0x10   PRIMITIVE
-# >           0x11   PRIMITIVE
-# >=          0x12   PRIMITIVE
-# <           0x13   PRIMITIVE
-# <=          0x14   PRIMITIVE
-# =           0x15   PRIMITIVE
-# <>          0x16   PRIMITIVE
-# JMP         0x17   PRIMITIVE
-# JZ          0x18   PRIMITIVE
-# JNZ         0x19   PRIMITIVE
-# LJMP        0x1A   PRIMITIVE
-# CALL        0x1B   PRIMITIVE
-# EXIT        0x1C   PRIMITIVE
-# .           0x1D   PRIMITIVE
-# NOP         0x1E   PRIMITIVE
-# EMIT        0x1F   PRIMITIVE
-# LIT         0x20   PRIMITIVE
-# %           0x21   PRIMITIVE
-# KEY         0x22   PRIMITIVE
-# SP          0x23   PRIMITIVE
-# SP!         0x24   PRIMITIVE
-# HALT        0x25   PRIMITIVE
-# LSHIFT      0x26   PRIMITIVE
-# RSHIFT      0x27   PRIMITIVE
-# !           0x28   PRIMITIVE
-# C!          0x29   PRIMITIVE
-# @           0x2A   PRIMITIVE
-# C@          0x2B   PRIMITIVE
-# DP          0x2C   PRIMITIVE
-# DP!         0x2D   PRIMITIVE
-# ,           0x2E   PRIMITIVE
-# C,          0x2F   PRIMITIVE
-# DEPTH       0x30   PRIMITIVE
-# >R          0x31   PRIMITIVE
-# R>          0x32   PRIMITIVE
+# +           0x01   DEF-PRIMITIVE
+# -           0x02   DEF-PRIMITIVE
+# *           0x03   DEF-PRIMITIVE
+# /           0x04   DEF-PRIMITIVE
+# DUP         0x05   DEF-PRIMITIVE
+# DROP        0x06   DEF-PRIMITIVE
+# SWAP        0x07   DEF-PRIMITIVE
+# NIP         0x08   DEF-PRIMITIVE
+# OVER        0x09   DEF-PRIMITIVE
+# ROT         0x0A   DEF-PRIMITIVE
+# -ROT        0x0B   DEF-PRIMITIVE
+# TUCK        0x0C   DEF-PRIMITIVE
+# INVERT      0x0D   DEF-PRIMITIVE
+# AND         0x0E   DEF-PRIMITIVE
+# OR          0x0F   DEF-PRIMITIVE
+# XOR         0x10   DEF-PRIMITIVE
+# >           0x11   DEF-PRIMITIVE
+# >=          0x12   DEF-PRIMITIVE
+# <           0x13   DEF-PRIMITIVE
+# <=          0x14   DEF-PRIMITIVE
+# =           0x15   DEF-PRIMITIVE
+# <>          0x16   DEF-PRIMITIVE
+# JMP         0x17   DEF-PRIMITIVE
+# JZ          0x18   DEF-PRIMITIVE
+# JNZ         0x19   DEF-PRIMITIVE
+# LJMP        0x1A   DEF-PRIMITIVE
+# CALL        0x1B   DEF-PRIMITIVE
+# EXIT        0x1C   DEF-PRIMITIVE
+# .           0x1D   DEF-PRIMITIVE
+# NOP         0x1E   DEF-PRIMITIVE
+# EMIT        0x1F   DEF-PRIMITIVE
+# LIT         0x20   DEF-PRIMITIVE
+# %           0x21   DEF-PRIMITIVE
+# KEY         0x22   DEF-PRIMITIVE
+# SP          0x23   DEF-PRIMITIVE
+# SP!         0x24   DEF-PRIMITIVE
+# HALT        0x25   DEF-PRIMITIVE
+# LSHIFT      0x26   DEF-PRIMITIVE
+# RSHIFT      0x27   DEF-PRIMITIVE
+# !           0x28   DEF-PRIMITIVE
+# C!          0x29   DEF-PRIMITIVE
+# @           0x2A   DEF-PRIMITIVE
+# C@          0x2B   DEF-PRIMITIVE
+# DP          0x2C   DEF-PRIMITIVE
+# DP!         0x2D   DEF-PRIMITIVE
+# ,           0x2E   DEF-PRIMITIVE
+# C,          0x2F   DEF-PRIMITIVE
+# DEPTH       0x30   DEF-PRIMITIVE
+# >R          0x31   DEF-PRIMITIVE
+# R>          0x32   DEF-PRIMITIVE
 
 0x2000 DP!
 
