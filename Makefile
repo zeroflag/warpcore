@@ -21,10 +21,14 @@ vm:
 
 test-core:
 	$(CC) $(CFLAGS) -o $(TEST_EXEC) $(TEST_SRCS) $(SRCS)
-	./$(TEST_EXEC)
+	@./$(TEST_EXEC) || { \
+		echo "$(BOLD_RED)✗ Core tests failed.$(RESET)"; \
+		exit 1; \
+	}
+	@echo "$(BOLD_GREEN)✓ Core tests passed.$(RESET)"
 
 test-bootstrap:
-	./test/test_bootstrap > $(TEST_OUTP)
+	@./test/test_bootstrap > $(TEST_OUTP)
 	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Bootstrap tests failed.$(RESET)"; \
 		exit 1; \

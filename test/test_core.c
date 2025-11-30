@@ -882,6 +882,5 @@ int main() {
   test_todp();
   test_tosp();
   test_rstack();
-  printf("\033[1;32mCore tests passed.\033[0m\n");
   return 0;
 }
