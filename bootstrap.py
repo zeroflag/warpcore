@@ -129,6 +129,11 @@ def compile_symbol(token):
 def compile_entry(address):
   mem[2] = address & 0xFF
   mem[3] = (address >> 8) & 0xFF
+
+def skip_until(end):
+  tok = tokens.pop(0)
+  while tok != end:
+    tok = tokens.pop(0)
   
 def create_macros():
   global dp, tokens
@@ -153,6 +158,7 @@ def create_macros():
   macros[":"] = lambda: def_word(tokens.pop(0))
   macros[";"] = lambda: compile_primitive("EXIT")
   macros['#'] = lambda: compile_symbol(tokens.pop(0))
+  macros['('] = lambda: skip_until(")")
   macros["ENTRY"] = lambda: compile_entry(dp)
 
 def make_header():
