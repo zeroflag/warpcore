@@ -133,6 +133,7 @@ VARIABLE STEPPER
   NIP * TRUE ;
 
 : LIT, ( n -- ) # LIT FIND >XT , , ;
+: UNKNOWN ( s -- ) TYPE 32 EMIT 63 EMIT ;
 
 : COMPILE
   WORD DUP FIND
@@ -147,7 +148,7 @@ VARIABLE STEPPER
     IF
       LIT, DROP
     ELSE
-      # Unknown: TYPE TYPE CR
+      UNKNOWN
     THEN
   THEN ;
 
