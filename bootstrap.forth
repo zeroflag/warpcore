@@ -1,0 +1,210 @@
+CONSTANT TIB      0x64
+CONSTANT F_PRIM   0b01000000
+CONSTANT F_IMME   0b10000000
+CONSTANT MASK_XT  0b00111111
+CONSTANT TRUE    -1
+CONSTANT FALSE    0
+
+VARIABLE POS
+VARIABLE LAST
+VARIABLE STEPPER
+
+0 LAST !
+
+: 2DROP DROP DROP ;
+: 3DROP DROP DROP DROP ;
+: 2DUP OVER OVER ;
+: CR 10 EMIT ;
+
+: ?DUP DUP 0 <> IF DUP THEN ;
+
+: SPACE?
+  DUP  9  =
+  OVER 32 = OR
+  OVER 10 = OR
+  SWAP 13 = OR ;
+
+: NON-SPACE? SPACE? INVERT ;
+
+: POS++ POS @ 1 + POS ! ;
+: LEN   POS @ TIB - ;
+: STORE POS @ C! POS++ ;
+: RESET TIB POS ! ;
+
+: CHR= C@ SWAP C@ = ;
+: NON-ZERO? C@ 0 <> ;
+: STRING=
+  BEGIN
+    2DUP CHR= 
+    OVER NON-ZERO? AND
+    OVER NON-ZERO? AND
+  WHILE
+    1 + SWAP 1 +
+  REPEAT
+  CHR= ;
+
+: LENGTH
+  0
+  BEGIN
+    OVER NON-ZERO?
+  WHILE
+    1 + SWAP
+    1 + SWAP
+  REPEAT
+  NIP ;
+
+: TYPE
+  BEGIN
+    DUP NON-ZERO?
+  WHILE
+    DUP C@ EMIT
+    1 +
+  REPEAT
+  DROP ;
+
+: SKIP BEGIN KEY DUP SPACE? WHILE DROP REPEAT STORE ;
+: WORD
+  RESET SKIP
+  BEGIN
+    KEY DUP NON-SPACE?
+  WHILE
+    STORE
+  REPEAT
+  DROP
+  0 STORE
+  TIB ;
+
+: STRING,
+  BEGIN
+    DUP NON-ZERO?
+  WHILE
+    DUP C@ C,
+    1 +
+  REPEAT
+  C@ C, ;
+
+: PRIMITIVE
+  DP
+  LAST @ , 
+  LAST !
+  F_PRIM OR C, 
+  STRING, ;
+  
+: NAME  STEPPER @ 3 + ;
+: XTFL  STEPPER @ 2 + C@ ;
+: STEP  STEPPER @ @ STEPPER ! ;
+: STEP? STEPPER @ 0 <> ;
+: >XT   MASK_XT AND ; 
+
+: FIND ( s -- xt / 0 )
+  LAST @ STEPPER !
+  BEGIN
+    STEP?
+  WHILE
+    NAME OVER STRING= IF
+      DROP XTFL
+      EXIT
+    THEN
+    STEP
+  REPEAT
+  DROP 0 ;
+
+( TODO: validate 0..9 )
+
+: DIGIT     C@ 48 - ;
+: NONDIGIT? C@ DUP 48 < SWAP 57 > OR ;
+: MINUS?    C@ 45 = ;
+
+: >NUMBER ( s -- n TRUE / FALSE )
+  DUP MINUS? IF 1 + -1 ELSE 1 THEN
+  SWAP 0
+  ( sign str result )
+  BEGIN
+    OVER NON-ZERO?
+  WHILE
+    OVER NONDIGIT? IF 3DROP FALSE EXIT THEN
+    10 * OVER DIGIT +
+    SWAP 1 + SWAP
+  REPEAT
+  NIP * TRUE ;
+
+: LIT, ( n -- ) # LIT FIND >XT , , ;
+
+: COMPILE
+  WORD DUP FIND
+  ?DUP IF
+    >XT , DROP
+  ELSE
+    DUP >NUMBER
+    IF
+      LIT, DROP
+    ELSE
+      # Unknown: TYPE TYPE CR
+    THEN
+  THEN ;
+
+ENTRY
+
+( TODO )
+0x800 DP!
+
+# +           0x01   PRIMITIVE
+# -           0x02   PRIMITIVE
+# *           0x03   PRIMITIVE
+# /           0x04   PRIMITIVE
+# DUP         0x05   PRIMITIVE
+# DROP        0x06   PRIMITIVE
+# SWAP        0x07   PRIMITIVE
+# NIP         0x08   PRIMITIVE
+# OVER        0x09   PRIMITIVE
+# ROT         0x0A   PRIMITIVE
+# -ROT        0x0B   PRIMITIVE
+# TUCK        0x0C   PRIMITIVE
+# INVERT      0x0D   PRIMITIVE
+# AND         0x0E   PRIMITIVE
+# OR          0x0F   PRIMITIVE
+# XOR         0x10   PRIMITIVE
+# >           0x11   PRIMITIVE
+# >=          0x12   PRIMITIVE
+# <           0x13   PRIMITIVE
+# <=          0x14   PRIMITIVE
+# =           0x15   PRIMITIVE
+# <>          0x16   PRIMITIVE
+# JMP         0x17   PRIMITIVE
+# JZ          0x18   PRIMITIVE
+# JNZ         0x19   PRIMITIVE
+# LJMP        0x1A   PRIMITIVE
+# CALL        0x1B   PRIMITIVE
+# EXIT        0x1C   PRIMITIVE
+# .           0x1D   PRIMITIVE
+# NOP         0x1E   PRIMITIVE
+# EMIT        0x1F   PRIMITIVE
+# LIT         0x20   PRIMITIVE
+# %           0x21   PRIMITIVE
+# KEY         0x22   PRIMITIVE
+# SP          0x23   PRIMITIVE
+# SP!         0x24   PRIMITIVE
+# HALT        0x25   PRIMITIVE
+# LSHIFT      0x26   PRIMITIVE
+# RSHIFT      0x27   PRIMITIVE
+# !           0x28   PRIMITIVE
+# C!          0x29   PRIMITIVE
+# @           0x2A   PRIMITIVE
+# C@          0x2B   PRIMITIVE
+# DP          0x2C   PRIMITIVE
+# DP!         0x2D   PRIMITIVE
+# ,           0x2E   PRIMITIVE
+# C,          0x2F   PRIMITIVE
+# DEPTH       0x30   PRIMITIVE
+# >R          0x31   PRIMITIVE
+# R>          0x32   PRIMITIVE
+
+0x2000 DP!
+
+BEGIN
+  COMPILE
+AGAIN
+
+CR DEPTH . CR
+
+0 HALT

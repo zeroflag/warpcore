@@ -1,0 +1,9 @@
+#!/bin/bash
+
+make
+IMAGE=bootstrap.img
+FORTH=bootstrap.forth
+
+rm -f "$IMAGE"
+python bootstrap.py "$FORTH" "$IMAGE"
+./warp "$IMAGE"
