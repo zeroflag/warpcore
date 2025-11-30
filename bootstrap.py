@@ -116,6 +116,14 @@ def def_word(name):
   # print("Defining word: %s" % name)
   words[name] = dp
 
+def compile_symbol(token):
+  compile_lit(dp + 5)
+  compile_branch("JMP")
+  for i in token:
+    compile_num8(ord(i))
+  compile_num8(0)
+  fill_branch_address()
+  
 def compile_entry(address):
   mem[2] = address & 0xFF
   mem[3] = (address >> 8) & 0xFF
@@ -142,6 +150,7 @@ def create_macros():
   macros["VARIABLE"] = lambda: def_var(tokens.pop(0))
   macros[":"] = lambda: def_word(tokens.pop(0))
   macros[";"] = lambda: compile_primitive("EXIT")
+  macros['#'] = lambda: compile_symbol(tokens.pop(0))
   macros["ENTRY"] = lambda: compile_entry(dp)
 
 def make_header():
