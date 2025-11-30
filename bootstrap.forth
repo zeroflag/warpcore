@@ -98,6 +98,8 @@ VARIABLE STEPPER
 : STEP? STEPPER @ 0 <> ;
 : >XT   MASK_XT AND ; 
 
+: PRIMITIVE? ( n -- bool ) F_PRIM AND 0 <> ;
+
 : FIND ( s -- xt / 0 )
   LAST @ STEPPER !
   BEGIN
@@ -135,7 +137,11 @@ VARIABLE STEPPER
 : COMPILE
   WORD DUP FIND
   ?DUP IF
-    >XT , DROP
+    DUP PRIMITIVE? IF
+      >XT , DROP
+    ELSE
+      # NotYetImplemented: TYPE TYPE CR
+    THEN
   ELSE
     DUP >NUMBER
     IF
