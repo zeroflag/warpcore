@@ -33,6 +33,8 @@ def read_primitives():
 def tonum(token):
   if token.lower().startswith("0x"):
     base = 16
+  elif token.lower().startswith("0b"):
+    base = 2
   else:
     base = 10
   return int(token, base)
