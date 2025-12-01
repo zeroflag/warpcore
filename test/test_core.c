@@ -6,6 +6,7 @@
 #define B1(x) (((x) >> 8) & 0xFF)
 
 #define LIT16(x) OP_LIT, B0(x), B1(x)
+#define OFFSET(x) B0(x), B1(x)
 
 #define SIZE SHRT_MAX
 #define STACK 50
@@ -647,7 +648,8 @@ void test_jnz() {
     OP_SUB,
     OP_SWAP,
     OP_OVER,
-    OP_JNZ, -10,
+    OP_JNZ,
+    OFFSET(-10),
     OP_NIP,
     OP_HLT
   }));
@@ -664,8 +666,10 @@ void test_jz() {
     OP_SUB,
     OP_SWAP,
     OP_OVER,
-    OP_JZ,   4,
-    OP_JMP, -12,
+    OP_JZ,
+    OFFSET(5),
+    OP_JMP,
+    OFFSET(-13),
     OP_NIP,
     OP_HLT
   }));

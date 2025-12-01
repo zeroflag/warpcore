@@ -51,7 +51,8 @@ VARIABLE V1
     5 OF s" Friday" ENDOF
     6 OF s" Saturday" ENDOF
     7 OF s" Sunday" ENDOF
-    s" Unknown day: " 
+    ( number left on stack )
+    s" Unknown day: "
   ENDCASE ;
 
 ENTRY
@@ -78,6 +79,6 @@ s" Test String 2" TYPE CR
 2 DAY TYPE CR
 3 DAY TYPE CR
 5 DAY TYPE CR
-8 DAY TYPE CR
+8 DAY TYPE . CR
 
 0 HALT

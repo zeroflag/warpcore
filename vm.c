@@ -19,6 +19,10 @@ void breach(char* format, ...) {
   exit(1);
 }
 
+inline cell_t next_cell(const opcode_t* ip) {
+  return (cell_t) ((uint16_t) *ip | ((uint16_t) *(ip+1) << 8));
+}
+
 cell_t engage(uint8_t *mem,
               cell_t start_ip,
               cell_t stack,
@@ -189,26 +193,24 @@ cell_t engage(uint8_t *mem,
         break;
       }
       case OP_JZ: {
-        ip += (POP == 0) ? (int8_t)*ip : 1;
+        ip += (POP == 0) ? next_cell(ip) : (int)sizeof(cell_t);
         break; 
       }
       case OP_JNZ: {
-        ip += (POP != 0) ? (int8_t)*ip : 1;
+        ip += (POP != 0) ? next_cell(ip) : (int)sizeof(cell_t);
         break; 
       }
       case OP_JMP: {
-        ip += (int8_t)*ip;
+        ip += next_cell(ip);
         break;
       }
       case OP_LJMP: {
-        cell_t addr = (uint16_t) *ip | ((uint16_t) *(ip+1) << 8);
-        ip = (opcode_t *) (mem + addr);
+        ip = (opcode_t *) (mem + next_cell(ip));
         break;
       }
       case OP_CALL: {
         RPUSH((cell_t) ((uint8_t*)ip - mem + sizeof(uint16_t)));
-        cell_t addr = ((uint16_t)*ip) | ((uint16_t)*(ip+1) << 8);
-        ip = (opcode_t *) (mem + addr);
+        ip = (opcode_t *) (mem + next_cell(ip));
         break;
       }
       case OP_RET: {

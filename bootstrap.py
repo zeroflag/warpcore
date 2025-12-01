@@ -138,21 +138,19 @@ def dump(mem, output):
 def compile_forward_jump(branch_type):
   compile_primitive(branch_type)
   push(dp)
-  compile_num8(0)
+  compile_num16(0)
 
 def compile_back_jump(jump_type):
   compile_primitive(jump_type)
-  compile_num8(pop() - dp)
+  compile_num16(pop() - dp)
 
 def fill_branch_address():
   address = pop()
-  rel = dp - address
-  if rel > 127 or rel < -128:
-    raise RuntimeError("Relative address out of range: %d" % rel)
-  mem[address] = rel
-
-def compile_jump_address():
-  compile_num8(pop() - dp)
+  offset = dp - address
+  if offset > CELL_MAX or offset < CELL_MIN:
+    raise RuntimeError("Relative address out of range: %d" % offset)
+  mem[address] = offset & 0xFF
+  mem[address +1] = (offset >> 8) & 0xFF
 
 def def_const(name, val):
   def_word(name)
@@ -176,8 +174,8 @@ def compile_string():
   if pool.get(s):
     compile_lit(pool.get(s))
   else:
-    pool.add(s, dp + 5)
-    compile_lit(dp + 5)
+    pool.add(s, dp + 6)
+    compile_lit(dp + 6)
     compile_forward_jump("JMP")
     for i in s:
       compile_num8(ord(i))
@@ -222,7 +220,7 @@ def create_macros():
                              swap()) # keep counter on top
   macros[":"] = lambda: def_word(tokens.next())
   macros[";"] = lambda: compile_primitive("EXIT")
-  macros['s"'] = lambda: compile_string()
+  macros['s"'] = compile_string
   macros['('] = lambda: skip_until(")")
   macros["ENTRY"] = lambda: compile_entry(dp)
 
