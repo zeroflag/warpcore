@@ -180,7 +180,7 @@ VARIABLE STEPPER
 : CALL, ( -- )  s" CALL" FIND-PRIMITIVE , ;
 : ??? ( s -- ) TYPE 32 EMIT 63 EMIT ;
 
-: COMPILE
+: COMPILE ( -- )
   WORD DUP FIND-WORD
   ?DUP IF
     CALL, 1 + , ( Word Start )
@@ -215,9 +215,10 @@ ENTRY
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N RET LINK .. )
 (   ^---------------------------------------------+      )
 
-s" SQUARE" FALSE DEF-WORD
-s" DUP" FIND-PRIMITIVE ,
-s" *"   FIND-PRIMITIVE ,
+s" SQUARE" FALSE
+DEF-WORD
+  s" DUP" FIND-PRIMITIVE ,
+  s" *"   FIND-PRIMITIVE ,
 END-WORD
 
 0x2000 DP!
