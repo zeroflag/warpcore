@@ -189,7 +189,7 @@ VARIABLE STEPPER
       ( OPCODE ) , DROP
     ELSE
       DUP >NUMBER IF
-        XT, LIT ( NUM ), DROP
+        XT, LIT ( NUM ) , DROP
       ELSE ??? THEN
     THEN
   THEN ;
