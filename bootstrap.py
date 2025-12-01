@@ -237,8 +237,8 @@ if __name__ == "__main__":
 
   if len(sys.argv) != 3:
     for name, opcode in primitives.items():
-      sep = " " * (12 - len(name))
-      print("# %s%s0x%0.2X   PRIMITIVE" % (name, sep, opcode))
+      sep = " " * (8 - len(name))
+      print('  DUP s" %s"%s STRING= IF 0x%0.2X EXIT THEN' % (name, sep, opcode))
     sys.exit()
 
   input_file = sys.argv[1]

@@ -1,7 +1,5 @@
 CONSTANT TIB      0x64
-CONSTANT F_PRIM   0b01000000
 CONSTANT F_IMME   0b10000000
-CONSTANT MASK_XT  0b00111111
 CONSTANT TRUE    -1
 CONSTANT FALSE    0
 
@@ -89,11 +87,8 @@ VARIABLE STEPPER
 : STEP? STEPPER @ 0 <> ;
 
 : >NAME   STEPPER @ 3 + ;
-: >OPCODE MASK_XT AND ; 
 
-: PRIMITIVE? ( n -- bool ) F_PRIM AND 0 <> ;
-
-: FIND ( s -- addr / 0 )
+: FIND-WORD ( s -- addr / 0 )
   LAST @ STEPPER !
   BEGIN
     STEP?
@@ -127,34 +122,80 @@ VARIABLE STEPPER
   REPEAT
   NIP * TRUE ;
 
-: LIT, ( n -- ) s" LIT" FIND @ >OPCODE , , ;
-: UNKNOWN ( s -- ) TYPE 32 EMIT 63 EMIT ;
+: FIND-PRIMITIVE ( s -- opcode / 0 )
+  DUP s" +"        STRING= IF 0x01 EXIT THEN
+  DUP s" -"        STRING= IF 0x02 EXIT THEN
+  DUP s" *"        STRING= IF 0x03 EXIT THEN
+  DUP s" /"        STRING= IF 0x04 EXIT THEN
+  DUP s" DUP"      STRING= IF 0x05 EXIT THEN
+  DUP s" DROP"     STRING= IF 0x06 EXIT THEN
+  DUP s" SWAP"     STRING= IF 0x07 EXIT THEN
+  DUP s" NIP"      STRING= IF 0x08 EXIT THEN
+  DUP s" OVER"     STRING= IF 0x09 EXIT THEN
+  DUP s" ROT"      STRING= IF 0x0A EXIT THEN
+  DUP s" -ROT"     STRING= IF 0x0B EXIT THEN
+  DUP s" TUCK"     STRING= IF 0x0C EXIT THEN
+  DUP s" INVERT"   STRING= IF 0x0D EXIT THEN
+  DUP s" AND"      STRING= IF 0x0E EXIT THEN
+  DUP s" OR"       STRING= IF 0x0F EXIT THEN
+  DUP s" XOR"      STRING= IF 0x10 EXIT THEN
+  DUP s" >"        STRING= IF 0x11 EXIT THEN
+  DUP s" >="       STRING= IF 0x12 EXIT THEN
+  DUP s" <"        STRING= IF 0x13 EXIT THEN
+  DUP s" <="       STRING= IF 0x14 EXIT THEN
+  DUP s" ="        STRING= IF 0x15 EXIT THEN
+  DUP s" <>"       STRING= IF 0x16 EXIT THEN
+  DUP s" JMP"      STRING= IF 0x17 EXIT THEN
+  DUP s" JZ"       STRING= IF 0x18 EXIT THEN
+  DUP s" JNZ"      STRING= IF 0x19 EXIT THEN
+  DUP s" AJMP"     STRING= IF 0x1A EXIT THEN
+  DUP s" CALL"     STRING= IF 0x1B EXIT THEN
+  DUP s" EXIT"     STRING= IF 0x1C EXIT THEN
+  DUP s" ."        STRING= IF 0x1D EXIT THEN
+  DUP s" NOP"      STRING= IF 0x1E EXIT THEN
+  DUP s" EMIT"     STRING= IF 0x1F EXIT THEN
+  DUP s" LIT"      STRING= IF 0x20 EXIT THEN
+  DUP s" %"        STRING= IF 0x21 EXIT THEN
+  DUP s" KEY"      STRING= IF 0x22 EXIT THEN
+  DUP s" SP"       STRING= IF 0x23 EXIT THEN
+  DUP s" SP!"      STRING= IF 0x24 EXIT THEN
+  DUP s" HALT"     STRING= IF 0x25 EXIT THEN
+  DUP s" LSHIFT"   STRING= IF 0x26 EXIT THEN
+  DUP s" RSHIFT"   STRING= IF 0x27 EXIT THEN
+  DUP s" !"        STRING= IF 0x28 EXIT THEN
+  DUP s" C!"       STRING= IF 0x29 EXIT THEN
+  DUP s" @"        STRING= IF 0x2A EXIT THEN
+  DUP s" C@"       STRING= IF 0x2B EXIT THEN
+  DUP s" DP"       STRING= IF 0x2C EXIT THEN
+  DUP s" DP!"      STRING= IF 0x2D EXIT THEN
+  DUP s" ,"        STRING= IF 0x2E EXIT THEN
+  DUP s" C,"       STRING= IF 0x2F EXIT THEN
+  DUP s" DEPTH"    STRING= IF 0x30 EXIT THEN
+  DUP s" >R"       STRING= IF 0x31 EXIT THEN
+  DUP s" R>"       STRING= IF 0x32 EXIT THEN
+  DROP 0
+;
+
+: LIT, ( n -- ) s" LIT" FIND-PRIMITIVE , , ;
+: CALL, ( -- )  s" CALL" FIND-PRIMITIVE , ;
+: ??? ( s -- ) TYPE 32 EMIT 63 EMIT ;
 
 : COMPILE
-  WORD DUP FIND
+  WORD DUP FIND-WORD
   ?DUP IF
-    DUP @ PRIMITIVE? IF
-      >OPCODE , DROP
-    ELSE
-      s" CALL" FIND @ >OPCODE ,
-      1 + , ( Word Start )
-    THEN
+    CALL, 1 + , ( Word Start )
+    DROP
   ELSE
-    DUP >NUMBER
-    IF
-      LIT, DROP
+    DUP FIND-PRIMITIVE
+    ?DUP IF
+      ( OPCODE ) , DROP
     ELSE
-      UNKNOWN
+      DUP >NUMBER IF
+        ( NUM ) LIT, DROP
+      ELSE ??? THEN
     THEN
   THEN ;
 
-: DEF-PRIMITIVE ( name opcode -- )
-  DP
-  LAST @ , 
-  LAST !
-  F_PRIM OR C, 
-  STRING, ;
-  
 : DEF-WORD ( name imm? -- )
   DP
   LAST @ , 
@@ -162,76 +203,21 @@ VARIABLE STEPPER
   IF F_IMME ELSE 0 THEN C,
   STRING, ;
 
-: END-WORD s" RET" FIND @ >OPCODE , ;
+: END-WORD s" RET" FIND-PRIMITIVE , ;
 
 ENTRY
 
 ( TODO )
-0x800 DP!
+0x850 DP!
 
 ( **************** Dictionary Structure **************** )
-( Primitives:                                            )
-(  [16b]         [8b] [8b]    [16b]                      )
-(  LINK "<name1>" 00 F_OPCODE LINK "<name2>" 00 F_OPCODE )
-(   ^--------------------------+                         )
 ( Words:                                                 )
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N RET LINK .. )
 (   ^---------------------------------------------+      )
 
-s" +"           0x01   DEF-PRIMITIVE
-s" -"           0x02   DEF-PRIMITIVE
-s" *"           0x03   DEF-PRIMITIVE
-s" /"           0x04   DEF-PRIMITIVE
-s" DUP"         0x05   DEF-PRIMITIVE
-s" DROP"        0x06   DEF-PRIMITIVE
-s" SWAP"        0x07   DEF-PRIMITIVE
-s" NIP"         0x08   DEF-PRIMITIVE
-s" OVER"        0x09   DEF-PRIMITIVE
-s" ROT"         0x0A   DEF-PRIMITIVE
-s" -ROT"        0x0B   DEF-PRIMITIVE
-s" TUCK"        0x0C   DEF-PRIMITIVE
-s" INVERT"      0x0D   DEF-PRIMITIVE
-s" AND"         0x0E   DEF-PRIMITIVE
-s" OR"          0x0F   DEF-PRIMITIVE
-s" XOR"         0x10   DEF-PRIMITIVE
-s" >"           0x11   DEF-PRIMITIVE
-s" >="          0x12   DEF-PRIMITIVE
-s" <"           0x13   DEF-PRIMITIVE
-s" <="          0x14   DEF-PRIMITIVE
-s" ="           0x15   DEF-PRIMITIVE
-s" <>"          0x16   DEF-PRIMITIVE
-s" JMP"         0x17   DEF-PRIMITIVE
-s" JZ"          0x18   DEF-PRIMITIVE
-s" JNZ"         0x19   DEF-PRIMITIVE
-s" AJMP"        0x1A   DEF-PRIMITIVE
-s" CALL"        0x1B   DEF-PRIMITIVE
-s" EXIT"        0x1C   DEF-PRIMITIVE
-s" ."           0x1D   DEF-PRIMITIVE
-s" NOP"         0x1E   DEF-PRIMITIVE
-s" EMIT"        0x1F   DEF-PRIMITIVE
-s" LIT"         0x20   DEF-PRIMITIVE
-s" %"           0x21   DEF-PRIMITIVE
-s" KEY"         0x22   DEF-PRIMITIVE
-s" SP"          0x23   DEF-PRIMITIVE
-s" SP!"         0x24   DEF-PRIMITIVE
-s" HALT"        0x25   DEF-PRIMITIVE
-s" LSHIFT"      0x26   DEF-PRIMITIVE
-s" RSHIFT"      0x27   DEF-PRIMITIVE
-s" !"           0x28   DEF-PRIMITIVE
-s" C!"          0x29   DEF-PRIMITIVE
-s" @"           0x2A   DEF-PRIMITIVE
-s" C@"          0x2B   DEF-PRIMITIVE
-s" DP"          0x2C   DEF-PRIMITIVE
-s" DP!"         0x2D   DEF-PRIMITIVE
-s" ,"           0x2E   DEF-PRIMITIVE
-s" C,"          0x2F   DEF-PRIMITIVE
-s" DEPTH"       0x30   DEF-PRIMITIVE
-s" >R"          0x31   DEF-PRIMITIVE
-s" R>"          0x32   DEF-PRIMITIVE
-
 s" SQUARE" FALSE DEF-WORD
-s" DUP" FIND @ >OPCODE ,
-s" *"   FIND @ >OPCODE ,
+s" DUP" FIND-PRIMITIVE ,
+s" *"   FIND-PRIMITIVE ,
 END-WORD
 
 0x2000 DP!
