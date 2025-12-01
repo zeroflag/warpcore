@@ -203,7 +203,7 @@ s" <>"          0x16   DEF-PRIMITIVE
 s" JMP"         0x17   DEF-PRIMITIVE
 s" JZ"          0x18   DEF-PRIMITIVE
 s" JNZ"         0x19   DEF-PRIMITIVE
-s" LJMP"        0x1A   DEF-PRIMITIVE
+s" AJMP"        0x1A   DEF-PRIMITIVE
 s" CALL"        0x1B   DEF-PRIMITIVE
 s" EXIT"        0x1C   DEF-PRIMITIVE
 s" ."           0x1D   DEF-PRIMITIVE

@@ -48,7 +48,7 @@ typedef enum {
   OP_JMP   = 0x17,  // "JMP"
   OP_JZ    = 0x18,  // "JZ"
   OP_JNZ   = 0x19,  // "JNZ"
-  OP_LJMP  = 0x1A,  // "LJMP"
+  OP_AJMP  = 0x1A,  // "AJMP"
 
   OP_CALL  = 0x1B,  // "CALL"
   OP_RET   = 0x1C,  // "EXIT"

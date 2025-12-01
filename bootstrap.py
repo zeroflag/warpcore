@@ -229,7 +229,7 @@ def make_header():
   entry = 0x164
   mem[dp] = 0b00010000 # version
   dp += 1
-  compile_primitive("LJMP")
+  compile_primitive("AJMP")
   compile_num16(entry)
   dp = entry
 

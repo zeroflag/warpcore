@@ -204,7 +204,7 @@ cell_t engage(uint8_t *mem,
         ip += next_cell(ip);
         break;
       }
-      case OP_LJMP: {
+      case OP_AJMP: {
         ip = (opcode_t *) (mem + next_cell(ip));
         break;
       }
