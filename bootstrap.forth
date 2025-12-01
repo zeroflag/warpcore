@@ -85,21 +85,23 @@ VARIABLE STEPPER
   REPEAT
   C@ C, ;
   
-: NAME  STEPPER @ 3 + ;
-: XTFL  STEPPER @ 2 + C@ ;
 : STEP  STEPPER @ @ STEPPER ! ;
 : STEP? STEPPER @ 0 <> ;
-: >XT   MASK_XT AND ; 
+
+: >NAME   STEPPER @ 3 + ;
+: >OPCODE MASK_XT AND ; 
 
 : PRIMITIVE? ( n -- bool ) F_PRIM AND 0 <> ;
 
-: FIND ( s -- xt / 0 )
+: FIND ( s -- addr / 0 )
   LAST @ STEPPER !
   BEGIN
     STEP?
   WHILE
-    NAME OVER STRING= IF
-      DROP XTFL
+    >NAME OVER STRING= IF
+      DROP
+      ( return addr. of FLAG/OPCODE  )
+      STEPPER @ 2 + 
       EXIT
     THEN
     STEP
@@ -125,16 +127,17 @@ VARIABLE STEPPER
   REPEAT
   NIP * TRUE ;
 
-: LIT, ( n -- ) # LIT FIND >XT , , ;
+: LIT, ( n -- ) # LIT FIND @ >OPCODE , , ;
 : UNKNOWN ( s -- ) TYPE 32 EMIT 63 EMIT ;
 
 : COMPILE
   WORD DUP FIND
   ?DUP IF
-    DUP PRIMITIVE? IF
-      >XT , DROP
+    DUP @ PRIMITIVE? IF
+      >OPCODE , DROP
     ELSE
-      # NotYetImplemented: TYPE TYPE CR
+      # CALL FIND @ >OPCODE ,
+      1 + , ( Word Start )
     THEN
   ELSE
     DUP >NUMBER
@@ -159,7 +162,7 @@ VARIABLE STEPPER
   IF F_IMME ELSE 0 THEN C,
   STRING, ;
 
-: END-WORD # RET FIND >XT , ;
+: END-WORD # RET FIND @ >OPCODE , ;
 
 ENTRY
 
@@ -227,8 +230,8 @@ ENTRY
 # R>          0x32   DEF-PRIMITIVE
 
 # SQUARE FALSE DEF-WORD
-# DUP FIND >XT ,
-# *   FIND >XT ,
+# DUP FIND @ >OPCODE ,
+# *   FIND @ >OPCODE ,
 END-WORD
 
 0x2000 DP!
