@@ -192,9 +192,8 @@ def skip_until(end):
     tok = tokens.next()
 
 def create_macros():
-  global dp, tokens
   macros["IF"] = lambda: compile_forward_jump("JZ")
-  macros["THEN"] = lambda: fill_branch_address()
+  macros["THEN"] = fill_branch_address
   macros["ELSE"] = lambda: (compile_forward_jump("JMP"),
                             swap(),
                             fill_branch_address())
