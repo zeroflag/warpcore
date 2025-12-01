@@ -9,3 +9,8 @@
 Test String
 Test String
 Test String 2
+Monday
+Tuesday
+Wednesday
+Friday
+Unknown day: 8

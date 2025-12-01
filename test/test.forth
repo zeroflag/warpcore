@@ -42,6 +42,18 @@ VARIABLE V1
   REPEAT
   DROP ;
 
+: DAY ( n -- s )
+  CASE
+    1 OF s" Monday"  ENDOF
+    2 OF s" Tuesday" ENDOF
+    3 OF s" Wednesday" ENDOF
+    4 OF s" Thursday" ENDOF
+    5 OF s" Friday" ENDOF
+    6 OF s" Saturday" ENDOF
+    7 OF s" Sunday" ENDOF
+    s" Unknown day: " 
+  ENDCASE ;
+
 ENTRY
 
 2 SQR 3 SQR MIN . CR
@@ -61,5 +73,11 @@ V1 @ 1 + . CR
 s" Test String"   TYPE CR
 s" Test String"   TYPE CR
 s" Test String 2" TYPE CR
+
+1 DAY TYPE CR
+2 DAY TYPE CR
+3 DAY TYPE CR
+5 DAY TYPE CR
+8 DAY TYPE CR
 
 0 HALT

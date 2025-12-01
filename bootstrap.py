@@ -69,6 +69,7 @@ def push(val): stack.append(val)
 def pop(): return stack.pop()
 def tos(): return stack[-1]
 def swap(): stack[-1], stack[-2] = stack[-2], stack[-1]
+def inc2nd(): stack[-2] += 1
 
 def read_primitives():
   with open(HEADER) as f:
@@ -113,7 +114,7 @@ def compile_lit(num):
 def compile_num16(num):
   global dp
   if num > CELL_MAX or num < CELL_MIN:
-    raise("Number out of range: %d" % num)
+    raise RuntimeError("Number out of range: %d" % num)
   mem[dp] = num & 0xFF
   dp += 1
   mem[dp] = (num >> 8) & 0xFF
@@ -122,7 +123,7 @@ def compile_num16(num):
 def compile_num8(num):
   global dp
   if num > 127 or num < -128:
-    raise("Number out of range: %d" % num)
+    raise RuntimeError("Number out of range: %d" % num)
   mem[dp] = num & 0xFF
   dp += 1
 
@@ -145,7 +146,10 @@ def compile_back_jump(jump_type):
 
 def fill_branch_address():
   address = pop()
-  mem[address] = dp - address
+  rel = dp - address
+  if rel > 127 or rel < -128:
+    raise RuntimeError("Relative address out of range: %d" % rel)
+  mem[address] = rel
 
 def compile_jump_address():
   compile_num8(pop() - dp)
@@ -205,6 +209,17 @@ def create_macros():
                               fill_branch_address())
   macros["CONSTANT"] = lambda: def_const(tokens.next(), tokens.next())
   macros["VARIABLE"] = lambda: def_var(tokens.next())
+  macros["CASE"] = lambda: push(0)
+  macros["ENDCASE"] = lambda: [fill_branch_address() for i in range(pop())]
+  macros["OF"] = lambda: (compile_primitive('OVER'),
+                          compile_primitive('='),
+                          compile_forward_jump("JZ"),
+                          compile_primitive('DROP'))
+  macros["ENDOF"] = lambda: (inc2nd(),
+                             compile_forward_jump("JMP"),
+                             swap(),
+                             fill_branch_address(),
+                             swap()) # keep counter on top
   macros[":"] = lambda: def_word(tokens.next())
   macros[";"] = lambda: compile_primitive("EXIT")
   macros['s"'] = lambda: compile_string()
