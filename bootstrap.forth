@@ -176,14 +176,12 @@ VARIABLE STEPPER
   DROP 0
 ;
 
-: LIT, ( n -- ) s" LIT" FIND-PRIMITIVE , , ;
-: CALL, ( -- )  s" CALL" FIND-PRIMITIVE , ;
 : ??? ( s -- ) TYPE 32 EMIT 63 EMIT ;
 
 : COMPILE ( -- )
   WORD DUP FIND-WORD
   ?DUP IF
-    CALL, 1 + , ( Word Start )
+    XT, CALL 1 + , ( Word Start )
     DROP
   ELSE
     DUP FIND-PRIMITIVE
@@ -191,7 +189,7 @@ VARIABLE STEPPER
       ( OPCODE ) , DROP
     ELSE
       DUP >NUMBER IF
-        ( NUM ) LIT, DROP
+        XT, LIT ( NUM ), DROP
       ELSE ??? THEN
     THEN
   THEN ;
@@ -203,7 +201,7 @@ VARIABLE STEPPER
   IF F_IMME ELSE 0 THEN C,
   STRING, ;
 
-: END-WORD s" RET" FIND-PRIMITIVE , ;
+: END-WORD XT, EXIT ;
 
 ENTRY
 
@@ -212,13 +210,13 @@ ENTRY
 
 ( **************** Dictionary Structure **************** )
 ( Words:                                                 )
-(  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N RET LINK .. )
+(  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK .. )
 (   ^---------------------------------------------+      )
 
 s" SQUARE" FALSE
 DEF-WORD
-  s" DUP" FIND-PRIMITIVE ,
-  s" *"   FIND-PRIMITIVE ,
+  XT, DUP
+  XT, * 
 END-WORD
 
 0x2000 DP!
