@@ -84,13 +84,6 @@ VARIABLE STEPPER
     1 +
   REPEAT
   C@ C, ;
-
-: DEF-PRIMITIVE
-  DP
-  LAST @ , 
-  LAST !
-  F_PRIM OR C, 
-  STRING, ;
   
 : NAME  STEPPER @ 3 + ;
 : XTFL  STEPPER @ 2 + C@ ;
@@ -152,10 +145,35 @@ VARIABLE STEPPER
     THEN
   THEN ;
 
+: DEF-PRIMITIVE ( name opcode -- )
+  DP
+  LAST @ , 
+  LAST !
+  F_PRIM OR C, 
+  STRING, ;
+  
+: DEF-WORD ( name imm? -- )
+  DP
+  LAST @ , 
+  LAST !
+  IF F_IMME ELSE 0 THEN C,
+  STRING, ;
+
+: END-WORD # RET FIND >XT , ;
+
 ENTRY
 
 ( TODO )
 0x800 DP!
+
+( **************** Dictionary Structure **************** )
+( Primitives:                                            )
+(  [16b]         [8b] [8b]    [16b]                      )
+(  LINK "<name1>" 00 F_OPCODE LINK "<name2>" 00 F_OPCODE )
+(   ^--------------------------+                         )
+( Words:                                                 )
+(  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N RET LINK .. )
+(   ^---------------------------------------------+      )
 
 # +           0x01   DEF-PRIMITIVE
 # -           0x02   DEF-PRIMITIVE
@@ -207,6 +225,11 @@ ENTRY
 # DEPTH       0x30   DEF-PRIMITIVE
 # >R          0x31   DEF-PRIMITIVE
 # R>          0x32   DEF-PRIMITIVE
+
+# SQUARE FALSE DEF-WORD
+# DUP FIND >XT ,
+# *   FIND >XT ,
+END-WORD
 
 0x2000 DP!
 
