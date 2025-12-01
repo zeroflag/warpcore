@@ -51,6 +51,20 @@ class Tokens:
   def next_char(self):
     return self.stream.pop(0)
 
+class StringPool:
+  def __init__(self):
+    self.pool = {}
+
+  def get(self, s):
+    if s in self.pool:
+      return self.pool[s]
+    else:
+      return None
+
+  def add(self, s, address):
+    if s not in self.pool:
+      self.pool[s] = address
+
 def push(val): stack.append(val)
 def pop(): return stack.pop()
 def tos(): return stack[-1]
@@ -71,7 +85,7 @@ def tonum(token):
   else:
     base = 10
   return int(token, base)
-        
+
 def compile_token(token):
   #print("[0x%X] Compiling %s" % (dp, token))
   if token in words:
@@ -135,7 +149,7 @@ def def_const(name, val):
   def_word(name)
   compile_lit(tonum(val))
   compile_primitive("EXIT")
-  
+
 def def_var(name):
   # LIT @SLOT EXIT SLOT
   global dp
@@ -149,13 +163,18 @@ def def_word(name):
   words[name] = dp
 
 def compile_string():
-  compile_lit(dp + 5)
-  compile_branch("JMP")
-  for i in tokens.read_until('"'):
-    compile_num8(ord(i))
-  compile_num8(0)
-  fill_branch_address()
-  
+  s = tokens.read_until('"')
+  if pool.get(s):
+    compile_lit(pool.get(s))
+  else:
+    pool.add(s, dp + 5)
+    compile_lit(dp + 5)
+    compile_branch("JMP")
+    for i in s:
+      compile_num8(ord(i))
+    compile_num8(0)
+    fill_branch_address()
+
 def compile_entry(address):
   mem[2] = address & 0xFF
   mem[3] = (address >> 8) & 0xFF
@@ -164,7 +183,7 @@ def skip_until(end):
   tok = tokens.next()
   while tok != end:
     tok = tokens.next()
-  
+
 def create_macros():
   global dp, tokens
   macros["IF"] = lambda: compile_branch("JZ")
@@ -212,6 +231,7 @@ if __name__ == "__main__":
   input_file = sys.argv[1]
   output_file = sys.argv[2]
 
+  pool = StringPool()
   tokens = Tokens.parse_file(input_file)
   create_macros()
   make_header()

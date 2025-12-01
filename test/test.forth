@@ -31,6 +31,17 @@ VARIABLE V1
   REPEAT
   2DROP ;
 
+: NON-ZERO? C@ 0 <> ;
+
+: TYPE
+  BEGIN
+    DUP NON-ZERO?
+  WHILE
+    DUP C@ EMIT
+    1 +
+  REPEAT
+  DROP ;
+
 ENTRY
 
 2 SQR 3 SQR MIN . CR
@@ -46,5 +57,9 @@ V1 @ . CR
 V1 @ 1 + . CR
 
 7 FACTORIAL . CR
+
+s" Test String"   TYPE CR
+s" Test String"   TYPE CR
+s" Test String 2" TYPE CR
 
 0 HALT
