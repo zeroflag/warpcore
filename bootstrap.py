@@ -1,4 +1,5 @@
 import re, sys
+from io import StringIO
 
 HEADER = "vm.h"
 
@@ -9,12 +10,6 @@ primitives = {}
 words = {}
 macros = {}
 stack = []
-tokens = []
-
-def push(val): stack.append(val)
-def pop(): return stack.pop()
-def tos(): return stack[-1]
-def swap(): stack[-1], stack[-2] = stack[-2], stack[-1]
 
 SIZE = 32767
 CELL_MAX =  32767
@@ -22,6 +17,44 @@ CELL_MIN = -32768
 
 dp = 0
 mem = [0 for i in range(SIZE)]
+
+class Tokens:
+  @staticmethod
+  def parse_file(input_file):
+    with open(input_file) as f:
+      return Tokens(list(f.read()))
+
+  def __init__(self, stream):
+    self.stream = stream
+
+  def has_more(self):
+    return len(self.stream) > 0
+
+  def next(self):
+    ch = self.next_char()
+    while ch.isspace():
+      ch = self.next_char()
+    token = StringIO()
+    while not ch.isspace():
+      token.write(ch)
+      ch = self.next_char()
+    return token.getvalue()
+
+  def read_until(self, end_ch):
+    token = StringIO()
+    ch = self.next_char()
+    while ch != end_ch:
+      token.write(ch)
+      ch = self.next_char()
+    return token.getvalue()
+
+  def next_char(self):
+    return self.stream.pop(0)
+
+def push(val): stack.append(val)
+def pop(): return stack.pop()
+def tos(): return stack[-1]
+def swap(): stack[-1], stack[-2] = stack[-2], stack[-1]
 
 def read_primitives():
   with open(HEADER) as f:
@@ -79,12 +112,9 @@ def compile_num8(num):
   mem[dp] = num & 0xFF
   dp += 1
 
-def parse(source):
-  return source.split()
-
 def compile(tokens):
-  while tokens:
-    compile_token(tokens.pop(0))
+  while tokens.has_more():
+    compile_token(tokens.next())
 
 def dump(mem, output):
   with open(output, 'wb') as f:
@@ -118,10 +148,10 @@ def def_word(name):
   # print("Defining word: %s" % name)
   words[name] = dp
 
-def compile_symbol(token):
+def compile_string():
   compile_lit(dp + 5)
   compile_branch("JMP")
-  for i in token:
+  for i in tokens.read_until('"'):
     compile_num8(ord(i))
   compile_num8(0)
   fill_branch_address()
@@ -131,9 +161,9 @@ def compile_entry(address):
   mem[3] = (address >> 8) & 0xFF
 
 def skip_until(end):
-  tok = tokens.pop(0)
+  tok = tokens.next()
   while tok != end:
-    tok = tokens.pop(0)
+    tok = tokens.next()
   
 def create_macros():
   global dp, tokens
@@ -153,11 +183,11 @@ def create_macros():
                               compile_primitive("JMP"), # XXX
                               compile_num8(pop() - dp),
                               fill_branch_address())
-  macros["CONSTANT"] = lambda: def_const(tokens.pop(0), tokens.pop(0))
-  macros["VARIABLE"] = lambda: def_var(tokens.pop(0))
-  macros[":"] = lambda: def_word(tokens.pop(0))
+  macros["CONSTANT"] = lambda: def_const(tokens.next(), tokens.next())
+  macros["VARIABLE"] = lambda: def_var(tokens.next())
+  macros[":"] = lambda: def_word(tokens.next())
   macros[";"] = lambda: compile_primitive("EXIT")
-  macros['#'] = lambda: compile_symbol(tokens.pop(0))
+  macros['s"'] = lambda: compile_string()
   macros['('] = lambda: skip_until(")")
   macros["ENTRY"] = lambda: compile_entry(dp)
 
@@ -181,10 +211,10 @@ if __name__ == "__main__":
 
   input_file = sys.argv[1]
   output_file = sys.argv[2]
-  with open(input_file) as f:
-    create_macros()
-    make_header()
-    tokens = parse(f.read())
-    compile(tokens)
-    #print("Writing output: %s" % output_file)
-    dump(mem, output_file)
+
+  tokens = Tokens.parse_file(input_file)
+  create_macros()
+  make_header()
+  compile(tokens)
+  #print("Writing output: %s" % output_file)
+  dump(mem, output_file)
