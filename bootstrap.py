@@ -134,16 +134,21 @@ def dump(mem, output):
   with open(output, 'wb') as f:
     f.write(bytearray(mem))
 
-def compile_branch(branch_type):
-  global dp
+def compile_forward_jump(branch_type):
   compile_primitive(branch_type)
   push(dp)
   compile_num8(0)
 
+def compile_back_jump(jump_type):
+  compile_primitive(jump_type)
+  compile_num8(pop() - dp)
+
 def fill_branch_address():
-  global dp
   address = pop()
   mem[address] = dp - address
+
+def compile_jump_address():
+  compile_num8(pop() - dp)
 
 def def_const(name, val):
   def_word(name)
@@ -169,7 +174,7 @@ def compile_string():
   else:
     pool.add(s, dp + 5)
     compile_lit(dp + 5)
-    compile_branch("JMP")
+    compile_forward_jump("JMP")
     for i in s:
       compile_num8(ord(i))
     compile_num8(0)
@@ -186,21 +191,17 @@ def skip_until(end):
 
 def create_macros():
   global dp, tokens
-  macros["IF"] = lambda: compile_branch("JZ")
+  macros["IF"] = lambda: compile_forward_jump("JZ")
   macros["THEN"] = lambda: fill_branch_address()
-  macros["ELSE"] = lambda: (compile_branch("JMP"),
+  macros["ELSE"] = lambda: (compile_forward_jump("JMP"),
                             swap(),
                             fill_branch_address())
   macros["BEGIN"] = lambda: push(dp)
-  macros["UNTIL"] = lambda: (compile_primitive("JZ"), # XXX
-                             compile_num8(pop() - dp))
-  macros["AGAIN"] = lambda: (compile_primitive("JMP"), # XXX
-                             compile_num8(pop() - dp))
-
-  macros["WHILE"] = lambda: compile_branch("JZ")
+  macros["UNTIL"] = lambda: compile_back_jump("JZ")
+  macros["AGAIN"] = lambda: compile_back_jump("JMP")
+  macros["WHILE"] = lambda: compile_forward_jump("JZ")
   macros["REPEAT"] = lambda: (swap(),
-                              compile_primitive("JMP"), # XXX
-                              compile_num8(pop() - dp),
+                              compile_back_jump("JMP"),
                               fill_branch_address())
   macros["CONSTANT"] = lambda: def_const(tokens.next(), tokens.next())
   macros["VARIABLE"] = lambda: def_var(tokens.next())
