@@ -1,0 +1,269 @@
+CONSTANT TIB      0x64
+CONSTANT F_IMME   0b10000000
+CONSTANT TRUE    -1
+CONSTANT FALSE    0
+
+VARIABLE POS
+VARIABLE LAST
+VARIABLE STEPPER
+
+0 LAST !
+
+: 2DROP DROP DROP ;
+: 3DROP DROP DROP DROP ;
+: 2DUP  OVER OVER ;
+: ?DUP  DUP 0 <> IF DUP THEN ;
+
+: CR 10 EMIT ;
+
+: SPACE?
+  DUP  9  =
+  OVER 32 = OR
+  OVER 10 = OR
+  SWAP 13 = OR ;
+
+: NON-SPACE? SPACE? INVERT ;
+
+: POS++ POS @ 1 + POS ! ;
+: STORE POS @ C! POS++ ;
+: RESET TIB POS ! ;
+
+: CHR= C@ SWAP C@ = ;
+: NON-ZERO? C@ 0 <> ;
+
+: STRING=
+  BEGIN
+    2DUP CHR= 
+    OVER NON-ZERO? AND
+    OVER NON-ZERO? AND
+  WHILE
+    1 + SWAP 1 +
+  REPEAT
+  CHR= ;
+
+: LENGTH
+  0
+  BEGIN
+    OVER NON-ZERO?
+  WHILE
+    1 + SWAP
+    1 + SWAP
+  REPEAT
+  NIP ;
+
+: TYPE
+  BEGIN
+    DUP NON-ZERO?
+  WHILE
+    DUP C@ EMIT
+    1 +
+  REPEAT
+  DROP ;
+
+: SKIP BEGIN KEY DUP SPACE? WHILE DROP REPEAT STORE ;
+
+: WORD
+  RESET SKIP
+  BEGIN
+    KEY DUP NON-SPACE?
+  WHILE
+    STORE
+  REPEAT
+  DROP
+  0 STORE
+  TIB ;
+
+: STRING,
+  BEGIN
+    DUP NON-ZERO?
+  WHILE
+    DUP C@ C,
+    1 +
+  REPEAT
+  C@ C, ;
+
+: >NFA 2 + ;
+: >FFA >NFA DUP LENGTH + 1 + ;
+: >CFA >FFA 1 + ;
+
+: STEP  STEPPER @ @ STEPPER ! ;
+: STEP? STEPPER @ 0 <> ;
+: NFA   STEPPER @ >NFA ;
+
+: IMMEDIATE? >FFA C@ F_IMME AND 0 <> ;
+
+: IMMEDIATE
+  LAST @ >FFA C@
+  F_IMME OR 
+  LAST @ >FFA C!
+
+: FIND ( s -- addr / 0 )
+  LAST @ STEPPER !
+  BEGIN
+    STEP?
+  WHILE
+    NFA OVER ( s ) STRING= IF
+      DROP
+      STEPPER @
+      EXIT
+    THEN
+    STEP
+  REPEAT
+  DROP 0 ;
+
+: >DIGIT    C@ 48 - ;
+: NONDIGIT? C@ DUP 48 < SWAP 57 > OR ;
+: MINUS?    C@ 45 = ;
+
+: >NUMBER ( s -- n bool )
+  DUP MINUS? IF 1 + -1 ELSE 1 THEN
+  SWAP 0
+  ( sign str result )
+  BEGIN
+    OVER NON-ZERO?
+  WHILE
+    OVER NONDIGIT? IF 3DROP FALSE EXIT THEN
+    10 * OVER >DIGIT +
+    SWAP 1 + SWAP
+  REPEAT
+  NIP * TRUE ;
+
+: CONVERT ( -- n bool ) TIB >NUMBER ;
+
+: >OPCODE ( s -- opcode / 0 )
+  DUP s" +"        STRING= IF 0x01 EXIT THEN
+  DUP s" -"        STRING= IF 0x02 EXIT THEN
+  DUP s" *"        STRING= IF 0x03 EXIT THEN
+  DUP s" /"        STRING= IF 0x04 EXIT THEN
+  DUP s" DUP"      STRING= IF 0x05 EXIT THEN
+  DUP s" DROP"     STRING= IF 0x06 EXIT THEN
+  DUP s" SWAP"     STRING= IF 0x07 EXIT THEN
+  DUP s" NIP"      STRING= IF 0x08 EXIT THEN
+  DUP s" OVER"     STRING= IF 0x09 EXIT THEN
+  DUP s" ROT"      STRING= IF 0x0A EXIT THEN
+  DUP s" -ROT"     STRING= IF 0x0B EXIT THEN
+  DUP s" TUCK"     STRING= IF 0x0C EXIT THEN
+  DUP s" INVERT"   STRING= IF 0x0D EXIT THEN
+  DUP s" AND"      STRING= IF 0x0E EXIT THEN
+  DUP s" OR"       STRING= IF 0x0F EXIT THEN
+  DUP s" XOR"      STRING= IF 0x10 EXIT THEN
+  DUP s" >"        STRING= IF 0x11 EXIT THEN
+  DUP s" >="       STRING= IF 0x12 EXIT THEN
+  DUP s" <"        STRING= IF 0x13 EXIT THEN
+  DUP s" <="       STRING= IF 0x14 EXIT THEN
+  DUP s" ="        STRING= IF 0x15 EXIT THEN
+  DUP s" <>"       STRING= IF 0x16 EXIT THEN
+  DUP s" JMP"      STRING= IF 0x17 EXIT THEN
+  DUP s" JZ"       STRING= IF 0x18 EXIT THEN
+  DUP s" JNZ"      STRING= IF 0x19 EXIT THEN
+  DUP s" AJMP"     STRING= IF 0x1A EXIT THEN
+  DUP s" CALL"     STRING= IF 0x1B EXIT THEN
+  DUP s" EXIT"     STRING= IF 0x1C EXIT THEN
+  DUP s" ."        STRING= IF 0x1D EXIT THEN
+  DUP s" NOP"      STRING= IF 0x1E EXIT THEN
+  DUP s" EMIT"     STRING= IF 0x1F EXIT THEN
+  DUP s" LIT"      STRING= IF 0x20 EXIT THEN
+  DUP s" %"        STRING= IF 0x21 EXIT THEN
+  DUP s" KEY"      STRING= IF 0x22 EXIT THEN
+  DUP s" SP"       STRING= IF 0x23 EXIT THEN
+  DUP s" SP!"      STRING= IF 0x24 EXIT THEN
+  DUP s" HALT"     STRING= IF 0x25 EXIT THEN
+  DUP s" LSHIFT"   STRING= IF 0x26 EXIT THEN
+  DUP s" RSHIFT"   STRING= IF 0x27 EXIT THEN
+  DUP s" !"        STRING= IF 0x28 EXIT THEN
+  DUP s" C!"       STRING= IF 0x29 EXIT THEN
+  DUP s" @"        STRING= IF 0x2A EXIT THEN
+  DUP s" C@"       STRING= IF 0x2B EXIT THEN
+  DUP s" DP"       STRING= IF 0x2C EXIT THEN
+  DUP s" DP!"      STRING= IF 0x2D EXIT THEN
+  DUP s" ,"        STRING= IF 0x2E EXIT THEN
+  DUP s" C,"       STRING= IF 0x2F EXIT THEN
+  DUP s" DEPTH"    STRING= IF 0x30 EXIT THEN
+  DUP s" >R"       STRING= IF 0x31 EXIT THEN
+  DUP s" R>"       STRING= IF 0x32 EXIT THEN
+  DROP 0
+;
+
+: FIND-PRIMITIVE ( -- opcode / 0 ) TIB >OPCODE ;
+
+: ??? ( s -- ) TIB TYPE 32 EMIT 63 EMIT CR ;
+
+: COMPILE ( -- )
+  WORD FIND
+  ?DUP IF
+    DUP IMMEDIATE? IF
+      >CFA EXEC
+    ELSE
+      OPCODE: CALL C,
+      >CFA , 
+    THEN
+  ELSE
+    FIND-PRIMITIVE
+    ?DUP IF
+      ( OPCODE ) C,
+    ELSE CONVERT
+      IF
+        OPCODE: LIT C, ( NUM ) ,
+      ELSE ??? THEN
+    THEN
+  THEN ;
+
+: DEF-WORD ( flags name -- )
+  DP
+  LAST @ , 
+  LAST !
+  STRING, 
+  0 C,   ( FLAGS )
+;
+
+: END-WORD OPCODE: EXIT C, ;
+
+(
+  : M-IF   OPCODE: JZ  C, DP 0 , ;
+  : M-ELSE OPCODE: JMP C, DP 0 , ;
+  : M-THEN DP OVER - SWAP ! ;
+)
+
+ENTRY
+
+( TODO Should match Start IP )
+0x4000 DP!
+
+( ***************** Dictionary Structure ***************** )
+( Words:                                                   )
+(  16b            8b 8b                                    )
+(  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
+(   ^---------------------------------------------+        )
+
+s" :"
+DEF-WORD
+  OPCODE: CALL C, ' WORD ,
+  OPCODE: CALL C, ' DEF-WORD ,
+END-WORD IMMEDIATE
+
+s" ;"
+DEF-WORD
+  OPCODE: LIT C, 0x1C , ( EXIT )
+  OPCODE: C, C,
+END-WORD IMMEDIATE
+
+s" ENTRY"
+DEF-WORD
+  OPCODE: DP  C, 
+  OPCODE: LIT C, 0x0002 , 
+  OPCODE: !   C,
+END-WORD IMMEDIATE
+
+s" BYE"
+DEF-WORD
+  OPCODE: LIT  C, 0 ,
+  OPCODE: HALT C,
+END-WORD IMMEDIATE
+
+0x6000 DP!
+
+BEGIN COMPILE AGAIN
+
+CR DEPTH . CR
+
+0 HALT
