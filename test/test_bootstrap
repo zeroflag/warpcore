@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGE="test/bootstrap_test.dat"
+IMAGE="test/bootstrap_test.img"
 TEST="test/test.forth"
 
 rm -f "$IMAGE"
