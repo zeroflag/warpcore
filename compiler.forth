@@ -208,21 +208,14 @@ VARIABLE STEPPER
     THEN
   THEN ;
 
-: DEF-WORD ( flags name -- )
+: DEF ( name -- )
   DP
-  LAST @ , 
+  LAST @ ,
   LAST !
   STRING, 
-  0 C,   ( FLAGS )
-;
+  0 ( FLAGS ) C, ;
 
-: END-WORD OPCODE: EXIT C, ;
-
-( TODO
-  : M-IF   OPCODE: JZ  C, DP 0 , ;
-  : M-ELSE OPCODE: JMP C, DP 0 , ;
-  : M-THEN DP OVER - SWAP ! ;
-)
+: END OPCODE: EXIT C, ;
 
 ENTRY
 
@@ -233,23 +226,23 @@ ENTRY
 (   ^---------------------------------------------+        )
 
 s" :"
-DEF-WORD
+DEF
   OPCODE: CALL C, ' WORD ,
-  OPCODE: CALL C, ' DEF-WORD ,
-END-WORD IMMEDIATE
+  OPCODE: CALL C, ' DEF  ,
+END IMMEDIATE
 
 s" ;"
-DEF-WORD
+DEF
   OPCODE: LIT C, 0x1C , ( EXIT )
   OPCODE: C, C,
-END-WORD IMMEDIATE
+END IMMEDIATE
 
 s" ENTRY"
-DEF-WORD
+DEF
   OPCODE: DP  C, 
   OPCODE: LIT C, 0x0002 , 
   OPCODE: !   C,
-END-WORD IMMEDIATE
+END IMMEDIATE
 
 BEGIN
   WORD s" BYE" STRING= INVERT
