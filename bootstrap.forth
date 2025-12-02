@@ -11,10 +11,10 @@ VARIABLE STEPPER
 
 : 2DROP DROP DROP ;
 : 3DROP DROP DROP DROP ;
-: 2DUP OVER OVER ;
-: CR 10 EMIT ;
+: 2DUP  OVER OVER ;
+: ?DUP  DUP 0 <> IF DUP THEN ;
 
-: ?DUP DUP 0 <> IF DUP THEN ;
+: CR 10 EMIT ;
 
 : SPACE?
   DUP  9  =
@@ -25,7 +25,6 @@ VARIABLE STEPPER
 : NON-SPACE? SPACE? INVERT ;
 
 : POS++ POS @ 1 + POS ! ;
-: LEN   POS @ TIB - ;
 : STORE POS @ C! POS++ ;
 : RESET TIB POS ! ;
 
@@ -85,8 +84,7 @@ VARIABLE STEPPER
   
 : STEP  STEPPER @ @ STEPPER ! ;
 : STEP? STEPPER @ 0 <> ;
-
-: >NAME   STEPPER @ 3 + ;
+: >NAME STEPPER @ 3 + ;
 
 : FIND ( s -- addr / 0 )
   LAST @ STEPPER !
@@ -103,9 +101,7 @@ VARIABLE STEPPER
   REPEAT
   DROP 0 ;
 
-( TODO: validate 0..9 )
-
-: DIGIT     C@ 48 - ;
+: >DIGIT    C@ 48 - ;
 : NONDIGIT? C@ DUP 48 < SWAP 57 > OR ;
 : MINUS?    C@ 45 = ;
 
@@ -117,7 +113,7 @@ VARIABLE STEPPER
     OVER NON-ZERO?
   WHILE
     OVER NONDIGIT? IF 3DROP FALSE EXIT THEN
-    10 * OVER DIGIT +
+    10 * OVER >DIGIT +
     SWAP 1 + SWAP
   REPEAT
   NIP * TRUE ;
@@ -211,10 +207,10 @@ ENTRY
 ( TODO )
 0x850 DP!
 
-( **************** Dictionary Structure **************** )
-( Words:                                                 )
-(  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK .. )
-(   ^---------------------------------------------+      )
+( ***************** Dictionary Structure ***************** )
+( Words:                                                   )
+(  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
+(   ^---------------------------------------------+        )
 
 s" SQUARE" FALSE
 DEF-WORD
