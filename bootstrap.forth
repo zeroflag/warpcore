@@ -84,16 +84,22 @@ VARIABLE STEPPER
   
 : STEP  STEPPER @ @ STEPPER ! ;
 : STEP? STEPPER @ 0 <> ;
-: >NFA STEPPER @ 2 + ;
+: NFA STEPPER @ 2 + ;
+
+( TODO refac )
+: IMMEDIATE
+  LAST @ 2 +
+  DUP LENGTH + 1 + ( ending 0 )
+  DUP C@ F_IMME OR SWAP C! ;
 
 : FIND ( s -- addr / 0 )
   LAST @ STEPPER !
   BEGIN
     STEP?
   WHILE
-    >NFA OVER STRING= IF
+    NFA OVER STRING= IF
       DROP
-      >NFA LENGTH >NFA + 1 + ( *FLAGS )
+      NFA LENGTH NFA + 1 + ( *FLAGS )
       EXIT
     THEN
     STEP
@@ -205,7 +211,7 @@ VARIABLE STEPPER
   LAST @ , 
   LAST !
   STRING, 
-  IF F_IMME ELSE 0 THEN C,
+  0 C,   ( FLAGS )
 ;
 
 : END-WORD OPCODE: EXIT C, ;
@@ -225,18 +231,18 @@ ENTRY
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
 (   ^---------------------------------------------+        )
 
-FALSE s" SQUARE"
+s" SQUARE"
 DEF-WORD
   OPCODE: DUP C,
   OPCODE: *   C,
 END-WORD
 
-TRUE s" MACRO"
+s" MACRO"
 DEF-WORD
   OPCODE: LIT  C,
   65 ,
   OPCODE: EMIT C,
-END-WORD
+END-WORD IMMEDIATE
 
 0x2000 DP!
 
