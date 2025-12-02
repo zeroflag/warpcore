@@ -218,16 +218,13 @@ VARIABLE STEPPER
 
 : END-WORD OPCODE: EXIT C, ;
 
-(
+( TODO
   : M-IF   OPCODE: JZ  C, DP 0 , ;
   : M-ELSE OPCODE: JMP C, DP 0 , ;
   : M-THEN DP OVER - SWAP ! ;
 )
 
 ENTRY
-
-( TODO Should match Start IP )
-0x4000 DP!
 
 ( ***************** Dictionary Structure ***************** )
 ( Words:                                                   )
@@ -253,8 +250,6 @@ DEF-WORD
   OPCODE: LIT C, 0x0002 , 
   OPCODE: !   C,
 END-WORD IMMEDIATE
-
-0x6000 DP!
 
 BEGIN
   WORD s" BYE" STRING= INVERT

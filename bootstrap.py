@@ -229,7 +229,7 @@ def create_macros():
 
 def make_header():
   global dp
-  entry = 0x164
+  entry = 0x7800
   mem[dp] = 0b00010000 # version
   dp += 1
   compile_primitive("AJMP")
@@ -238,12 +238,6 @@ def make_header():
 
 if __name__ == "__main__":
   read_primitives()
-
-  if len(sys.argv) != 3:
-    for name, opcode in primitives.items():
-      sep = " " * (8 - len(name))
-      print('  DUP s" %s"%s STRING= IF 0x%0.2X EXIT THEN' % (name, sep, opcode))
-    sys.exit()
 
   input_file = sys.argv[1]
   output_file = sys.argv[2]
