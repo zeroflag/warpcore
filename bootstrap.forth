@@ -200,7 +200,7 @@ VARIABLE STEPPER
   ELSE
     FIND-PRIMITIVE
     ?DUP IF
-      ( OPCODE ) ,
+      ( OPCODE ) C,
     ELSE CONVERT
       IF
         OPCODE: LIT C, ( NUM ) ,
