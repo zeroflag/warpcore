@@ -235,12 +235,6 @@ ENTRY
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
 (   ^---------------------------------------------+        )
 
-s" SQUARE"
-DEF-WORD
-  OPCODE: DUP C,
-  OPCODE: *   C,
-END-WORD
-
 s" TEST-MACRO"
 DEF-WORD
   OPCODE: LIT  C,
