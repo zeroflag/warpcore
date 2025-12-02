@@ -220,6 +220,7 @@ def create_macros():
   macros[":"] = lambda: def_word(tokens.next())
   macros[";"] = lambda: compile_primitive("EXIT")
   macros["OPCODE:"] = lambda: compile_lit(primitives[tokens.next()])
+  macros["'"] = lambda: compile_lit(words[tokens.next()])
   macros['s"'] = compile_string
   macros['('] = lambda: skip_until(")")
   macros["ENTRY"] = lambda: compile_entry(dp)

@@ -181,14 +181,14 @@ VARIABLE STEPPER
 : COMPILE ( -- )
   WORD FIND
   ?DUP IF
-    OPCODE: CALL , 1 + , ( Word Start )
+    OPCODE: CALL C, 1 + , ( Word Start )
   ELSE
     FIND-PRIMITIVE
     ?DUP IF
       ( OPCODE ) ,
     ELSE CONVERT
       IF
-        OPCODE: LIT , ( NUM ) ,
+        OPCODE: LIT C, ( NUM ) ,
       ELSE ??? THEN
     THEN
   THEN ;
@@ -200,7 +200,7 @@ VARIABLE STEPPER
   IF F_IMME ELSE 0 THEN C,
   STRING, ;
 
-: END-WORD OPCODE: EXIT , ;
+: END-WORD OPCODE: EXIT C, ;
 
 ENTRY
 
@@ -214,8 +214,8 @@ ENTRY
 
 s" SQUARE" FALSE
 DEF-WORD
-  OPCODE: DUP ,
-  OPCODE: *   ,
+  OPCODE: DUP C,
+  OPCODE: *   C,
 END-WORD
 
 0x2000 DP!
