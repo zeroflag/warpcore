@@ -92,11 +92,10 @@ VARIABLE STEPPER
 
 : IMMEDIATE? >FFA C@ F_IMME AND 0 <> ;
 
-( TODO refac )
 : IMMEDIATE
-  LAST @ 2 +
-  DUP LENGTH + 1 + ( ending 0 )
-  DUP C@ F_IMME OR SWAP C! ;
+  LAST @ >FFA C@
+  F_IMME OR 
+  LAST @ >FFA C!
 
 : FIND ( s -- addr / 0 )
   LAST @ STEPPER !
