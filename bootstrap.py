@@ -167,6 +167,8 @@ def def_var(name):
 
 def def_word(name):
   # print("Defining word: %s" % name)
+  if name in words:
+    print("Warning: redefined %s" % name)
   words[name] = dp
 
 def compile_string():

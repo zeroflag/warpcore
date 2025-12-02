@@ -81,10 +81,16 @@ VARIABLE STEPPER
     1 +
   REPEAT
   C@ C, ;
-  
+
+: >NFA 2 + ;
+: >FFA >NFA DUP LENGTH + 1 + ;
+: >CFA >FFA 1 + ;
+
 : STEP  STEPPER @ @ STEPPER ! ;
 : STEP? STEPPER @ 0 <> ;
-: NFA STEPPER @ 2 + ;
+: NFA   STEPPER @ >NFA ;
+
+: IMMEDIATE? >FFA C@ F_IMME AND 0 <> ;
 
 ( TODO refac )
 : IMMEDIATE
@@ -97,9 +103,9 @@ VARIABLE STEPPER
   BEGIN
     STEP?
   WHILE
-    NFA OVER STRING= IF
+    NFA OVER ( s ) STRING= IF
       DROP
-      NFA LENGTH NFA + 1 + ( *FLAGS )
+      STEPPER @
       EXIT
     THEN
     STEP
@@ -183,9 +189,6 @@ VARIABLE STEPPER
 
 : ??? ( s -- ) TIB TYPE 32 EMIT 63 EMIT CR ;
 
-: IMMEDIATE? ( a -- bool ) C@ F_IMME AND 0 <> ;
-: >CFA ( a -- a ) 1 + ;
-
 : COMPILE ( -- )
   WORD FIND
   ?DUP IF
@@ -216,9 +219,11 @@ VARIABLE STEPPER
 
 : END-WORD OPCODE: EXIT C, ;
 
-: M-IF   OPCODE: JZ  C, DP 0 , ;
-: M-ELSE OPCODE: JMP C, DP 0 , ;
-: M-THEN DP OVER - SWAP ! ;
+(
+  : M-IF   OPCODE: JZ  C, DP 0 , ;
+  : M-ELSE OPCODE: JMP C, DP 0 , ;
+  : M-THEN DP OVER - SWAP ! ;
+)
 
 ENTRY
 
@@ -237,7 +242,7 @@ DEF-WORD
   OPCODE: *   C,
 END-WORD
 
-s" MACRO"
+s" TEST-MACRO"
 DEF-WORD
   OPCODE: LIT  C,
   65 ,
