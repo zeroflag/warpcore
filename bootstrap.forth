@@ -88,7 +88,7 @@ VARIABLE STEPPER
 
 : >NAME   STEPPER @ 3 + ;
 
-: FIND-WORD ( s -- addr / 0 )
+: FIND ( s -- addr / 0 )
   LAST @ STEPPER !
   BEGIN
     STEP?
@@ -183,7 +183,7 @@ VARIABLE STEPPER
 : ??? ( s -- ) TIB TYPE 32 EMIT 63 EMIT CR ;
 
 : COMPILE ( -- )
-  WORD FIND-WORD ( TODO )
+  WORD FIND
   ?DUP IF
     OPCODE: CALL , 1 + , ( Word Start )
   ELSE
