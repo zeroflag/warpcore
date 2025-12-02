@@ -84,17 +84,16 @@ VARIABLE STEPPER
   
 : STEP  STEPPER @ @ STEPPER ! ;
 : STEP? STEPPER @ 0 <> ;
-: >NAME STEPPER @ 3 + ;
+: >NFA STEPPER @ 2 + ;
 
 : FIND ( s -- addr / 0 )
   LAST @ STEPPER !
   BEGIN
     STEP?
   WHILE
-    >NAME OVER STRING= IF
+    >NFA OVER STRING= IF
       DROP
-      ( return addr. of FLAG/OPCODE  )
-      STEPPER @ 2 + 
+      >NFA LENGTH >NFA + 1 + ( *FLAGS )
       EXIT
     THEN
     STEP
@@ -178,10 +177,18 @@ VARIABLE STEPPER
 
 : ??? ( s -- ) TIB TYPE 32 EMIT 63 EMIT CR ;
 
+: IMMEDIATE? ( a -- bool ) C@ F_IMME AND 0 <> ;
+: >CFA ( a -- a ) 1 + ;
+
 : COMPILE ( -- )
   WORD FIND
   ?DUP IF
-    OPCODE: CALL C, 1 + , ( Word Start )
+    DUP IMMEDIATE? IF
+      >CFA EXEC
+    ELSE
+      OPCODE: CALL C,
+      >CFA , 
+    THEN
   ELSE
     FIND-PRIMITIVE
     ?DUP IF
@@ -193,17 +200,19 @@ VARIABLE STEPPER
     THEN
   THEN ;
 
-: DEF-WORD ( name imm? -- )
+: DEF-WORD ( flags name -- )
   DP
   LAST @ , 
   LAST !
+  STRING, 
   IF F_IMME ELSE 0 THEN C,
-  STRING, ;
+;
 
 : END-WORD OPCODE: EXIT C, ;
 
-
-: HELLO s" Hello World" TYPE CR ; 
+: M-IF   OPCODE: JZ  C, DP 0 , ;
+: M-ELSE OPCODE: JMP C, DP 0 , ;
+: M-THEN DP OVER - SWAP ! ;
 
 ENTRY
 
@@ -212,18 +221,24 @@ ENTRY
 
 ( ***************** Dictionary Structure ***************** )
 ( Words:                                                   )
+(  16b            8b 8b                                    )
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
 (   ^---------------------------------------------+        )
 
-s" SQUARE" FALSE
+FALSE s" SQUARE"
 DEF-WORD
   OPCODE: DUP C,
   OPCODE: *   C,
 END-WORD
 
-0x2000 DP!
+TRUE s" MACRO"
+DEF-WORD
+  OPCODE: LIT  C,
+  65 ,
+  OPCODE: EMIT C,
+END-WORD
 
-' HELLO EXEC
+0x2000 DP!
 
 BEGIN
   COMPILE
