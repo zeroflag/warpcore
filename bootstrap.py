@@ -211,7 +211,7 @@ def create_macros():
   macros["OF"] = lambda: (compile_primitive('OVER'),
                           compile_primitive('='),
                           compile_forward_jump("JZ"),
-                          compile_primitive('DROP'))
+                          compile_primitive("DROP"))
   macros["ENDOF"] = lambda: (inc2nd(),
                              compile_forward_jump("JMP"),
                              swap(),
