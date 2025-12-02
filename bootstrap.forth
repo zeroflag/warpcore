@@ -226,7 +226,7 @@ VARIABLE STEPPER
 
 ENTRY
 
-( TODO )
+( TODO Should match Start IP )
 0x4000 DP!
 
 ( ***************** Dictionary Structure ***************** )
@@ -234,13 +234,6 @@ ENTRY
 (  16b            8b 8b                                    )
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
 (   ^---------------------------------------------+        )
-
-s" TEST-MACRO"
-DEF-WORD
-  OPCODE: LIT  C,
-  65 ,
-  OPCODE: EMIT C,
-END-WORD IMMEDIATE
 
 s" :"
 DEF-WORD
@@ -250,8 +243,15 @@ END-WORD IMMEDIATE
 
 s" ;"
 DEF-WORD
-  OPCODE: LIT C, 0x1C ( EXIT ) ,
+  OPCODE: LIT C, 0x1C , ( EXIT )
   OPCODE: C, C,
+END-WORD IMMEDIATE
+
+s" ENTRY"
+DEF-WORD
+  OPCODE: DP  C, 
+  OPCODE: LIT C, 0x0002 , 
+  OPCODE: !   C,
 END-WORD IMMEDIATE
 
 0x6000 DP!
