@@ -113,10 +113,10 @@ VARIABLE STEPPER
 
 : >DIGIT    C@ 48 - ;
 : NONDIGIT? C@ DUP 48 < SWAP 57 > OR ;
-: MINUS?    C@ 45 = ;
+: NEGATIVE? C@ 45 = ;
 
 : >NUMBER ( s -- n bool )
-  DUP MINUS? IF 1 + -1 ELSE 1 THEN
+  DUP NEGATIVE? IF 1 + -1 ELSE 1 THEN
   SWAP 0
   ( sign str result )
   BEGIN
