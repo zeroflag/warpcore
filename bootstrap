@@ -1,8 +1,8 @@
 #!/bin/bash
 
 make
-IMAGE=bootstrap.img
-FORTH=bootstrap.forth
+IMAGE=compiler.img
+FORTH=compiler.forth
 
 rm -f "$IMAGE"
 python bootstrap.py "$FORTH" "$IMAGE"

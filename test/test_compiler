@@ -1,0 +1,14 @@
+#!/bin/bash
+
+IMAGE="compiler.img"
+COMPILER="compiler.forth"
+TEST="test/smoke.forth"
+
+rm -f "$IMAGE"
+
+python bootstrap.py "$COMPILER" "$IMAGE"
+
+./warp "$IMAGE" < "$TEST"
+./warp "$IMAGE"
+
+rm -f "$IMAGE"

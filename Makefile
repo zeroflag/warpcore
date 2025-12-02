@@ -14,7 +14,7 @@ BOLD_GREEN = \033[1;32m
 BOLD_RED   := \033[1;31m
 RESET = \033[0m
 
-all: clean vm test-core test-bootstrap
+all: clean vm test-core test-bootstrap test-compiler
 
 vm:
 	$(CC) $(CFLAGS) -o $(OUT) $(SRCS) "main.c"
@@ -22,21 +22,30 @@ vm:
 test-core:
 	$(CC) $(CFLAGS) -o $(TEST_EXEC) $(TEST_SRCS) $(SRCS)
 	@./$(TEST_EXEC) || { \
-		echo "$(BOLD_RED)✗ Core tests failed.$(RESET)"; \
+		echo "$(BOLD_RED)✗ VM tests failed.$(RESET)"; \
 		exit 1; \
 	}
-	@echo "$(BOLD_GREEN)✓ Core tests passed.$(RESET)"
+	@echo "$(BOLD_GREEN)✓ VM tests passed.$(RESET)"
 
 test-bootstrap:
 	@./test/test_bootstrap > $(TEST_OUTP)
 	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
-		echo "$(BOLD_RED)✗ Bootstrap tests failed.$(RESET)"; \
+		echo "$(BOLD_RED)✗ Bootstrap compiler tests failed.$(RESET)"; \
 		exit 1; \
 	}
-	@echo "$(BOLD_GREEN)✓ Bootstrap tests passed.$(RESET)"
+	@echo "$(BOLD_GREEN)✓ Bootstrap compiler tests passed.$(RESET)"
+	@rm -f $(TEST_OUTP)
+
+test-compiler:
+	@./test/test_compiler > $(TEST_OUTP)
+	@diff -u ./test/compiler_expected.txt $(TEST_OUTP) || { \
+		echo "$(BOLD_RED)✗ Final compiler tests failed.$(RESET)"; \
+		exit 1; \
+	}
+	@echo "$(BOLD_GREEN)✓ Final compiler tests passed.$(RESET)"
 	@rm -f $(TEST_OUTP)
 
 clean:
 	@rm -f $(OUT) $(OBJS) $(TEST_OBJS) $(TEST_EXEC) $(TEST_OUTP)
 
-.PHONY: all clean test-core test-bootstrap
+.PHONY: all clean test-core test-bootstrap test-compiler

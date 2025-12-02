@@ -1,0 +1,11 @@
+: SQ DUP * ;
+: CR 10 EMIT ;
+
+ENTRY
+
+3 SQ . CR
+
+0 HALT
+
+BYE
+
