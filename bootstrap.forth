@@ -109,7 +109,7 @@ VARIABLE STEPPER
 : NONDIGIT? C@ DUP 48 < SWAP 57 > OR ;
 : MINUS?    C@ 45 = ;
 
-: >NUMBER ( s -- n TRUE / FALSE )
+: >NUMBER ( s -- n bool )
   DUP MINUS? IF 1 + -1 ELSE 1 THEN
   SWAP 0
   ( sign str result )
@@ -122,7 +122,9 @@ VARIABLE STEPPER
   REPEAT
   NIP * TRUE ;
 
-: FIND-PRIMITIVE ( s -- opcode / 0 )
+: CONVERT ( -- n bool ) TIB >NUMBER ;
+
+: >OPCODE ( s -- opcode / 0 )
   DUP s" +"        STRING= IF 0x01 EXIT THEN
   DUP s" -"        STRING= IF 0x02 EXIT THEN
   DUP s" *"        STRING= IF 0x03 EXIT THEN
@@ -176,20 +178,21 @@ VARIABLE STEPPER
   DROP 0
 ;
 
-: ??? ( s -- ) TYPE 32 EMIT 63 EMIT ;
+: FIND-PRIMITIVE ( -- opcode / 0 ) TIB >OPCODE ;
+
+: ??? ( s -- ) TIB TYPE 32 EMIT 63 EMIT CR ;
 
 : COMPILE ( -- )
-  WORD DUP FIND-WORD
+  WORD FIND-WORD ( TODO )
   ?DUP IF
-    XT, CALL 1 + , ( Word Start )
-    DROP
+    OPCODE: CALL , 1 + , ( Word Start )
   ELSE
-    DUP FIND-PRIMITIVE
+    FIND-PRIMITIVE
     ?DUP IF
-      ( OPCODE ) , DROP
-    ELSE
-      DUP >NUMBER IF
-        XT, LIT ( NUM ) , DROP
+      ( OPCODE ) ,
+    ELSE CONVERT
+      IF
+        OPCODE: LIT , ( NUM ) ,
       ELSE ??? THEN
     THEN
   THEN ;
@@ -201,7 +204,7 @@ VARIABLE STEPPER
   IF F_IMME ELSE 0 THEN C,
   STRING, ;
 
-: END-WORD XT, EXIT ;
+: END-WORD OPCODE: EXIT , ;
 
 ENTRY
 
@@ -215,8 +218,8 @@ ENTRY
 
 s" SQUARE" FALSE
 DEF-WORD
-  XT, DUP
-  XT, * 
+  OPCODE: DUP ,
+  OPCODE: *   ,
 END-WORD
 
 0x2000 DP!
