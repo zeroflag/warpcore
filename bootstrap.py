@@ -14,6 +14,7 @@ stack = []
 SIZE = 32767
 CELL_MAX =  32767
 CELL_MIN = -32768
+COMPILER_ENTRY = 0x7800
 
 dp = 0
 mem = [0 for i in range(SIZE)]
@@ -229,7 +230,7 @@ def create_macros():
 
 def make_header():
   global dp
-  entry = 0x7800
+  entry = COMPILER_ENTRY
   mem[dp] = 0b00010000 # version
   dp += 1
   compile_primitive("AJMP")
