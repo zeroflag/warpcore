@@ -227,7 +227,7 @@ VARIABLE STEPPER
 ENTRY
 
 ( TODO )
-0x850 DP!
+0x4000 DP!
 
 ( ***************** Dictionary Structure ***************** )
 ( Words:                                                   )
@@ -248,11 +248,20 @@ DEF-WORD
   OPCODE: EMIT C,
 END-WORD IMMEDIATE
 
-0x2000 DP!
+s" :"
+DEF-WORD
+  OPCODE: CALL C, ' WORD ,
+  OPCODE: CALL C, ' DEF-WORD ,
+END-WORD IMMEDIATE
 
-BEGIN
-  COMPILE
-AGAIN
+s" ;"
+DEF-WORD
+  OPCODE: EXIT C,
+END-WORD IMMEDIATE
+
+0x6000 DP!
+
+BEGIN COMPILE AGAIN
 
 CR DEPTH . CR
 
