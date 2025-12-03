@@ -242,6 +242,19 @@ VARIABLE STEPPER
   REPEAT
   COMPILE-HALT ;
 
+: DUMP-OUTPUT
+  s" output.img" DUMP
+  INVERT IF
+    s" DUMP FAILED" TYPE CR
+    ABORT
+  THEN ;
+
+: POST-CHECKS
+  DEPTH 0 <> IF
+    s" Non Empty stack: " TYPE DEPTH . CR
+    ABORT
+  THEN ;
+
 ENTRY
 
 ( ***************** Dictionary Structure ***************** )
@@ -272,16 +285,7 @@ DEF
 END IMMEDIATE
 
 COMPILER-LOOP
-
-s" output.img" DUMP
-INVERT IF
-  s" DUMP FAILED" TYPE CR
-  ABORT
-THEN
-
-DEPTH 0 <> IF
-  s" Non Empty stack: " TYPE DEPTH . CR
-  ABORT
-THEN
+DUMP-OUTPUT
+POST-CHECKS
 
 0 HALT
