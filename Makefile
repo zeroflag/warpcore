@@ -30,8 +30,8 @@ test-core:
 	@echo "$(BOLD_GREEN)✓ VM tests passed.$(RESET)"
 
 test-bootstrap:
-	@./test/test_bootstrap > $(TEST_OUTP)
-	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
+	@./test/test_bootstrap.sh > $(TEST_OUTP)
+	@diff -u ./test/bootstrap_expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Bootstrap compiler tests failed.$(RESET)"; \
 		exit 1; \
 	}
@@ -39,7 +39,7 @@ test-bootstrap:
 	@rm -f $(TEST_OUTP)
 
 test-compiler:
-	@./test/test_compiler > $(TEST_OUTP)
+	@./test/test_compiler.sh > $(TEST_OUTP)
 	@diff -u ./test/compiler_expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Final compiler tests failed.$(RESET)"; \
 		exit 1; \
