@@ -1,0 +1,14 @@
+#!/bin/bash
+
+COMPILER=compiler.img
+OUTPUT=output.img
+
+echo "Bootstrapping compiler.."
+./bootstrap
+echo "Compiler ready: $COMPILER"
+
+./warp "$COMPILER"
+
+echo "Running compiled output: $OUTPUT"
+
+./warp "$OUTPUT"
