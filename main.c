@@ -30,25 +30,25 @@ void parse_args(int argc, char **argv) {
 }
 
 int main(int argc, char **argv) {
-  parse_args(argc, argv);
-  dprint("Loading %s..\n", image_path);
+  uint8_t *mem = NULL;
 
-  uint8_t mem[MEM_SIZE];
-  uint8_t *mapped_mem = NULL;
+  parse_args(argc, argv);
   if (mapping_enabled) {
     dprint("MMAP image: %s\n", image_path);
-    mapped_mem = map_file(image_path);
+    mem = map_file(image_path);
   } else {
-    load_file(image_path, mem);
+    uint8_t static_mem[MEM_SIZE];
+    dprint("Loading %s..\n", image_path);
+    load_file(image_path, static_mem);
+    mem = static_mem;
   }
 
-  Ver ver = read_version(mapping_enabled ? mapped_mem : mem);
-  
+  Ver ver = read_version(mem);
   if (ver.major == 1) {
     dprint("Image version: %d.%d.\n", ver.major, ver.minor);
-    cell_t result = engage(mapping_enabled ? mapped_mem : mem, 0x01, 0x04, 0x44, 0x164);
+    cell_t result = engage(mem, 0x01, 0x04, 0x44, 0x164);
     if (mapping_enabled) {
-      sync_mapped_image(mapped_mem);
+      sync_mapped_image(mem);
     }
     return result;
   } else {
