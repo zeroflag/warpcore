@@ -296,7 +296,8 @@ cell_t engage(uint8_t *mem,
         return POP;
       }
       case OP_DUMP: {
-        PUSH((cell_t)dump(mem));
+        char *path = (char *)(POP + mem);
+        PUSH((cell_t)dump_image(mem, path));
         break;
       }
       case OP_NOP: {}

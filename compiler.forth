@@ -256,7 +256,8 @@ REPEAT
 
 ( CR DEPTH . CR TODO check stack )
 
-DUMP INVERT IF
+s" output.img" DUMP
+INVERT IF
   s" DUMP FAILED" TYPE CR
 THEN
 
