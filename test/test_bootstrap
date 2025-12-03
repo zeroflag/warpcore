@@ -7,5 +7,3 @@ rm -f "$IMAGE"
 
 python bootstrap.py "$TEST" "$IMAGE"
 ./warp "$IMAGE"
-
-rm -f "$IMAGE"

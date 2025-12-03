@@ -2,10 +2,10 @@
 
 COMPILER_IMAGE="compiler.img"
 COMPILER_FORTH="compiler.forth"
-OUT_IMAGE="dump.img"
+OUT_IMAGE="output.img"
 TEST="test/smoke.forth"
 
-rm -f "$IMAGE"
+rm -f "$IMAGE" "$OUT_IMAGE"
 
 # build compiler image
 python bootstrap.py "$COMPILER_FORTH" "$COMPILER_IMAGE"
@@ -15,5 +15,3 @@ python bootstrap.py "$COMPILER_FORTH" "$COMPILER_IMAGE"
 
 # run the emitted image
 ./warp "$OUT_IMAGE"
-
-rm -f "$IMAGE"

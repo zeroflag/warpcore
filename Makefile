@@ -3,12 +3,14 @@ CFLAGS = -Wall -Wextra -std=c11 -I. -O3
 
 SRCS = $(filter-out main.c, $(wildcard *.c))
 OBJS = $(SRCS:.c=.o)
+IMGS := $(wildcard *.img)
 OUT = warp
 
 TEST_SRCS := $(wildcard test/*.c)
 TEST_OBJS = $(TEST_SRC:.c=.o)
 TEST_EXEC = test/run_tests
 TEST_OUTP = test/out.txt
+TEST_IMGS := $(wildcard test/*.img)
 
 BOLD_GREEN = \033[1;32m
 BOLD_RED   := \033[1;31m
@@ -46,6 +48,6 @@ test-compiler:
 	@rm -f $(TEST_OUTP)
 
 clean:
-	@rm -f $(OUT) $(OBJS) $(TEST_OBJS) $(TEST_EXEC) $(TEST_OUTP)
+	@rm -f $(OUT) $(OBJS) $(IMGS) $(TEST_OBJS) $(TEST_EXEC) $(TEST_OUTP) $(TEST_IMGS)
 
 .PHONY: all clean test-core test-bootstrap test-compiler
