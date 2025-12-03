@@ -1,9 +1,21 @@
 : SQ DUP * ;
 : CR 10 EMIT ;
 
+: RESOLVE DP OVER - SWAP ! ;
+
+: IF  24 C, DP 0 , ; IMMEDIATE
+: ELSE
+  23 C, DP 0 ,
+  SWAP RESOLVE ; IMMEDIATE
+: THEN RESOLVE ; IMMEDIATE   
+
 ENTRY
 
-3 SQ 1 + . CR
+2 3 < IF
+  3 SQ 1 + . CR
+ELSE
+  65 EMIT
+THEN
 
 BYE
 
