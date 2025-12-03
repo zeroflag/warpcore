@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include "vm.h"
+#include "image.h"
 
 #define DEBUG 0
 
