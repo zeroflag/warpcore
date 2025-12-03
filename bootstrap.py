@@ -14,7 +14,7 @@ stack = []
 SIZE = 32767
 CELL_MAX =  32767
 CELL_MIN = -32768
-COMPILER_ENTRY = 0x7800
+COMPILER_ENTRY = 0x7000
 
 dp = 0
 mem = [0 for i in range(SIZE)]

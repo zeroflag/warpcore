@@ -5,7 +5,5 @@ ENTRY
 
 3 SQ 1 + . CR
 
-0 HALT
-
 BYE
 

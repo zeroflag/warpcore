@@ -2,6 +2,7 @@ CONSTANT TIB      0x64
 CONSTANT F_IMME   0b10000000
 CONSTANT TRUE    -1
 CONSTANT FALSE    0
+CONSTANT START-IP 0x0164
 
 VARIABLE POS
 VARIABLE LAST
@@ -219,6 +220,20 @@ VARIABLE STEPPER
 
 : END OPCODE: EXIT C, ;
 
+: COMPILE-AJMP OPCODE: AJMP C, START-IP , ;
+: COMPILE-HALT OPCODE: LIT  C, 0 , OPCODE: HALT C, ;
+
+: COMPILER-LOOP
+  1 DP!
+  COMPILE-AJMP
+  START-IP DP!
+  BEGIN
+    WORD s" BYE" STRING= INVERT
+  WHILE
+    COMPILE
+  REPEAT
+  COMPILE-HALT ;
+
 ENTRY
 
 ( ***************** Dictionary Structure ***************** )
@@ -227,8 +242,7 @@ ENTRY
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
 (   ^---------------------------------------------+        )
 
-( TODO check initial app's DP )
-0x0164 DP!
+0x3000 DP! ( <= User Dictionary Start )
 
 s" :"
 DEF
@@ -249,11 +263,7 @@ DEF
   OPCODE: !   C,
 END IMMEDIATE
 
-BEGIN
-  WORD s" BYE" STRING= INVERT
-WHILE
-  COMPILE
-REPEAT
+COMPILER-LOOP
 
 s" output.img" DUMP
 INVERT IF
