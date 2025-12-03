@@ -258,6 +258,7 @@ REPEAT
 s" output.img" DUMP
 INVERT IF
   s" DUMP FAILED" TYPE CR
+  ABORT
 THEN
 
 DEPTH 0 <> IF
