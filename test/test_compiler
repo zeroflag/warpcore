@@ -8,7 +8,7 @@ rm -f "$IMAGE"
 
 python bootstrap.py "$COMPILER" "$IMAGE"
 
-./warp "$IMAGE" < "$TEST"
-./warp "$IMAGE"
+./warp -m "$IMAGE" < "$TEST"
+./warp -m "$IMAGE"
 
 rm -f "$IMAGE"

@@ -225,6 +225,9 @@ ENTRY
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
 (   ^---------------------------------------------+        )
 
+( TODO check initial app's DP )
+0x0164 DP!
+
 s" :"
 DEF
   OPCODE: CALL C, ' WORD ,
