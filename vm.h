@@ -85,6 +85,7 @@ typedef enum {
   OP_RPOP  = 0x32,  // "R>"
 
   OP_EXEC  = 0x33,  // "EXEC"
+  OP_DUMP  = 0x34,  // "DUMP"
 } Op;
 
 cell_t engage(uint8_t *mem,

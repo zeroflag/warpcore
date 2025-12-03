@@ -28,5 +28,6 @@ Ver read_version(uint8_t *image);
 uint8_t *map_file(const char* path);
 void load_file(const char *path, uint8_t* buffer);
 void sync_mapped_image(uint8_t* mem);
+int dump(const uint8_t* mem);
 
 #endif // IMAGE_H

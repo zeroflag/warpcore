@@ -6,6 +6,6 @@ TEST="test/test.forth"
 rm -f "$IMAGE"
 
 python bootstrap.py "$TEST" "$IMAGE"
-./warp "$IMAGE" -m
+./warp "$IMAGE"
 
 rm -f "$IMAGE"

@@ -31,13 +31,13 @@ void parse_args(int argc, char **argv) {
 
 int main(int argc, char **argv) {
   uint8_t *mem = NULL;
+  uint8_t static_mem[MEM_SIZE];
 
   parse_args(argc, argv);
   if (mapping_enabled) {
     dprint("MMAP image: %s\n", image_path);
     mem = map_file(image_path);
   } else {
-    uint8_t static_mem[MEM_SIZE];
     dprint("Loading %s..\n", image_path);
     load_file(image_path, static_mem);
     mem = static_mem;

@@ -295,6 +295,10 @@ cell_t engage(uint8_t *mem,
       case OP_HLT: {
         return POP;
       }
+      case OP_DUMP: {
+        PUSH((cell_t)dump(mem));
+        break;
+      }
       case OP_NOP: {}
       default: {
         breach("Unknown opcode: 0x%x at ip=0x%x\n",

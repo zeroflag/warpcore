@@ -7,6 +7,8 @@
 #include "image.h"
 #include "vm.h"
 
+const char DUMP_NAME[] = "dump.img";
+
 Ver read_version(uint8_t *image) {
   Ver ver;
   ver.major = image[0] >> 4;
@@ -69,4 +71,20 @@ void load_file(const char *path, uint8_t* buffer) {
 
 void sync_mapped_image(uint8_t* mem) {
   msync(mem, MEM_SIZE, MS_SYNC);
+}
+
+int dump(const uint8_t* mem) {
+  FILE *fp = fopen(DUMP_NAME, "wb");
+  if (!fp) {
+    breach("Cannot create dump file: %s", DUMP_NAME);
+    return 0;
+  }
+  size_t written = fwrite(mem, 1, MEM_SIZE, fp);
+  if (written != (size_t)MEM_SIZE) {
+    fprintf(stderr, "Short write: expected %d, wrote %zu\n", MEM_SIZE, written);
+    fclose(fp);
+    return 0;
+  }
+  fclose(fp);
+  return -1;
 }
