@@ -1,8 +1,16 @@
+( ************************************* )
+( Layout:                               )
+( 0x0164: USER CODE DEFAULT ENTRY       )
+( 0x0164: USER CODE DEFAULT ENTRY       )
+( 0x3000: USER HEAP START               )
+( 0x7000: COMPILER CODE                 )
+( ************************************* )
 CONSTANT TIB      0x64
 CONSTANT F_IMME   0b10000000
 CONSTANT TRUE    -1
 CONSTANT FALSE    0
 CONSTANT START-IP 0x0164
+CONSTANT USR-HEAP 0x3000
 
 VARIABLE POS
 VARIABLE LAST
@@ -242,7 +250,7 @@ ENTRY
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
 (   ^---------------------------------------------+        )
 
-0x3000 DP! ( <= User Dictionary Start )
+USR-HEAP DP! ( <= User Dictionary Start )
 
 s" :"
 DEF
