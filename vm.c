@@ -300,10 +300,8 @@ cell_t engage(uint8_t *mem,
         PUSH((cell_t)dump_image(mem, path));
         break;
       }
-      case OP_ASRT: {
-        if (POP != TRUE) {
-          breach("ASSERT ERROR AT: 0x%x\n", ip - mem);
-        }
+      case OP_ABORT: {
+        breach("ABORTED: ip=0x%x\n", ip - mem);
         break;
       }
       case OP_NOP: {}
