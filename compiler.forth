@@ -1,8 +1,9 @@
 ( ************************************* )
 ( Layout:                               )
 ( 0x0164: USER CODE DEFAULT ENTRY       )
-( 0x0164: USER CODE DEFAULT ENTRY       )
+( ...                                   )
 ( 0x3000: USER HEAP START               )
+( ...                                   )
 ( 0x7000: COMPILER CODE                 )
 ( ************************************* )
 CONSTANT TIB      0x64
