@@ -8,12 +8,16 @@
   23 C, DP 0 ,
   SWAP RESOLVE ; IMMEDIATE
 : THEN RESOLVE ; IMMEDIATE   
+: BEGIN DP ; IMMEDIATE
+: UNTIL 24 C, DP - , ; IMMEDIATE
+: ( BEGIN KEY 41 = UNTIL ; IMMEDIATE
 
 ENTRY
 
 2 3 < IF
   3 SQ 1 + . CR
 ELSE
+  ( shouldn't  be executed )
   65 EMIT
 THEN
 
