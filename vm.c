@@ -300,10 +300,16 @@ cell_t engage(uint8_t *mem,
         PUSH((cell_t)dump_image(mem, path));
         break;
       }
+      case OP_ASRT: {
+        if (POP != TRUE) {
+          breach("ASSERT ERROR AT: 0x%x\n", ip - mem);
+        }
+        break;
+      }
       case OP_NOP: {}
       default: {
         breach("Unknown opcode: 0x%x at ip=0x%x\n",
-               code, ip - mem - start_ip);
+               code, ip - mem);
         return 1;
       }
     }

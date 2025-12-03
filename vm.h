@@ -86,6 +86,7 @@ typedef enum {
 
   OP_EXEC  = 0x33,  // "EXEC"
   OP_DUMP  = 0x34,  // "DUMP"
+  OP_ASRT  = 0x35,  // "ASRT"
 } Op;
 
 cell_t engage(uint8_t *mem,

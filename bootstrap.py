@@ -194,6 +194,9 @@ def skip_until(end):
   while tok != end:
     tok = tokens.next()
 
+def skip_line():
+  tokens.read_until("\n")
+
 def create_macros():
   macros["IF"] = lambda: compile_forward_jump("JZ")
   macros["THEN"] = fill_branch_address
@@ -226,6 +229,7 @@ def create_macros():
   macros["'"] = lambda: compile_lit(words[tokens.next()])
   macros['s"'] = compile_string
   macros['('] = lambda: skip_until(")")
+  macros['\\'] = skip_line
   macros["ENTRY"] = lambda: compile_entry(dp)
 
 def make_header():
