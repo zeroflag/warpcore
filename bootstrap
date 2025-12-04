@@ -8,3 +8,4 @@ FORTH=compiler.forth
 rm -f "$IMAGE"
 python bootstrap.py "$FORTH" "$IMAGE"
 echo "Compiler image: $IMAGE"
+echo "Run with ./warp $IMAGE"

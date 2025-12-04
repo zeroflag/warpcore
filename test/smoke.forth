@@ -10,12 +10,34 @@
 : THEN RESOLVE ; IMMEDIATE   
 : BEGIN DP ; IMMEDIATE
 : UNTIL 24 C, DP - , ; IMMEDIATE
+: AGAIN 23 C, DP - , ; IMMEDIATE
 : ( BEGIN KEY 41 = UNTIL ; IMMEDIATE
+
+: WHILE 24 C, DP 0 , ; IMMEDIATE
+: REPEAT
+  SWAP
+  23 C,
+  DP - ,
+  RESOLVE ; IMMEDIATE
+
+: 2DUP OVER OVER ;
+: 2DROP DROP DROP ;
+: FACTORIAL
+  1 2 ROT
+  BEGIN
+      2DUP <=
+  WHILE
+      -ROT TUCK
+      * SWAP
+      1 + ROT
+  REPEAT
+  2DROP ;
 
 ENTRY
 
 2 3 < IF
   3 SQ 1 + . CR
+  5 FACTORIAL . CR
 ELSE
   ( shouldn't  be executed )
   65 EMIT
