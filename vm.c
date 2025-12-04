@@ -304,6 +304,10 @@ cell_t engage(uint8_t *mem,
         breach("ABORTED: ip=0x%x\n", ip - mem);
         break;
       }
+      case OP_BTICK: {
+        PUSH(*ip++);
+        break;
+      }
       case OP_NOP: {}
       default: {
         breach("Unknown opcode: 0x%x at ip=0x%x\n",
