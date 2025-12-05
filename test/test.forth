@@ -1,24 +1,18 @@
-: SQR DUP * ;
-: CR 10 EMIT ;
-
 : 2DUP OVER OVER ;
 : 2DROP DROP DROP ;
-
-: MIN 2DUP < IF DROP ELSE NIP  THEN ;
-: MAX 2DUP < IF NIP  ELSE DROP THEN ;
-
-CONSTANT TEN 10
-
-VARIABLE V1
-
-: SUMN
-  0
+: CR 10 EMIT ;
+: NON-ZERO? C@ 0 <> ;
+: PRINT
   BEGIN
-    OVER +
-    SWAP 1 - SWAP
-    OVER 0 =
-  UNTIL
-  NIP ;
+    DUP NON-ZERO?
+  WHILE
+    DUP C@ EMIT
+    1 +
+  REPEAT
+  DROP ;
+
+
+: SQR DUP * ;
 
 : FACTORIAL
   1 2 ROT
@@ -31,16 +25,14 @@ VARIABLE V1
   REPEAT
   2DROP ;
 
-: NON-ZERO? C@ 0 <> ;
-
-: TYPE
+: SUMN
+  0
   BEGIN
-    DUP NON-ZERO?
-  WHILE
-    DUP C@ EMIT
-    1 +
-  REPEAT
-  DROP ;
+    OVER +
+    SWAP 1 - SWAP
+    OVER 0 =
+  UNTIL
+  NIP ;
 
 : DAY ( n -- s )
   CASE
@@ -51,9 +43,18 @@ VARIABLE V1
     5 OF s" Friday" ENDOF
     6 OF s" Saturday" ENDOF
     7 OF s" Sunday" ENDOF
-    ( number left on stack )
+   ( number left on stack )
     s" Unknown day: "
   ENDCASE ;
+
+: MIN 2DUP < IF DROP ELSE NIP  THEN ;
+: MAX 2DUP < IF NIP  ELSE DROP THEN ;
+
+VARIABLE V1
+VARIABLE V2
+
+( 10 CONSTANT TEN )
+: TEN 10 ; ( TODO recheck constant impl. )
 
 ENTRY
 
@@ -71,16 +72,18 @@ V1 @ 1 + . CR
 
 7 FACTORIAL . CR
 
-s" Test String"   TYPE CR
-s" Test String"   TYPE CR
-s" Test String 2" TYPE CR
+s" Test String"   PRINT CR
+s" Test String"   PRINT CR
+s" Test String 2" PRINT CR
 
-1 DAY TYPE CR
-2 DAY TYPE CR
-3 DAY TYPE CR
-5 DAY TYPE CR
-8 DAY TYPE . CR
+1 DAY PRINT CR
+2 DAY PRINT CR
+3 DAY PRINT CR
+5 DAY PRINT CR
+8 DAY PRINT . CR
 
 DEPTH . CR
 
 0 HALT
+
+BYE

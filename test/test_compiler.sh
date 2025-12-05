@@ -3,7 +3,7 @@
 COMPILER_IMAGE="compiler.img"
 COMPILER_FORTH="compiler.forth"
 OUT_IMAGE="output.img"
-TEST="test/smoke.forth"
+TEST="test/test.forth"
 LIB="lib.forth"
 
 rm -f "$IMAGE" "$OUT_IMAGE"

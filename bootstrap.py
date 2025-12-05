@@ -231,6 +231,7 @@ def create_macros():
   macros['('] = lambda: skip_until(")")
   macros['\\'] = skip_line
   macros["ENTRY"] = lambda: compile_entry(dp)
+  macros["BYE"] = lambda: 0
 
 def make_header():
   global dp
