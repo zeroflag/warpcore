@@ -222,12 +222,14 @@ VARIABLE STEPPER
     THEN
   THEN ;
 
-: DEF ( name -- )
+: MAKE-HEADER ( name -- )
   DP
   LAST @ ,
   LAST !
   STRING, 
   0 ( FLAGS ) C, ;
+
+: CREATE WORD MAKE-HEADER ;
 
 : END OPCODE: EXIT C, ;
 
@@ -268,25 +270,20 @@ ENTRY
 
 USR-HEAP DP! ( <= User Dictionary Start )
 
-s" :"
-DEF
-  OPCODE: CALL C, ' WORD ,
-  OPCODE: CALL C, ' DEF  ,
+s" :" MAKE-HEADER
+  OPCODE: CALL C, ' CREATE  ,
 END IMMEDIATE
 
-s" ;"
-DEF
+s" ;" MAKE-HEADER
   OPCODE: LIT C, 0x1C , ( EXIT )
   OPCODE: C, C,
 END IMMEDIATE
 
-s" IMMEDIATE"
-DEF
+s" IMMEDIATE" MAKE-HEADER
   OPCODE: CALL C, ' IMMEDIATE ,
 END IMMEDIATE
 
-s" ENTRY"
-DEF
+s" ENTRY" MAKE-HEADER
   OPCODE: DP  C, 
   OPCODE: LIT C, 0x0002 , 
   OPCODE: !   C,
