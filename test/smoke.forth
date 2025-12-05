@@ -12,6 +12,13 @@
 : WHILE   ['] JZ C, MARK ; IMMEDIATE
 : REPEAT  SWAP ['] JMP C, DP - , RESOLVE ; IMMEDIATE
 
+: VARIABLE
+  CREATE
+  ['] LIT  C, DP 4 + ,
+  ['] EXIT C,
+  DP 2 + DP!
+; IMMEDIATE 
+
 : ( BEGIN KEY 41 = UNTIL ; IMMEDIATE
 
 : CASE 0 ; IMMEDIATE
@@ -82,11 +89,17 @@
   RESOLVE
 ; IMMEDIATE
 
+VARIABLE V1
+VARIABLE V2
+
 ENTRY
 
+3 V1 !
+5 V2 !
+
 2 3 < IF
-  3 SQ 1 + . CR
-  5 FACTORIAL . CR
+  V1 @ SQ 1 + . CR
+  V2 @ FACTORIAL . CR
 ELSE
   ( shouldn't  be executed )
   65 EMIT
