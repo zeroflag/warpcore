@@ -58,6 +58,30 @@
     DROP 99
   ENDCASE ;
 
+: NON-ZERO? C@ 0 <> ;
+
+: TYPE
+  BEGIN
+    DUP NON-ZERO?
+  WHILE
+    DUP C@ EMIT
+    1 +
+  REPEAT
+  DROP ;
+
+: s"
+  ['] LIT C, DP 5 + , ( addr of string )
+  ['] JMP C, MARK
+  BEGIN
+    KEY DUP 34 <>
+  WHILE
+    C,
+  REPEAT
+  DROP
+  0 C,
+  RESOLVE
+; IMMEDIATE
+
 ENTRY
 
 2 3 < IF
@@ -71,6 +95,8 @@ THEN
 2 CHOOSE . CR
 3 CHOOSE . CR
 7 CHOOSE . CR
+
+s" Hello world!" TYPE CR
 
 DEPTH . CR
 
