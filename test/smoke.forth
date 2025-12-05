@@ -5,7 +5,7 @@
 : RESOLVE DP OVER - SWAP ! ;
 : IF      ['] JZ  C, MARK ; IMMEDIATE
 : ELSE    ['] JMP C, MARK SWAP RESOLVE ; IMMEDIATE
-: THEN    RESOLVE ; IMMEDIATE   
+: THEN    RESOLVE ; IMMEDIATE
 : BEGIN   DP ; IMMEDIATE
 : UNTIL   ['] JZ  C, DP - , ; IMMEDIATE
 : AGAIN   ['] JMP C, DP - , ; IMMEDIATE
@@ -16,14 +16,14 @@
 
 : CASE 0 ; IMMEDIATE
 : OF
-  ['] OVER , ['] = ,
-  ['] JZ   , MARK 
-  ['] DROP ,
+  ['] OVER C, ['] = C,
+  ['] JZ   C, MARK
+  ['] DROP C,
 ; IMMEDIATE
 
-: ENDOF 
+: ENDOF
     SWAP 1 + SWAP
-    ['] JMP , MARK SWAP
+    ['] JMP C, MARK SWAP
     RESOLVE
     SWAP
 ; IMMEDIATE
@@ -36,7 +36,7 @@
   REPEAT
   DROP
 ; IMMEDIATE
-       
+
 : 2DUP OVER OVER ;
 : 2DROP DROP DROP ;
 : FACTORIAL
@@ -55,7 +55,7 @@
     1 OF 10 ENDOF
     2 OF 20 ENDOF
     3 OF 30 ENDOF
-    DROP
+    DROP 99
   ENDCASE ;
 
 ENTRY
@@ -68,8 +68,10 @@ ELSE
   65 EMIT
 THEN
 
+2 CHOOSE . CR
+3 CHOOSE . CR
+7 CHOOSE . CR
 
 DEPTH . CR
 
 BYE
-
