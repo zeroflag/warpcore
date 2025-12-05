@@ -81,4 +81,6 @@ s" Test String 2" TYPE CR
 5 DAY TYPE CR
 8 DAY TYPE . CR
 
+DEPTH . CR
+
 0 HALT

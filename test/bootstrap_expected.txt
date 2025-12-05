@@ -14,3 +14,4 @@ Tuesday
 Wednesday
 Friday
 Unknown day: 8
+0
