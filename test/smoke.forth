@@ -14,7 +14,7 @@
 
 : VARIABLE
   CREATE
-  ['] LIT  C, DP 4 + ,
+  ['] LIT  C, DP 3 + ,
   ['] EXIT C,
   DP 2 + DP!
 ; IMMEDIATE 
