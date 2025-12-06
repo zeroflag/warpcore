@@ -80,8 +80,9 @@ def read_primitives():
         primitives[m.group(3)] = int(m.group(2), 16)
 
 def tonum(token):
-  if token.lower().startswith("0x"):
+  if token.lower().startswith("$"):
     base = 16
+    token = token[1:]
   elif token.lower().startswith("0b"):
     base = 2
   else:
