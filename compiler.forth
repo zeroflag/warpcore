@@ -104,7 +104,7 @@ VARIABLE BASE
 : IMMEDIATE
   LAST @ >FFA C@
   F_IMME OR
-  LAST @ >FFA C!
+  LAST @ >FFA C! ;
 
 : FIND ( s -- addr / 0 )
   LAST @ STEPPER !
