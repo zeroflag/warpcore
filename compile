@@ -2,12 +2,23 @@
 
 COMPILER=compiler.img
 OUTPUT=output.img
+LIB="lib.forth"
+
+if [ -z "$1" ]; then
+  echo "Usage: compile <file.forth>" >&2
+  exit 1
+fi
+
+rm -f "$OUTPUT"
+rm -f "$COMPILER"
 
 echo "Bootstrapping compiler.."
 ./bootstrap
-echo "Compiler ready: $COMPILER"
 
-./warp "$COMPILER"
+echo "Compiling $1.."
+cat "$LIB"  \
+    "$1" \
+    | ./warp "$COMPILER"
 
 echo "Running compiled output: $OUTPUT"
 
