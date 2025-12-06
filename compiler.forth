@@ -289,7 +289,7 @@ ENTRY
 ( We need to use different target address depending the stage. )
 STEPPER $7000 >= IF
   ( We're in stage1 compiler )
-  $5000 TARGET !
+  $6000 TARGET !
 ELSE
   ( We're in stage2 compiler )
   $0164 TARGET !
