@@ -1,11 +1,11 @@
 USE_MUSL ?= 0
 
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11 -I. -O3
+CFLAGS = -Wall -Wextra -std=c11 -I. -O1
 
 ifeq ($(USE_MUSL),1)
 	CC = musl-gcc
-	CFLAGS = -Wall -Wextra -std=c11 -I. -O3 -static -s 
+	CFLAGS = -Wall -Wextra -std=c11 -I. -O1 -static -s 
 endif
 
 SRCS = $(filter-out main.c, $(wildcard *.c))
