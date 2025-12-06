@@ -15,6 +15,7 @@ A compact stack-based virtual machine designed for simplicity.
 ENTRY
 
 s" Hello World!" PRINT
+CR
 
 BYE
 ```
