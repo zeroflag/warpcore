@@ -16,8 +16,7 @@ CONSTANT USR-HEAP $3000
 VARIABLE POS
 VARIABLE LAST
 VARIABLE STEPPER
-
-0 LAST !
+VARIABLE BASE
 
 : 3DROP DROP DROP DROP ;
 : 2DUP  OVER OVER ;
@@ -132,7 +131,7 @@ VARIABLE STEPPER
     OVER NON-ZERO?
   WHILE
     OVER NONDIGIT? IF 3DROP FALSE EXIT THEN
-    10 * OVER >DIGIT +
+    BASE @ * OVER >DIGIT +
     SWAP 1 + SWAP
   REPEAT
   NIP * TRUE ;
@@ -268,6 +267,9 @@ ENTRY
 (   ^---------------------------------------------+        )
 
 USR-HEAP DP! ( <= User Dictionary Start )
+
+0  LAST !
+10 BASE !
 
 s" :" MAKE-HEADER
   ['] CALL C, ' CREATE  ,
