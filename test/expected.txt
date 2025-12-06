@@ -1,0 +1,22 @@
+4
+4
+9
+9
+55
+4243
+4244
+5040
+Test String
+Test String
+Test String 2
+Monday
+Tuesday
+Wednesday
+Friday
+Unknown day: 8
+Hexa test
+255
+16
+90
+depth
+0
