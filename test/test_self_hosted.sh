@@ -11,21 +11,13 @@ LIB="lib.forth"
 
 rm -f "$STAGE1_IMAGE" "$STAGE2_IMAGE" "$OUT_IMAGE"
 
-# TODO DP hack remove later
-sed -i 's/^: START-IP .*/: START-IP $0164 ;/' compiler.forth
-
 # build stage 1 compiler
 python bootstrap.py "$COMPILER_FORTH" "$STAGE1_IMAGE"
 
-# TODO DP hack remove later
-sed -i 's/^: START-IP .*/: START-IP $5000 ;/' compiler.forth
 # bouild stage2: outputs outpout.img
 cat "$LIB"  \
     "$COMPILER_FORTH" \
     | ./warp "$STAGE1_IMAGE"
-
-# TODO DP hack remove later
-sed -i 's/^: START-IP .*/: START-IP $0164 ;/' compiler.forth
 
 mv "$OUT_IMAGE" "$STAGE2_IMAGE"
 

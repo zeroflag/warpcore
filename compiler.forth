@@ -1,4 +1,4 @@
-( ************************************* )
+( *************************4*********** )
 ( Layout:                               )
 ( $0164: USER CODE DEFAULT ENTRY        )
 ( ...                                   )
@@ -10,14 +10,13 @@
 : F_IMME   128 ;
 : TRUE      -1 ;
 : FALSE      0 ;
-
-: START-IP $0164 ;
 : USR-HEAP $3000 ;
 
 VARIABLE POS
 VARIABLE LAST
 VARIABLE STEPPER
 VARIABLE BASE
+VARIABLE TARGET
 
 : 3DROP DROP DROP DROP ;
 : 2DUP  OVER OVER ;
@@ -251,13 +250,13 @@ VARIABLE BASE
 
 : END ['] EXIT C, ;
 
-: COMPILE-AJMP ['] AJMP C, START-IP , ;
+: COMPILE-AJMP ['] AJMP C, TARGET @ , ;
 : COMPILE-HALT ['] LIT  C, 0 , ['] HALT C, ;
 
 : COMPILER-LOOP
   1 DP!
   COMPILE-AJMP
-  START-IP DP!
+  TARGET @ DP!
   BEGIN
     WORD s" BYE" STRING= INVERT
   WHILE
@@ -285,6 +284,16 @@ ENTRY
 (  16b            8b 8b                                    )
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
 (   ^---------------------------------------------+        )
+
+( Same source code is used for stage1 and stage2 compiler. )
+( We need to use different target address depending the stage. )
+STEPPER $7000 > IF
+  ( We're in stage1 compiler )
+  $5000 TARGET !
+ELSE
+  ( We're in stage2 compiler )
+  $0164 TARGET !
+THEN
 
 USR-HEAP DP! ( <= User Dictionary Start )
 
