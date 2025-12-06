@@ -14,8 +14,12 @@ A compact stack-based virtual machine designed for simplicity.
 ```Forth
 ENTRY
 
+: SQUARE DUP * ;
+
 s" Hello World!" PRINT
 CR
+
+3 SQUARE . CR
 
 BYE
 ```
