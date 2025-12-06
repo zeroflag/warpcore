@@ -6,12 +6,13 @@
 ( ...                                   )
 ( $7000: COMPILER CODE                  )
 ( ************************************* )
-CONSTANT TIB      $64
-CONSTANT F_IMME   128
-CONSTANT TRUE    -1
-CONSTANT FALSE    0
-CONSTANT START-IP $0164
-CONSTANT USR-HEAP $3000
+: TIB      $64 ;
+: F_IMME   128 ;
+: TRUE      -1 ;
+: FALSE      0 ;
+
+: START-IP $0164 ;
+: USR-HEAP $3000 ;
 
 VARIABLE POS
 VARIABLE LAST
@@ -41,7 +42,7 @@ VARIABLE BASE
 
 : STRING=
   BEGIN
-    2DUP CHR= 
+    2DUP CHR=
     OVER NON-ZERO? AND
     OVER NON-ZERO? AND
   WHILE
@@ -102,7 +103,7 @@ VARIABLE BASE
 
 : IMMEDIATE
   LAST @ >FFA C@
-  F_IMME OR 
+  F_IMME OR
   LAST @ >FFA C!
 
 : FIND ( s -- addr / 0 )
@@ -226,7 +227,7 @@ VARIABLE BASE
       >CFA EXEC
     ELSE
       ['] CALL C,
-      >CFA , 
+      >CFA ,
     THEN
   ELSE
     FIND-PRIMITIVE
@@ -243,7 +244,7 @@ VARIABLE BASE
   DP
   LAST @ ,
   LAST !
-  STRING, 
+  STRING,
   0 ( FLAGS ) C, ;
 
 : CREATE WORD MAKE-HEADER ;
@@ -308,8 +309,8 @@ s" CREATE" MAKE-HEADER
 END
 
 s" ENTRY" MAKE-HEADER
-  ['] DP  C, 
-  ['] LIT C, $0002 , 
+  ['] DP  C,
+  ['] LIT C, $0002 ,
   ['] !   C,
 END IMMEDIATE
 
