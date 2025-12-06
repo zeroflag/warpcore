@@ -12,9 +12,10 @@ A compact stack-based virtual machine designed for simplicity.
 ## Language
 
 ```Forth
-ENTRY
 
 : SQUARE DUP * ;
+
+ENTRY
 
 s" Hello World!" PRINT
 CR
