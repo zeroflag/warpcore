@@ -316,7 +316,7 @@ cell_t engage(uint8_t *mem,
         ip += sizeof(cell_t);
         break;
       }
-      case OP_NOP: {}
+      case OP_NOP: { break; }
       default: {
         breach("Unknown opcode: 0x%x at ip=0x%x\n",
                code, ip - mem);
