@@ -20,4 +20,4 @@ cat "$LIB"   \
     | ./warp "$COMPILER"
 
 echo "Running compiled image: $OUTPUT"
-./warp "$OUTPUT"
+time ./warp "$OUTPUT"
