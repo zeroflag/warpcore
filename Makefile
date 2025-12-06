@@ -31,7 +31,7 @@ test-core:
 
 test-bootstrap:
 	@./test/test_bootstrap.sh > $(TEST_OUTP)
-	@diff -u ./test/bootstrap_expected.txt $(TEST_OUTP) || { \
+	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Bootstrap compiler tests failed.$(RESET)"; \
 		exit 1; \
 	}
@@ -40,7 +40,7 @@ test-bootstrap:
 
 test-compiler:
 	@./test/test_compiler.sh > $(TEST_OUTP)
-	@diff -u ./test/compiler_expected.txt $(TEST_OUTP) || { \
+	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Final compiler tests failed.$(RESET)"; \
 		exit 1; \
 	}

@@ -82,6 +82,12 @@ s" Test String 2" PRINT CR
 5 DAY PRINT CR
 8 DAY PRINT . CR
 
+s" Hexa test" PRINT CR
+$FF . CR
+$10 . CR
+$5A . CR
+
+s" depth" PRINT CR
 DEPTH . CR
 
 0 HALT

@@ -3,10 +3,10 @@
 COMPILER=compiler.img
 OUTPUT=output.img
 LIB="lib.forth"
+INPUT="/dev/stdin"
 
-if [ -z "$1" ]; then
-  echo "Usage: compile <file.forth>" >&2
-  exit 1
+if [ -n "$1" ]; then
+  INPUT="$1"
 fi
 
 rm -f "$OUTPUT"
@@ -16,8 +16,8 @@ echo "Bootstrapping compiler.."
 ./bootstrap
 
 echo "Compiling $1.."
-cat "$LIB"  \
-    "$1" \
+cat "$LIB"   \
+    "$INPUT" \
     | ./warp "$COMPILER"
 
 echo "Running compiled output: $OUTPUT"
