@@ -55,7 +55,7 @@ test-bootstrap:
 
 test-stage1: stage1
 	@echo "* $(CYAN)Running stage1 compiler tests..$(RESET)"
-	@./test/test_stage1.sh > $(TEST_OUTP)
+	@COMPILER_IMAGE="stage1.img" ./test/test_compiler.sh > $(TEST_OUTP)
 	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Stage 1 compiler tests failed.$(RESET)"; \
 		exit 1; \
@@ -65,7 +65,7 @@ test-stage1: stage1
 
 test-stage2: stage2
 	@echo "* $(CYAN)Running stage2 compiler tests..$(RESET)"
-	@./test/test_stage2.sh > $(TEST_OUTP)
+	@COMPILER_IMAGE="stage2.img" ./test/test_compiler.sh > $(TEST_OUTP)
 	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Stage 2 compiler tests failed.$(RESET)"; \
 		exit 1; \
