@@ -11,7 +11,7 @@ A compact stack-based virtual machine designed for simplicity.
 
 ## Language
 
-```
+```Forth
 ENTRY
 
 s" Hello World!" PRINT
