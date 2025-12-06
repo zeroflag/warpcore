@@ -14,22 +14,28 @@ TEST_OUTP = test/out.txt
 TEST_IMGS = $(wildcard test/*.img)
 
 BOLD_GREEN = \033[1;32m
-BOLD_RED   := \033[1;31m
+BOLD_RED   = \033[1;31m
+
+CYAN  = \033[36m
 RESET = \033[0m
 
-all: clean vm stage1 stage2 test-vm test-bootstrap test-stage1 test-stage2
+all: clean vm test-vm stage1 stage2 test-bootstrap test-stage1 test-stage2
 
 vm:
+	@echo "* $(CYAN)Building vm..$(RESET)"
 	$(CC) $(CFLAGS) -o $(OUT) $(SRCS) "main.c"
 
 stage1: vm
-	$(PYTHON) bootstrap.py compiler.forth stage1.img
+	@echo "* $(CYAN)Building stage1 compiler with bootstrap compiler..$(RESET)"
+	@$(PYTHON) bootstrap.py compiler.forth stage1.img
 
 stage2: stage1
-	cat lib.forth compiler.forth | ./$(OUT) stage1.img
-	mv output.img stage2.img
+	@echo "* $(CYAN)Building stage2 compiler with stage1 compiler..$(RESET)"
+	@cat lib.forth compiler.forth | ./$(OUT) stage1.img
+	@mv output.img stage2.img
 
 test-vm: vm
+	@echo "* $(CYAN)Running VM tests..$(RESET)"
 	$(CC) $(CFLAGS) -o $(TEST_EXEC) $(TEST_SRCS) $(SRCS)
 	@./$(TEST_EXEC) || { \
 		echo "$(BOLD_RED)✗ VM tests failed.$(RESET)"; \
@@ -38,6 +44,7 @@ test-vm: vm
 	@echo "$(BOLD_GREEN)✓ VM tests passed.$(RESET)"
 
 test-bootstrap:
+	@echo "* $(CYAN)Running bootstrap compiler tests..$(RESET)"
 	@./test/test_bootstrap.sh > $(TEST_OUTP)
 	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Bootstrap compiler tests failed.$(RESET)"; \
@@ -47,6 +54,7 @@ test-bootstrap:
 	@rm -f $(TEST_OUTP)
 
 test-stage1: stage1
+	@echo "* $(CYAN)Running stage1 compiler tests..$(RESET)"
 	@./test/test_stage1.sh > $(TEST_OUTP)
 	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Stage 1 compiler tests failed.$(RESET)"; \
@@ -56,6 +64,7 @@ test-stage1: stage1
 	@rm -f $(TEST_OUTP)
 
 test-stage2: stage2
+	@echo "* $(CYAN)Running stage2 compiler tests..$(RESET)"
 	@./test/test_stage2.sh > $(TEST_OUTP)
 	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Stage 2 compiler tests failed.$(RESET)"; \
