@@ -308,6 +308,14 @@ cell_t engage(uint8_t *mem,
         PUSH(*ip++);
         break;
       }
+      case OP_CTICK: {
+        if (*ip++ != OP_CALL) {
+          breach("Expected OP_CALL");
+        }
+        PUSH(fetch_cell(ip));
+        ip += sizeof(cell_t);
+        break;
+      }
       case OP_NOP: {}
       default: {
         breach("Unknown opcode: 0x%x at ip=0x%x\n",
