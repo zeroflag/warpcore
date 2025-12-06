@@ -81,9 +81,15 @@ V1 @ 1 + . CR
 
 7 FACTORIAL . CR
 
+( Test multi
+       line
+       comment )
+
 s" Test String"   PRINT CR
 s" Test String"   PRINT CR
 s" Test String 2" PRINT CR
+
+\ test single line comment
 
 1 DAY PRINT CR
 2 DAY PRINT CR

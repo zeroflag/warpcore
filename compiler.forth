@@ -288,11 +288,9 @@ ENTRY
 \ Same source code is used for stage1 and stage2 compiler.
 \ Use different target address depending the stage.
 STEPPER $7000 >= IF
-  \ We're in stage1 compiler
-  $6000 TARGET !
+  $6000 TARGET ! \ We're in stage1 compiler
 ELSE
-  \ We're in stage2 compiler
-  $0164 TARGET !
+  $0164 TARGET ! \ We're in stage2 compiler
 THEN
 
 USR-HEAP DP! ( <= User Dictionary Start )
