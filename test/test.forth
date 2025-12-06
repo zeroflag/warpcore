@@ -11,7 +11,6 @@
   REPEAT
   DROP ;
 
-
 : SQR DUP * ;
 
 : FACTORIAL
@@ -50,6 +49,16 @@
 : MIN 2DUP < IF DROP ELSE NIP  THEN ;
 : MAX 2DUP < IF NIP  ELSE DROP THEN ;
 
+: LENGTH
+  0
+  BEGIN
+    OVER C@ 0 <>
+  WHILE
+    1 + SWAP
+    1 + SWAP
+  REPEAT
+  NIP ;
+
 VARIABLE V1
 VARIABLE V2
 
@@ -86,6 +95,8 @@ s" Hexa test" PRINT CR
 $FF . CR
 $10 . CR
 $5A . CR
+
+s" Hello World !" LENGTH . CR
 
 s" depth" PRINT CR
 DEPTH . CR
