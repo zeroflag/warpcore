@@ -16,7 +16,7 @@ BOLD_GREEN = \033[1;32m
 BOLD_RED   := \033[1;31m
 RESET = \033[0m
 
-all: clean vm test-core test-bootstrap test-compiler
+all: clean vm test-core test-bootstrap test-compiler test-self-hosted
 
 vm:
 	$(CC) $(CFLAGS) -o $(OUT) $(SRCS) "main.c"
@@ -41,13 +41,22 @@ test-bootstrap:
 test-compiler:
 	@./test/test_compiler.sh > $(TEST_OUTP)
 	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
-		echo "$(BOLD_RED)✗ Final compiler tests failed.$(RESET)"; \
+		echo "$(BOLD_RED)✗ Stage 1 compiler tests failed.$(RESET)"; \
 		exit 1; \
 	}
-	@echo "$(BOLD_GREEN)✓ Final compiler tests passed.$(RESET)"
+	@echo "$(BOLD_GREEN)✓ Stage 1 compiler tests passed.$(RESET)"
+	@rm -f $(TEST_OUTP)
+
+test-self-hosted:
+	@./test/test_self_hosted.sh > $(TEST_OUTP)
+	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
+		echo "$(BOLD_RED)✗ Stage 2 compiler tests failed.$(RESET)"; \
+		exit 1; \
+	}
+	@echo "$(BOLD_GREEN)✓ Stage 2 compiler tests passed.$(RESET)"
 	@rm -f $(TEST_OUTP)
 
 clean:
 	@rm -f $(OUT) $(OBJS) $(IMGS) $(TEST_OBJS) $(TEST_EXEC) $(TEST_OUTP) $(TEST_IMGS)
 
-.PHONY: all clean test-core test-bootstrap test-compiler
+.PHONY: all clean test-core test-bootstrap test-compiler test-self-hosted
