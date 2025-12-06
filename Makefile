@@ -6,6 +6,8 @@ OBJS = $(SRCS:.c=.o)
 IMGS = $(wildcard *.img)
 PYTHON = python
 OUT = warp
+STAGE1_IMG="stage1.img"
+STAGE2_IMG="stage2.img"
 
 TEST_SRCS = $(wildcard test/*.c)
 TEST_OBJS = $(TEST_SRC:.c=.o)
@@ -27,12 +29,12 @@ vm:
 
 stage1: vm
 	@echo "* $(CYAN)Building stage1 compiler with bootstrap compiler..$(RESET)"
-	@$(PYTHON) bootstrap.py compiler.forth stage1.img
+	@$(PYTHON) bootstrap.py compiler.forth $(STAGE1_IMG)
 
 stage2: stage1
 	@echo "* $(CYAN)Building stage2 compiler with stage1 compiler..$(RESET)"
-	@cat lib.forth compiler.forth | ./$(OUT) stage1.img
-	@mv output.img stage2.img
+	@cat lib.forth compiler.forth | ./$(OUT) $(STAGE1_IMG)
+	@mv output.img $(STAGE2_IMG)
 
 test-vm: vm
 	@echo "* $(CYAN)Running VM tests..$(RESET)"
@@ -55,7 +57,7 @@ test-bootstrap:
 
 test-stage1: stage1
 	@echo "* $(CYAN)Running stage1 compiler tests..$(RESET)"
-	@COMPILER_IMAGE="stage1.img" ./test/test_compiler.sh > $(TEST_OUTP)
+	@COMPILER_IMAGE=$(STAGE1_IMG) ./test/test_compiler.sh > $(TEST_OUTP)
 	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Stage 1 compiler tests failed.$(RESET)"; \
 		exit 1; \
@@ -65,7 +67,7 @@ test-stage1: stage1
 
 test-stage2: stage2
 	@echo "* $(CYAN)Running stage2 compiler tests..$(RESET)"
-	@COMPILER_IMAGE="stage2.img" ./test/test_compiler.sh > $(TEST_OUTP)
+	@COMPILER_IMAGE=$(STAGE2_IMG) ./test/test_compiler.sh > $(TEST_OUTP)
 	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Stage 2 compiler tests failed.$(RESET)"; \
 		exit 1; \
