@@ -19,7 +19,6 @@ VARIABLE STEPPER
 
 0 LAST !
 
-: 2DROP DROP DROP ;
 : 3DROP DROP DROP DROP ;
 : 2DUP  OVER OVER ;
 : ?DUP  DUP 0 <> IF DUP THEN ;
@@ -61,7 +60,7 @@ VARIABLE STEPPER
   REPEAT
   NIP ;
 
-: TYPE
+: PRINT
   BEGIN
     DUP NON-ZERO?
   WHILE
@@ -200,7 +199,7 @@ VARIABLE STEPPER
 
 : FIND-PRIMITIVE ( -- opcode / 0 ) TIB >OPCODE ;
 
-: ??? ( s -- ) TIB TYPE 32 EMIT 63 EMIT CR ;
+: ??? ( s -- ) TIB PRINT 32 EMIT 63 EMIT CR ;
 
 : COMPILE ( -- )
   TIB FIND
@@ -208,7 +207,7 @@ VARIABLE STEPPER
     DUP IMMEDIATE? IF
       >CFA EXEC
     ELSE
-      OPCODE: CALL C,
+      ['] CALL C,
       >CFA , 
     THEN
   ELSE
@@ -217,7 +216,7 @@ VARIABLE STEPPER
       ( OPCODE ) C,
     ELSE CONVERT
       IF
-        OPCODE: LIT C, ( NUM ) ,
+        ['] LIT C, ( NUM ) ,
       ELSE ??? THEN
     THEN
   THEN ;
@@ -231,10 +230,10 @@ VARIABLE STEPPER
 
 : CREATE WORD MAKE-HEADER ;
 
-: END OPCODE: EXIT C, ;
+: END ['] EXIT C, ;
 
-: COMPILE-AJMP OPCODE: AJMP C, START-IP , ;
-: COMPILE-HALT OPCODE: LIT  C, 0 , OPCODE: HALT C, ;
+: COMPILE-AJMP ['] AJMP C, START-IP , ;
+: COMPILE-HALT ['] LIT  C, 0 , ['] HALT C, ;
 
 : COMPILER-LOOP
   1 DP!
@@ -250,13 +249,13 @@ VARIABLE STEPPER
 : DUMP-OUTPUT
   s" output.img" DUMP
   INVERT IF
-    s" DUMP FAILED" TYPE CR
+    s" DUMP FAILED" PRINT CR
     ABORT
   THEN ;
 
 : POST-CHECKS
   DEPTH 0 <> IF
-    s" Non Empty stack: " TYPE DEPTH . CR
+    s" Non Empty stack: " PRINT DEPTH . CR
     ABORT
   THEN ;
 
@@ -271,26 +270,26 @@ ENTRY
 USR-HEAP DP! ( <= User Dictionary Start )
 
 s" :" MAKE-HEADER
-  OPCODE: CALL C, ' CREATE  ,
+  ['] CALL C, ' CREATE  ,
 END IMMEDIATE
 
 s" ;" MAKE-HEADER
-  OPCODE: LIT C, 0x1C , ( EXIT )
-  OPCODE: C, C,
+  ['] LIT C, 0x1C , ( EXIT )
+  ['] C, C,
 END IMMEDIATE
 
 s" IMMEDIATE" MAKE-HEADER
-  OPCODE: CALL C, ' IMMEDIATE ,
+  ['] CALL C, ' IMMEDIATE ,
 END IMMEDIATE
 
 s" CREATE" MAKE-HEADER
-  OPCODE: CALL C, ' CREATE ,
+  ['] CALL C, ' CREATE ,
 END
 
 s" ENTRY" MAKE-HEADER
-  OPCODE: DP  C, 
-  OPCODE: LIT C, 0x0002 , 
-  OPCODE: !   C,
+  ['] DP  C, 
+  ['] LIT C, 0x0002 , 
+  ['] !   C,
 END IMMEDIATE
 
 COMPILER-LOOP
