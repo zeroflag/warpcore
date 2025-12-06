@@ -190,14 +190,6 @@ def compile_entry(address):
   mem[2] = address & 0xFF
   mem[3] = (address >> 8) & 0xFF
 
-def skip_until(end):
-  tok = tokens.next()
-  while tok != end:
-    tok = tokens.next()
-
-def skip_line():
-  tokens.read_until("\n")
-
 def create_macros():
   macros["IF"] = lambda: compile_forward_jump("JZ")
   macros["THEN"] = fill_branch_address
@@ -227,8 +219,8 @@ def create_macros():
   macros[":"] = lambda: def_word(tokens.next())
   macros[";"] = lambda: compile_primitive("EXIT")
   macros['s"'] = compile_string
-  macros['('] = lambda: skip_until(")")
-  macros['\\'] = skip_line
+  macros['('] = lambda: tokens.read_until(')')
+  macros['\\'] =  lambda: tokens.read_until("\n")
   macros["ENTRY"] = lambda: compile_entry(dp)
   macros["BYE"] = lambda: 0
 
