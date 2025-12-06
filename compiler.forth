@@ -287,7 +287,7 @@ ENTRY
 
 ( Same source code is used for stage1 and stage2 compiler. )
 ( We need to use different target address depending the stage. )
-STEPPER $7000 > IF
+STEPPER $7000 >= IF
   ( We're in stage1 compiler )
   $5000 TARGET !
 ELSE
