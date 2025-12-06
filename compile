@@ -1,25 +1,23 @@
 #!/bin/bash
 
-COMPILER=compiler.img
+COMPILER=stage2.img
 OUTPUT=output.img
 LIB="lib.forth"
 INPUT="/dev/stdin"
 
-if [ -n "$1" ]; then
+if [[ -n "$1" && -f "$1" ]]; then
   INPUT="$1"
+else
+  echo "Usage compile <file.forth>"
+  exit 1
 fi
 
 rm -f "$OUTPUT"
-rm -f "$COMPILER"
-
-echo "Bootstrapping compiler.."
-./bootstrap
 
 echo "Compiling $1.."
 cat "$LIB"   \
     "$INPUT" \
     | ./warp "$COMPILER"
 
-echo "Running compiled output: $OUTPUT"
-
+echo "Running compiled image: $OUTPUT"
 ./warp "$OUTPUT"

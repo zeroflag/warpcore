@@ -285,13 +285,13 @@ ENTRY
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
 (   ^---------------------------------------------+        )
 
-( Same source code is used for stage1 and stage2 compiler. )
-( We need to use different target address depending the stage. )
+\ Same source code is used for stage1 and stage2 compiler.
+\ Use different target address depending the stage.
 STEPPER $7000 >= IF
-  ( We're in stage1 compiler )
+  \ We're in stage1 compiler
   $6000 TARGET !
 ELSE
-  ( We're in stage2 compiler )
+  \ We're in stage2 compiler
   $0164 TARGET !
 THEN
 
