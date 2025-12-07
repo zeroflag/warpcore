@@ -94,7 +94,7 @@ cell_t engage(uint8_t *mem,
         break;
       }
       case OP_LIT:
-        PUSH(*(cell_t *) ip);
+        PUSH(fetch_cell(ip));
         ip += sizeof(cell_t);
         break;
       case OP_STO: {
@@ -117,8 +117,7 @@ cell_t engage(uint8_t *mem,
         break;
       }
       case OP_CFTCH: {
-        cell_t addr = POP;
-        cell_t val = mem[addr];
+        opcode_t val = mem[POP];
         PUSH(val);
         break;
       }
@@ -144,66 +143,43 @@ cell_t engage(uint8_t *mem,
       case OP_KEY:  PUSH(getchar());   break;
       case OP_DOT:  printf("%d", POP); break;
       case OP_EMIT: printf("%c", POP); break;
-      case OP_SP: PUSH((uint8_t*) sp - mem); break;
+      case OP_SP:   PUSH((uint8_t*) sp - mem); break;
       case OP_TOSP: {
         cell_t* new_sp = (cell_t*)(mem + POP);
         sp = new_sp;
         break;
       }
-      case OP_DEPTH: {
+      case OP_DEPTH:
         PUSH(sp - (cell_t*)(mem + stack));
         break;
-      }
-      case OP_DP: {
-        PUSH(dp - mem);
-        break;
-      }
-      case OP_TODP: {
+      case OP_DP: PUSH(dp - mem); break;
+      case OP_TODP: 
         dp = (uint8_t*) (mem + POP);
         break;
-      }
-      case OP_RPUSH: {
-        RPUSH(POP);
+      case OP_RPUSH: RPUSH(POP); break;
+      case OP_RPOP:  PUSH(RPOP); break;
+      case OP_RTOP:  PUSH(*(rp-1)); break;
+      case OP_BTICK: PUSH(*ip++); break;
+      case OP_CTICK:
+        if (*ip++ != OP_CALL)
+          breach("Expected OP_CALL, got: %x\n", *(ip-1));
+        PUSH(fetch_cell(ip));
+        ip += sizeof(cell_t);
         break;
-      }
-      case OP_RPOP: {
-        PUSH(RPOP);
+      case OP_HLT: return POP;
+      case OP_ABORT:
+        breach("ABORTED: ip=0x%x\n", ip - mem);
         break;
-      }
-      case OP_RTOP: {
-        PUSH(*(rp-1));
-        break;
-      }
-      case OP_HLT: {
-        return POP;
-      }
+      case OP_NOP: break;
       case OP_DUMP: {
         char *path = (char *)(POP + mem);
         PUSH((cell_t)dump_image(mem, path));
         break;
       }
-      case OP_ABORT: {
-        breach("ABORTED: ip=0x%x\n", ip - mem);
-        break;
-      }
-      case OP_BTICK: {
-        PUSH(*ip++);
-        break;
-      }
-      case OP_CTICK: {
-        if (*ip++ != OP_CALL) {
-          breach("Expected OP_CALL, got: %x\n", *(ip-1));
-        }
-        PUSH(fetch_cell(ip));
-        ip += sizeof(cell_t);
-        break;
-      }
-      case OP_NOP: break;
-      default: {
+      default:
         breach("Unknown opcode: 0x%x at ip=0x%x\n",
                code, ip - mem);
         return 1;
-      }
     }
   }
   return 0;
