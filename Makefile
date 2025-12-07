@@ -2,7 +2,7 @@ USE_MUSL ?= 0
 OPT_LVL  ?= 1
 
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11 -I. -O$(OPT_LVL) -march=native -flto -funroll-loops -s
+CFLAGS = -Wall -Wextra -std=c11 -I. -O$(OPT_LVL) -march=native -funroll-loops
 
 ifeq ($(USE_MUSL),1)
 	CC = musl-gcc
