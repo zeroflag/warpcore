@@ -252,6 +252,8 @@ def create_macros():
                          compile_lit(1),
                          compile_primitive("+"),
                          compile_primitive("DP!"))
+  macros["EXEC"] = lambda: (compile_primitive(">R"),
+                         compile_primitive("EXIT"))
 
 def make_header():
   global dp

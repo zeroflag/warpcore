@@ -222,7 +222,7 @@ VARIABLE TARGET
   TIB FIND
   ?DUP IF
     DUP IMMEDIATE? IF
-      >CFA >R EXIT ( EXEC )
+      >CFA EXEC
     ELSE
       ['] CALL C,
       >CFA ,

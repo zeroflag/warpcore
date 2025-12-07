@@ -1,5 +1,6 @@
 : ,   DP   ! DP 2 + DP! ;
 : C,  DP  C! DP 1 + DP! ;
+: EXEC >R EXIT ;
 
 : MARK    DP 0 , ;
 : RESOLVE DP OVER - SWAP ! ;
