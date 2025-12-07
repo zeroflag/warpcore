@@ -68,13 +68,13 @@ VARIABLE TARGET
     DUP NON-ZERO?
   WHILE
     DUP C@ C,
-    1 +
+    1+
   REPEAT
   C@ C, ;
 
 : >NFA 2 + ;
-: >FFA >NFA DUP STRLEN + 1 + ;
-: >CFA >FFA 1 + ;
+: >FFA >NFA DUP STRLEN + 1+ ;
+: >CFA >FFA 1+ ;
 
 : STEP  STEPPER @ @ STEPPER ! ;
 : STEP? STEPPER @ 0 <> ;
@@ -121,8 +121,8 @@ VARIABLE TARGET
   FALSE ;
 
 : >NUMBER ( s -- n bool )
-  DUP HEX? IF 1 + 16 ELSE 10 THEN BASE !
-  DUP NEG? IF 1 + -1 ELSE 1  THEN
+  DUP HEX? IF 1+ 16 ELSE 10 THEN BASE !
+  DUP NEG? IF 1+ -1 ELSE 1  THEN
   SWAP 0
   ( sign str result )
   BEGIN
@@ -130,7 +130,7 @@ VARIABLE TARGET
   WHILE
     OVER DIGIT? INVERT IF 3DROP FALSE EXIT THEN
     BASE @ * OVER >DIGIT +
-    SWAP 1 + SWAP
+    SWAP 1+ SWAP
   REPEAT
   NIP * TRUE ;
 
