@@ -134,12 +134,6 @@ cell_t engage(uint8_t *mem,
         break;
       }
       case OP_RET: ip = (opcode_t *) (mem + RPOP); break;
-      case OP_EXEC: {
-        cell_t addr = (cell_t) ((uint8_t*)ip - mem);
-        RPUSH(addr);
-        ip = (opcode_t *) (mem + POP);
-        break;
-      }
       case OP_KEY:  PUSH(getchar());   break;
       case OP_DOT:  printf("%d", POP); break;
       case OP_EMIT: printf("%c", POP); break;
