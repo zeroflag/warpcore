@@ -62,6 +62,14 @@ cell_t engage(uint8_t *mem,
         sp--;
         break;
       }
+      case OP_INC: {
+        *(sp-1) += 1;
+        break;
+      }
+      case OP_DEC: {
+        *(sp-1) -= 1;
+        break;
+      }
       case OP_DUP: { // ( a -- a a )
         *sp = *(sp-1);
         sp++;

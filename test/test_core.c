@@ -107,6 +107,34 @@ void test_div() {
   }));
 }
 
+void test_inc() {
+  assert(13 == eval((uint8_t[SIZE]) {
+    LIT16(12),
+    OP_INC,
+    OP_HLT
+  }));
+
+  assert(-5 == eval((uint8_t[SIZE]) {
+    LIT16(-6),
+    OP_INC,
+    OP_HLT
+  }));
+}
+
+void test_dec() {
+  assert(11 == eval((uint8_t[SIZE]) {
+    LIT16(12),
+    OP_DEC,
+    OP_HLT
+  }));
+
+  assert(-7 == eval((uint8_t[SIZE]) {
+    LIT16(-6),
+    OP_DEC,
+    OP_HLT
+  }));
+}
+
 void test_mod() {
   assert(0 == eval((uint8_t[SIZE]) {
     LIT16(12),
@@ -862,6 +890,8 @@ int main() {
   test_mul();
   test_sub();
   test_div();
+  test_inc();
+  test_dec();
   test_mod();
   test_depth();
   test_sp();
