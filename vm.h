@@ -70,14 +70,13 @@ typedef enum {
   OP_CFTCH = 0x2B,  // "C@"
   OP_DP    = 0x2C,  // "DP"
   OP_TODP  = 0x2D,  // "DP!"
-  OP_DEPTH = 0x2E,  // "DEPTH"
-  OP_RPUSH = 0x2F,  // ">R"
-  OP_RPOP  = 0x30,  // "R>"
-  OP_RTOP  = 0x31,  // "R@"
-  OP_DUMP  = 0x32,  // "DUMP"
-  OP_ABORT = 0x33,  // "ABORT"
-  OP_BTICK = 0x34,  // "[']"
-  OP_CTICK = 0x35,  // "'"
+  OP_RPUSH = 0x2E,  // ">R"
+  OP_RPOP  = 0x2F,  // "R>"
+  OP_RTOP  = 0x30,  // "R@"
+  OP_DUMP  = 0x31,  // "DUMP"
+  OP_ABORT = 0x32,  // "ABORT"
+  OP_BTICK = 0x33,  // "[']"
+  OP_CTICK = 0x34,  // "'"
 } Op;
 
 cell_t engage(uint8_t *mem,

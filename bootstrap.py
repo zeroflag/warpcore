@@ -285,6 +285,7 @@ DEFS = """
   DROP ;
 
 : /MOD 2DUP % -ROT / ;
+: DEPTH SP $04 - ;
 
 : . 
     DUP 0 < IF 45 EMIT -1 * THEN

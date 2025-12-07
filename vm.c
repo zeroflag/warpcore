@@ -142,13 +142,8 @@ cell_t engage(uint8_t *mem,
         sp = new_sp;
         break;
       }
-      case OP_DEPTH:
-        PUSH(sp - (cell_t*)(mem + stack));
-        break;
-      case OP_DP: PUSH(dp - mem); break;
-      case OP_TODP: 
-        dp = (uint8_t*) (mem + POP);
-        break;
+      case OP_DP:    PUSH(dp - mem); break;
+      case OP_TODP:  dp = (uint8_t*) (mem + POP); break;
       case OP_RPUSH: RPUSH(POP); break;
       case OP_RPOP:  PUSH(RPOP); break;
       case OP_RTOP:  PUSH(*(rp-1)); break;

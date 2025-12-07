@@ -158,21 +158,6 @@ void test_mod() {
   }));
 }
 
-void test_depth() {
-  assert(0 == eval((uint8_t[SIZE]) {
-    OP_DEPTH,
-    OP_HLT
-  }));
-
-  assert(3 == eval((uint8_t[SIZE]) {
-    LIT16(10),
-    LIT16(20),
-    LIT16(30),
-    OP_DEPTH,
-    OP_HLT
-  }));
-}
-
 void test_sp() {
   assert(STACK == eval((uint8_t[SIZE]) {
     OP_SP,
@@ -189,13 +174,12 @@ void test_sp() {
 }
 
 void test_drop() {
-  assert(1 == eval((uint8_t[SIZE]) {
+  assert(10 == eval((uint8_t[SIZE]) {
     LIT16(10),
     LIT16(20),
     LIT16(30),
     OP_DROP,
     OP_DROP,
-    OP_DEPTH,
     OP_HLT
   }));
 }
@@ -224,14 +208,6 @@ void test_swap() {
     OP_DROP,
     OP_HLT
   }));
-
-  assert(2 == eval((uint8_t[SIZE]) {
-    LIT16(6),
-    LIT16(11),
-    OP_SWAP,
-    OP_DEPTH,
-    OP_HLT
-  }));
 }
 
 void test_nip() {
@@ -239,14 +215,6 @@ void test_nip() {
     LIT16(3),
     LIT16(4),
     OP_NIP,
-    OP_HLT
-  }));
-
-  assert(1 == eval((uint8_t[SIZE]) {
-    LIT16(3),
-    LIT16(4),
-    OP_NIP,
-    OP_DEPTH,
     OP_HLT
   }));
 }
@@ -304,15 +272,6 @@ void test_rot() {
     OP_DROP,
     OP_HLT
   }));
-
-  assert(3 == eval((uint8_t[SIZE]) {
-    LIT16(10),
-    LIT16(20),
-    LIT16(30),
-    OP_ROT,
-    OP_DEPTH,
-    OP_HLT
-  }));
 }
 
 void test_mrot() {
@@ -342,15 +301,6 @@ void test_mrot() {
     OP_DROP,
     OP_HLT
   }));
-
-  assert(3 == eval((uint8_t[SIZE]) {
-    LIT16(10),
-    LIT16(20),
-    LIT16(30),
-    OP_MROT,
-    OP_DEPTH,
-    OP_HLT
-  }));
 }
 
 void test_tuck() {
@@ -375,14 +325,6 @@ void test_tuck() {
     OP_TUCK,
     OP_DROP,
     OP_DROP,
-    OP_HLT
-  }));
-
-  assert(3 == eval((uint8_t[SIZE]) {
-    LIT16(10),
-    LIT16(20),
-    OP_TUCK,
-    OP_DEPTH,
     OP_HLT
   }));
 }
@@ -818,14 +760,6 @@ void test_rstack() {
     OP_HLT
   }));
 
-  assert(1 == eval((uint8_t[SIZE]) {
-    LIT16(1289),
-    LIT16(2030),
-    OP_RPUSH,
-    OP_DEPTH,
-    OP_HLT
-  }));
-
   assert(80 == eval((uint8_t[SIZE]) {
     LIT16(10),
     LIT16(20),
@@ -853,7 +787,6 @@ int main() {
   test_inc();
   test_dec();
   test_mod();
-  test_depth();
   test_sp();
   test_drop();
   test_dup();
