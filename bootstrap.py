@@ -28,6 +28,9 @@ class Tokens:
   def __init__(self, stream):
     self.stream = stream
 
+  def prepend(self, text):
+    self.stream[:0] = list(text)
+
   def has_more(self):
     return len(self.stream) > 0
 
@@ -259,6 +262,11 @@ def make_header():
   compile_num16(entry)
   dp = entry
 
+DEFS = """
+: ,   DP   ! DP 2 + DP! ;
+: C,  DP  C! DP 1 + DP! ;
+"""
+
 if __name__ == "__main__":
   read_primitives()
 
@@ -267,6 +275,7 @@ if __name__ == "__main__":
 
   pool = StringPool()
   tokens = Tokens.parse_file(input_file)
+  tokens.prepend(DEFS)
   create_macros()
   make_header()
   compile(tokens)
