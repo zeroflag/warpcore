@@ -1,10 +1,6 @@
-: BEGIN DP ; IMMEDIATE
-: UNTIL 24 C, DP - , ; IMMEDIATE
-: CR 10 EMIT ;
-
 : ARITHM
   0 BEGIN
-    1 + DUP DUP / OVER
+    1+ DUP DUP / OVER
     * OVER + OVER -
     DROP DUP 30000 >
   UNTIL DROP ;
@@ -12,7 +8,7 @@
 : RUN
   5000
   BEGIN
-    1 -
+    1-
     ARITHM
     DUP 0 <=
   UNTIL ;
