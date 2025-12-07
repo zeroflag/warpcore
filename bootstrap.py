@@ -273,6 +273,7 @@ DEFS = """
 : 2DROP DROP DROP ;
 : 3DROP DROP DROP DROP ;
 : CR 10 EMIT ;
+: -ROT ROT ROT ;
 
 : NON-ZERO? C@ 0 <> ;
 : PRINT

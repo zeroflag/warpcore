@@ -78,13 +78,6 @@ cell_t engage(uint8_t *mem,
         *(sp-1) = tmp;
         break;
       }
-      case OP_MROT: { // ( a b c -- c a b )
-        cell_t tmp = *(sp-1);
-        *(sp-1) = *(sp-2);
-        *(sp-2) = *(sp-3);
-        *(sp-3) = tmp;
-        break;
-      }
       case OP_TUCK: { // ( a b -- b a b )
         PUSH(*(sp-1));
         *(sp-2) = *(sp-3);
