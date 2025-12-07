@@ -202,12 +202,6 @@ cell_t engage(uint8_t *mem,
         dp = (uint8_t*) (mem + POP);
         break;
       }
-      case OP_CCOMA: {
-        cell_t val = POP;
-        *dp = LO(val);
-        dp++;
-        break;
-      }
       case OP_RPUSH: {
         RPUSH(POP);
         break;
@@ -238,7 +232,7 @@ cell_t engage(uint8_t *mem,
       }
       case OP_CTICK: {
         if (*ip++ != OP_CALL) {
-          breach("Expected OP_CALL");
+          breach("Expected OP_CALL, got: %x\n", *(ip-1));
         }
         PUSH(fetch_cell(ip));
         ip += sizeof(cell_t);

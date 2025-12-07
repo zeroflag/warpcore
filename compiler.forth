@@ -18,6 +18,9 @@ VARIABLE STEPPER
 VARIABLE BASE
 VARIABLE TARGET
 
+: ,   DP   ! DP 2 + DP! ;
+: C,  DP  C! DP 1 + DP! ;
+
 : 3DROP DROP DROP DROP ;
 : 2DUP  OVER OVER ;
 : ?DUP  DUP 0 <> IF DUP THEN ;
@@ -202,7 +205,7 @@ VARIABLE TARGET
   DUP s" C@"       STRING= IF DROP $2D EXIT THEN
   DUP s" DP"       STRING= IF DROP $2E EXIT THEN
   DUP s" DP!"      STRING= IF DROP $2F EXIT THEN
-  DUP s" C,"       STRING= IF DROP $31 EXIT THEN
+  \ TODO gap
   DUP s" DEPTH"    STRING= IF DROP $32 EXIT THEN
   DUP s" >R"       STRING= IF DROP $33 EXIT THEN
   DUP s" R>"       STRING= IF DROP $34 EXIT THEN
@@ -304,8 +307,8 @@ s" :" MAKE-HEADER
 END IMMEDIATE
 
 s" ;" MAKE-HEADER
-  ['] LIT C, ['] EXIT ,
-  ['] C, C,
+  ['] LIT  C, ['] EXIT ,
+  ['] CALL C,  '  C,   ,  \ C, is not a primitive
 END IMMEDIATE
 
 s" IMMEDIATE" MAKE-HEADER

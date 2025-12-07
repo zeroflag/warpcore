@@ -1,4 +1,5 @@
-: ,  DP  ! DP 2 + DP! ;
+: ,   DP   ! DP 2 + DP! ;
+: C,  DP  C! DP 1 + DP! ;
 
 : MARK    DP 0 , ;
 : RESOLVE DP OVER - SWAP ! ;

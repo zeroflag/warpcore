@@ -70,8 +70,7 @@ typedef enum {
   OP_CFTCH = 0x2D,  // "C@"
   OP_DP    = 0x2E,  // "DP"
   OP_TODP  = 0x2F,  // "DP!"
-  
-  OP_CCOMA = 0x31,  // "C,"
+ // TODO gap 
   OP_DEPTH = 0x32,  // "DEPTH"
   OP_RPUSH = 0x33,  // ">R"
   OP_RPOP  = 0x34,  // "R>"

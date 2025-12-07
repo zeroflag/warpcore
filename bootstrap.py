@@ -243,6 +243,12 @@ def create_macros():
                          compile_lit(2),
                          compile_primitive("+"),
                          compile_primitive("DP!"))
+  macros["C,"] = lambda: (compile_primitive("DP"),
+                         compile_primitive("C!"),
+                         compile_primitive("DP"),
+                         compile_lit(1),
+                         compile_primitive("+"),
+                         compile_primitive("DP!"))
 
 def make_header():
   global dp
