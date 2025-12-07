@@ -35,7 +35,7 @@ cell_t engage(uint8_t *mem,
   register opcode_t* ip = (opcode_t*) (mem + start_ip);
 
   uint8_t* dp = (uint8_t*) (mem + heap);
-  
+
   while (((uint8_t*)ip - mem) < MEM_SIZE) {
     opcode_t code = *ip++;
     #if DEBUG
@@ -86,11 +86,9 @@ cell_t engage(uint8_t *mem,
         break;
       }
       case OP_TUCK: { // ( a b -- b a b )
-        cell_t tmp = *(sp-2);
-        *(sp-2) = *(sp-1);
-        *(sp-1) = tmp;
-        *sp = *(sp-2);
-        sp++;
+        PUSH(*(sp-1));
+        *(sp-2) = *(sp-3);
+        *(sp-3) = *(sp-1);
         break;
       }
       case OP_LIT:
@@ -121,8 +119,8 @@ cell_t engage(uint8_t *mem,
         PUSH(val);
         break;
       }
-      case OP_JZ:  JUMP_IF(POP == 0); break; 
-      case OP_JNZ: JUMP_IF(POP != 0); break; 
+      case OP_JZ:  JUMP_IF(POP == 0); break;
+      case OP_JNZ: JUMP_IF(POP != 0); break;
       case OP_JMP: ip += fetch_cell(ip); break;
       case OP_AJMP: SET_IP(fetch_cell(ip)); break;
       case OP_CALL: {

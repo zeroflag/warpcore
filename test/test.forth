@@ -93,6 +93,11 @@ s" Hello World !" LENGTH . CR
 
 9 FOR I . NEXT CR
 
+100 200 TUCK
+. CR \ 200
+. CR \ 100
+. CR \ 200
+
 s" depth" PRINT CR
 DEPTH . CR
 
