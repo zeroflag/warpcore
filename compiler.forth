@@ -40,7 +40,7 @@ VARIABLE TARGET
   REPEAT
   C= ;
 
-: LENGTH
+: STRLEN
   0
   BEGIN
     OVER NON-ZERO?
@@ -63,7 +63,7 @@ VARIABLE TARGET
   0 STORE
   TIB ;
 
-: S,
+: STR,
   BEGIN
     DUP NON-ZERO?
   WHILE
@@ -73,7 +73,7 @@ VARIABLE TARGET
   C@ C, ;
 
 : >NFA 2 + ;
-: >FFA >NFA DUP LENGTH + 1 + ;
+: >FFA >NFA DUP STRLEN + 1 + ;
 : >CFA >FFA 1 + ;
 
 : STEP  STEPPER @ @ STEPPER ! ;
@@ -220,7 +220,7 @@ VARIABLE TARGET
   DP
   LAST @ ,
   LAST !
-  S,
+  STR,
   0 ( FLAGS ) C, ;
 
 : CREATE WORD MAKE-HEADER ;
