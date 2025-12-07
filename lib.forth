@@ -87,7 +87,16 @@
   RESOLVE
 ; IMMEDIATE
 
+: ?DUP  DUP 0 <> IF DUP THEN ;
 : 2DUP OVER OVER ;
 : 2DROP DROP DROP ;
+: 3DROP DROP DROP DROP ;
 
 : CR 10 EMIT ;
+
+: /MOD 2DUP % -ROT / ;
+
+: . ( n -- )
+    DUP 0 < IF 45 EMIT -1 * THEN
+    10 /MOD ?DUP IF . THEN
+    48 + EMIT ;

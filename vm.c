@@ -135,7 +135,6 @@ cell_t engage(uint8_t *mem,
       }
       case OP_RET: ip = (opcode_t *) (mem + RPOP); break;
       case OP_KEY:  PUSH(getchar());   break;
-      case OP_DOT:  printf("%d", POP); break;
       case OP_EMIT: printf("%c", POP); break;
       case OP_SP:   PUSH((uint8_t*) sp - mem); break;
       case OP_TOSP: {

@@ -55,7 +55,7 @@ typedef enum {
   OP_AJMP  = 0x1C,  // "AJMP"
   OP_CALL  = 0x1D,  // "CALL"
   OP_RET   = 0x1E,  // "EXIT"
-  OP_DOT   = 0x1F,  // "."
+  /* OP_DOT   = 0x1F,  // "." */
   OP_EMIT  = 0x20,  // "EMIT"
   OP_LIT   = 0x21,  // "LIT"
   OP_MOD   = 0x22,  // "%"

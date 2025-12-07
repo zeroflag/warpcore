@@ -267,6 +267,29 @@ def make_header():
 DEFS = """
 : ,   DP   ! DP 2 + DP! ;
 : C,  DP  C! DP 1 + DP! ;
+
+: ?DUP  DUP 0 <> IF DUP THEN ;
+: 2DUP OVER OVER ;
+: 2DROP DROP DROP ;
+: 3DROP DROP DROP DROP ;
+: CR 10 EMIT ;
+
+: NON-ZERO? C@ 0 <> ;
+: PRINT
+  BEGIN
+    DUP NON-ZERO?
+  WHILE
+    DUP C@ EMIT
+    1 +
+  REPEAT
+  DROP ;
+
+: /MOD 2DUP % -ROT / ;
+
+: . 
+    DUP 0 < IF 45 EMIT -1 * THEN
+    10 /MOD ?DUP IF . THEN
+    48 + EMIT ;
 """
 
 if __name__ == "__main__":

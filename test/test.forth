@@ -1,16 +1,3 @@
-: 2DUP OVER OVER ;
-: 2DROP DROP DROP ;
-: CR 10 EMIT ;
-: NON-ZERO? C@ 0 <> ;
-: PRINT
-  BEGIN
-    DUP NON-ZERO?
-  WHILE
-    DUP C@ EMIT
-    1 +
-  REPEAT
-  DROP ;
-
 : SQR DUP * ;
 
 : FACTORIAL
