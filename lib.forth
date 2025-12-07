@@ -2,6 +2,9 @@
 : C,  DP  C! DP 1 + DP! ;
 : EXEC >R EXIT ;
 : DEPTH SP $04 - ;
+: CELL 2 ;
+: CELLS CELL * ;
+: ALLOT DP + DP! ;
 
 : MARK    DP 0 , ;
 : RESOLVE DP OVER - SWAP ! ;
