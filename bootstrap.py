@@ -216,6 +216,19 @@ def create_macros():
                              swap(),
                              fill_branch_address(),
                              swap()) # keep counter on top
+  macros["FOR"] = lambda: (compile_primitive(">R"),
+                           push(dp))
+  macros["NEXT"] = lambda: (compile_primitive("R@"),
+                            compile_forward_jump("JZ"),
+                            compile_primitive("R>"),
+                            compile_lit(1),
+                            compile_primitive("-"),
+                            compile_primitive(">R"),
+                            swap(),
+                            compile_back_jump("JMP"),
+                            fill_branch_address(),
+                            compile_primitive("R>"),
+                            compile_primitive("DROP"))
   macros[":"] = lambda: def_word(tokens.next())
   macros[";"] = lambda: compile_primitive("EXIT")
   macros['s"'] = compile_string

@@ -8,7 +8,16 @@
 : AGAIN   ['] JMP C, DP - , ; IMMEDIATE
 : WHILE   ['] JZ C, MARK ; IMMEDIATE
 : REPEAT  SWAP ['] JMP C, DP - , RESOLVE ; IMMEDIATE
-
+: FOR     ['] >R C, DP ; IMMEDIATE
+: NEXT
+  ['] R@ C, ['] JZ  C, MARK
+  ['] R> C, ['] LIT C, 1 , ['] - C, ['] >R C,
+  SWAP
+  ['] JMP C, DP - ,
+  RESOLVE
+  ['] R> C, ['] DROP C,
+; IMMEDIATE
+  
 : VARIABLE
   CREATE
   ['] LIT  C, DP 3 + ,
