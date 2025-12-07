@@ -124,16 +124,14 @@ cell_t engage(uint8_t *mem,
       case OP_JZ:  JUMP_IF(POP == 0); break; 
       case OP_JNZ: JUMP_IF(POP != 0); break; 
       case OP_JMP: ip += fetch_cell(ip); break;
-      case OP_AJMP: 
-        ip = (opcode_t *) (mem + fetch_cell(ip));
-        break;
+      case OP_AJMP: SET_IP(fetch_cell(ip)); break;
       case OP_CALL: {
         cell_t addr = (cell_t) ((uint8_t*)ip - mem + sizeof(uint16_t));
         RPUSH(addr);
-        ip = (opcode_t *) (mem + fetch_cell(ip));
+        SET_IP(fetch_cell(ip));
         break;
       }
-      case OP_RET: ip = (opcode_t *) (mem + RPOP); break;
+      case OP_RET: SET_IP(RPOP); break;
       case OP_KEY:  PUSH(getchar());   break;
       case OP_EMIT: printf("%c", POP); break;
       case OP_SP:   PUSH((uint8_t*) sp - mem); break;
