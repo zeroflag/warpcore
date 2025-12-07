@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <limits.h>
 
-#define PUSH(val)   ( *sp++  = (val) )
+#define PUSH(val)   ( *sp = (val), sp++ )
 #define POP         ( *(--sp) )
 
 #define RPUSH(val)  ( *rp++ = (val) )
@@ -15,7 +15,9 @@
 
 #define BINARY(operator) ( *(sp-2) operator *(sp-1), sp-- )
 #define UNARY(operator, operand) ( *(sp-1) operator (operand) )
+#define NULLARY(operator) ( *(sp-1) = operator *(sp-1) )
 #define COMPARE(operator) ( *(sp-2) = *(sp-2) operator *(sp-1) ? TRUE : FALSE, sp-- )
+#define JUMP_IF(cond) (ip += (cond) ? fetch_cell(ip) : (int)sizeof(cell_t))
 
 typedef int16_t cell_t;
 typedef uint8_t opcode_t;

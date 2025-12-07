@@ -42,44 +42,33 @@ cell_t engage(uint8_t *mem,
       printf("[0x%X] OPCODE: 0x%X\n", (cell_t)(ip - mem), code);
     #endif
     switch (code) {
-      case OP_ADD: BINARY(+=);   break;
-      case OP_SUB: BINARY(-=);   break;
-      case OP_MUL: BINARY(*=);   break;
-      case OP_DIV: BINARY(/=);   break;
-      case OP_AND: BINARY(&=);   break;
-      case OP_OR:  BINARY(|=);   break;
-      case OP_XOR: BINARY(^=);   break;
-      case OP_MOD: BINARY(%=);   break;
-      case OP_SHL: BINARY(<<=); break;
-      case OP_SAR: BINARY(>>=); break;
-      case OP_INC: UNARY(+=, 1); break;
-      case OP_DEC: UNARY(-=, 1); break;
-      case OP_EQ:  COMPARE(==);  break;
-      case OP_NEQ: COMPARE(!=);  break;
-      case OP_LT:  COMPARE(<);   break;
-      case OP_LTE: COMPARE(<=);  break;
-      case OP_GT:  COMPARE(>);   break;
-      case OP_GTE: COMPARE(>=);  break;
-      case OP_INV: *(sp-1) = ~ *(sp-1); break;
-      case OP_DUP: { // ( a -- a a )
-        *sp = *(sp-1);
-        sp++;
-        break;
-      }
-      case OP_DROP: { // ( a -- )
-        sp--;
-        break;
-      }
+      case OP_ADD:  BINARY(+=);   break;
+      case OP_SUB:  BINARY(-=);   break;
+      case OP_MUL:  BINARY(*=);   break;
+      case OP_DIV:  BINARY(/=);   break;
+      case OP_AND:  BINARY(&=);   break;
+      case OP_OR:   BINARY(|=);   break;
+      case OP_XOR:  BINARY(^=);   break;
+      case OP_MOD:  BINARY(%=);   break;
+      case OP_SHL:  BINARY(<<=);  break;
+      case OP_SAR:  BINARY(>>=);  break;
+      case OP_INC:  UNARY(+=, 1); break;
+      case OP_DEC:  UNARY(-=, 1); break;
+      case OP_EQ:   COMPARE(==);  break;
+      case OP_NEQ:  COMPARE(!=);  break;
+      case OP_LT:   COMPARE(<);   break;
+      case OP_LTE:  COMPARE(<=);  break;
+      case OP_GT:   COMPARE(>);   break;
+      case OP_GTE:  COMPARE(>=);  break;
+      case OP_INV:  NULLARY(~);   break;
+      case OP_DUP:  PUSH(*(sp-1)); break;
+      case OP_OVER: PUSH(*(sp-2)); break;
+      case OP_NIP:  BINARY(=); break;
+      case OP_DROP: sp--; break;
       case OP_SWAP: { // ( a b -- b a )
         cell_t tmp = *(sp-1);
         *(sp-1) = *(sp-2);
         *(sp-2) = tmp;
-        break;
-      }
-      case OP_NIP: BINARY(=); break;
-      case OP_OVER: { // ( a b -- a b a )
-        *sp = *(sp-2);
-        sp++;
         break;
       }
       case OP_ROT: { // ( a b c -- b c a )
@@ -104,11 +93,10 @@ cell_t engage(uint8_t *mem,
         sp++;
         break;
       }
-      case OP_LIT: {
+      case OP_LIT:
         PUSH(*(cell_t *) ip);
         ip += sizeof(cell_t);
         break;
-      }
       case OP_STO: {
         cell_t addr = POP;
         cell_t val  = POP;
@@ -134,64 +122,36 @@ cell_t engage(uint8_t *mem,
         PUSH(val);
         break;
       }
-      case OP_JZ: {
-        ip += (POP == 0) ? fetch_cell(ip) : (int)sizeof(cell_t);
-        break; 
-      }
-      case OP_JNZ: {
-        ip += (POP != 0) ? fetch_cell(ip) : (int)sizeof(cell_t);
-        break; 
-      }
-      case OP_JMP: {
-        ip += fetch_cell(ip);
-        break;
-      }
-      case OP_AJMP: {
+      case OP_JZ:  JUMP_IF(POP == 0); break; 
+      case OP_JNZ: JUMP_IF(POP != 0); break; 
+      case OP_JMP: ip += fetch_cell(ip); break;
+      case OP_AJMP: 
         ip = (opcode_t *) (mem + fetch_cell(ip));
         break;
-      }
       case OP_CALL: {
         cell_t addr = (cell_t) ((uint8_t*)ip - mem + sizeof(uint16_t));
         RPUSH(addr);
         ip = (opcode_t *) (mem + fetch_cell(ip));
         break;
       }
-      case OP_RET: {
-        cell_t addr = RPOP;
-        ip = (opcode_t *) (mem + addr);
-        break;
-      }
+      case OP_RET: ip = (opcode_t *) (mem + RPOP); break;
       case OP_EXEC: {
         cell_t addr = (cell_t) ((uint8_t*)ip - mem);
         RPUSH(addr);
         ip = (opcode_t *) (mem + POP);
         break;
       }
-      case OP_KEY: {
-        PUSH(getchar());
-        break;
-      }
-      case OP_DOT: {
-        printf("%d", POP);
-        break;
-      }
-      case OP_EMIT: {
-        printf("%c", POP);
-        break;
-      }
-      case OP_SP: {
-        *sp = (uint8_t*) sp - mem;
-        sp++;
-        break;
-      }
+      case OP_KEY:  PUSH(getchar());   break;
+      case OP_DOT:  printf("%d", POP); break;
+      case OP_EMIT: printf("%c", POP); break;
+      case OP_SP: PUSH((uint8_t*) sp - mem); break;
       case OP_TOSP: {
         cell_t* new_sp = (cell_t*)(mem + POP);
         sp = new_sp;
         break;
       }
       case OP_DEPTH: {
-        *sp = sp - (cell_t*)(mem + stack);
-        sp++;
+        PUSH(sp - (cell_t*)(mem + stack));
         break;
       }
       case OP_DP: {
