@@ -2,11 +2,11 @@ USE_MUSL ?= 0
 OPT_LVL  ?= 1
 
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11 -I. -O$(OPT_LVL)
+CFLAGS = -Wall -Wextra -std=c11 -I. -O$(OPT_LVL) -march=native -flto -funroll-loops -s
 
 ifeq ($(USE_MUSL),1)
 	CC = musl-gcc
-	CFLAGS = -Wall -Wextra -std=c11 -I. -O$(OPT_LVL) -static -s 
+	CFLAGS += -static -s 
 endif
 
 SRCS = $(filter-out main.c, $(wildcard *.c))
