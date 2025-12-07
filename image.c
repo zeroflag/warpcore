@@ -63,7 +63,6 @@ void load_file(const char *path, uint8_t* buffer) {
     fclose(fp);
     if (read != (size_t)MEM_SIZE) {
       fprintf(stderr, "Short read: expected %d, got %zu\n", MEM_SIZE, read);
-      free(buffer);
     }
 }
 
