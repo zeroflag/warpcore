@@ -104,7 +104,7 @@ $5A . CR
 
 s" Hello World !" LENGTH . CR
 
-9 FOR R@ . NEXT CR
+9 FOR I . NEXT CR
 
 s" depth" PRINT CR
 DEPTH . CR

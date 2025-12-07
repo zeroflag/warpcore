@@ -236,6 +236,7 @@ def create_macros():
   macros['\\'] =  lambda: tokens.read_until("\n")
   macros["ENTRY"] = lambda: compile_entry(dp)
   macros["BYE"] = lambda: 0
+  macros["I"] = lambda: compile_primitive("R@")
 
 def make_header():
   global dp
