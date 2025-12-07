@@ -792,26 +792,6 @@ void test_fetchstore() {
   }));
 }
 
-void test_comma() {
-  assert(2 == eval((uint8_t[SIZE]) {
-    OP_DP,
-    LIT16(10),
-    OP_COMA,
-    OP_DP,
-    OP_SWAP,
-    OP_SUB,
-    OP_HLT
-  }));
-
-  assert(9871 == eval((uint8_t[SIZE]) {
-    OP_DP,
-    LIT16(9871),
-    OP_COMA,
-    OP_FETCH,
-    OP_HLT
-  }));
-}
-
 void test_comma_byte() {
   assert(1 == eval((uint8_t[SIZE]) {
     OP_DP,
@@ -918,7 +898,6 @@ int main() {
   test_shl();
   test_sar();
   test_fetchstore();
-  test_comma();
   test_comma_byte();
   test_todp();
   test_tosp();

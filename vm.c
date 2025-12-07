@@ -202,13 +202,6 @@ cell_t engage(uint8_t *mem,
         dp = (uint8_t*) (mem + POP);
         break;
       }
-      case OP_COMA: {
-        cell_t val = POP;
-        *dp = LO(val);
-        *(dp +1) = HI(val);
-        dp += 2;
-        break;
-      }
       case OP_CCOMA: {
         cell_t val = POP;
         *dp = LO(val);

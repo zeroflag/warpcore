@@ -1,3 +1,5 @@
+: ,  DP  ! DP 2 + DP! ;
+
 : MARK    DP 0 , ;
 : RESOLVE DP OVER - SWAP ! ;
 : IF      ['] JZ  C, MARK ; IMMEDIATE
