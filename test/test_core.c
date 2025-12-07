@@ -848,6 +848,13 @@ void test_rstack() {
     OP_SUB,
     OP_HLT
   }));
+
+  assert(40 == eval((uint8_t[SIZE]) {
+    LIT16(40),
+    OP_RPUSH,
+    OP_RTOP,
+    OP_HLT
+  }));
 }
 
 int main() {
