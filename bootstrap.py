@@ -292,6 +292,9 @@ DEFS = """
     DUP 0 < IF 45 EMIT -1 * THEN
     10 /MOD ?DUP IF . THEN
     48 + EMIT ;
+
+: BETWEEN? OVER >= -ROT <= AND ;
+
 """
 
 if __name__ == "__main__":

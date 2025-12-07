@@ -97,6 +97,8 @@
 : 3DROP DROP DROP DROP ;
 : -ROT ROT ROT ;
 
+: BETWEEN? OVER >= -ROT <= AND ;
+
 : CR 10 EMIT ;
 
 : /MOD 2DUP % -ROT / ;

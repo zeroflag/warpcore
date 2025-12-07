@@ -101,8 +101,6 @@ VARIABLE TARGET
   REPEAT
   DROP 0 ;
 
-: BETWEEN? OVER >= -ROT <= AND ;
-
 : MINUS? C@ 45 = ;
 : HEXA?  C@ 36 = ;
 
