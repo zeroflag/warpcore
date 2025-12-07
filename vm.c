@@ -35,47 +35,38 @@ cell_t engage(uint8_t *mem,
   register opcode_t* ip = (opcode_t*) (mem + start_ip);
 
   uint8_t* dp = (uint8_t*) (mem + heap);
-
+  
   while (((uint8_t*)ip - mem) < MEM_SIZE) {
     opcode_t code = *ip++;
     #if DEBUG
       printf("[0x%X] OPCODE: 0x%X\n", (cell_t)(ip - mem), code);
     #endif
     switch (code) {
-      case OP_ADD: {
-        *(sp-2) += *(sp-1);
-        sp--;
-        break;
-      }
-      case OP_SUB: {
-        *(sp-2) -= *(sp-1);
-        sp--;
-        break;
-      }
-      case OP_MUL: {
-        *(sp-2) *= *(sp-1);
-        sp--;
-        break;
-      }
-      case OP_DIV: {
-        *(sp-2) /= *(sp-1);
-        sp--;
-        break;
-      }
-      case OP_INC: {
-        *(sp-1) += 1;
-        break;
-      }
-      case OP_DEC: {
-        *(sp-1) -= 1;
-        break;
-      }
+      case OP_ADD: BINARY(+=);   break;
+      case OP_SUB: BINARY(-=);   break;
+      case OP_MUL: BINARY(*=);   break;
+      case OP_DIV: BINARY(/=);   break;
+      case OP_AND: BINARY(&=);   break;
+      case OP_OR:  BINARY(|=);   break;
+      case OP_XOR: BINARY(^=);   break;
+      case OP_MOD: BINARY(%=);   break;
+      case OP_SHL: BINARY(<<=); break;
+      case OP_SAR: BINARY(>>=); break;
+      case OP_INC: UNARY(+=, 1); break;
+      case OP_DEC: UNARY(-=, 1); break;
+      case OP_EQ:  COMPARE(==);  break;
+      case OP_NEQ: COMPARE(!=);  break;
+      case OP_LT:  COMPARE(<);   break;
+      case OP_LTE: COMPARE(<=);  break;
+      case OP_GT:  COMPARE(>);   break;
+      case OP_GTE: COMPARE(>=);  break;
+      case OP_INV: *(sp-1) = ~ *(sp-1); break;
       case OP_DUP: { // ( a -- a a )
         *sp = *(sp-1);
         sp++;
         break;
       }
-      case OP_DROP: { // ( a --  )
+      case OP_DROP: { // ( a -- )
         sp--;
         break;
       }
@@ -85,11 +76,7 @@ cell_t engage(uint8_t *mem,
         *(sp-2) = tmp;
         break;
       }
-      case OP_NIP: { // ( a b -- b )
-        *(sp-2) = *(sp-1);
-        sp--;
-        break;
-      }
+      case OP_NIP: BINARY(=); break;
       case OP_OVER: { // ( a b -- a b a )
         *sp = *(sp-2);
         sp++;
@@ -120,60 +107,6 @@ cell_t engage(uint8_t *mem,
       case OP_LIT: {
         PUSH(*(cell_t *) ip);
         ip += sizeof(cell_t);
-        break;
-      }
-      case OP_EQ: {
-        *(sp-2) = *(sp-2) == *(sp-1) ? TRUE : FALSE;
-        sp--;
-        break;
-      }
-      case OP_NEQ: {
-        *(sp-2) = *(sp-2) != *(sp-1) ? TRUE : FALSE;
-        sp--;
-        break;
-      }
-      case OP_LT: {
-        *(sp-2) = *(sp-2) < *(sp-1) ? TRUE : FALSE;
-        sp--;
-        break;
-      }
-      case OP_LTE: {
-        *(sp-2) = *(sp-2) <= *(sp-1) ? TRUE : FALSE;
-        sp--;
-        break;
-      }
-      case OP_GT: {
-        *(sp-2) = *(sp-2) > *(sp-1) ? TRUE : FALSE;
-        sp--;
-        break;
-      }
-      case OP_GTE: {
-        *(sp-2) = *(sp-2) >= *(sp-1) ? TRUE : FALSE;
-        sp--;
-        break;
-      }
-      case OP_INV: {
-        *(sp-1) = ~ *(sp-1);
-        break;
-      }
-      case OP_AND: {
-        *(sp-2) &= *(sp-1);
-        sp--;
-        break;
-      }
-      case OP_OR: {
-        *(sp-2) |= *(sp-1);
-        sp--;
-        break;
-      }
-      case OP_XOR: {
-        *(sp-2) ^= *(sp-1);
-        sp--;
-        break;
-      }
-      case OP_MOD: {
-        *(sp-2) %= *(sp-1);
-        sp--;
         break;
       }
       case OP_STO: {
@@ -282,16 +215,6 @@ cell_t engage(uint8_t *mem,
         dp++;
         break;
       }
-      case OP_SHL: {
-        *(sp-2) <<= *(sp-1);
-        sp--;
-        break;
-      }
-      case OP_SAR: {
-        *(sp-2) >>= *(sp-1);
-        sp--;
-        break;
-      }
       case OP_RPUSH: {
         RPUSH(POP);
         break;
@@ -328,7 +251,7 @@ cell_t engage(uint8_t *mem,
         ip += sizeof(cell_t);
         break;
       }
-      case OP_NOP: { break; }
+      case OP_NOP: break;
       default: {
         breach("Unknown opcode: 0x%x at ip=0x%x\n",
                code, ip - mem);

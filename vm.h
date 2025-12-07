@@ -13,6 +13,10 @@
 #define LO(val)    ((val) & 0xFF)
 #define HI(val)    (((val) >> 8) & 0xFF)
 
+#define BINARY(operator) ( *(sp-2) operator *(sp-1), sp-- )
+#define UNARY(operator, operand) ( *(sp-1) operator (operand) )
+#define COMPARE(operator) ( *(sp-2) = *(sp-2) operator *(sp-1) ? TRUE : FALSE, sp-- )
+
 typedef int16_t cell_t;
 typedef uint8_t opcode_t;
 
