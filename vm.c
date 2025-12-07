@@ -164,7 +164,6 @@ cell_t engage(uint8_t *mem,
       case OP_ABORT:
         breach("ABORTED: ip=0x%x\n", ip - mem);
         break;
-      case OP_NOP: break;
       case OP_DUMP: {
         char *path = (char *)(POP + mem);
         PUSH((cell_t)dump_image(mem, path));
