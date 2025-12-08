@@ -115,7 +115,6 @@ cell_t engage(uint8_t *mem,
       case OP_JZ:  JUMP_IF(POP == 0); break;
       case OP_JNZ: JUMP_IF(POP != 0); break;
       case OP_JMP: ip += fetch_cell(ip); break;
-      case OP_AJMP: SET_IP(fetch_cell(ip)); break;
       case OP_CALL: {
         cell_t addr = (cell_t) ((uint8_t*)ip - mem + sizeof(cell_t));
         RPUSH(addr);
