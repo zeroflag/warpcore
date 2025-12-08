@@ -3,25 +3,24 @@
 ( $0182: USER CODE MAIN ENTRY           )
 ( $0200: USER CODE HEAP START           )
 ( ...                                   )
-( $3000: USER HEAP START                )
 ( $6000: STAGE2 COMPILER                )
 ( $7000: STAGE1 COMPILER                )
 ( ************************************* )
 : TIB     $102 ;
 : F_IMME   128 ;
+
 : TRUE      -1 ;
 : FALSE      0 ;
-: USR-HEAP $3000 ;
-: MAIN $182 ;
-: STAGE1-TARGET $6000 ;
-: STAGE2-TARGET $0200 ;
+
+: MAIN           $0182 ;
+: STAGE1-TARGET  $6000 ;
+: STAGE2-TARGET  $0200 ;
 : BOOTSTRAP-ADDR $7000 ;
 
 VARIABLE POS
 VARIABLE LAST
 VARIABLE STEPPER
 VARIABLE BASE
-VARIABLE TARGET
 
 : SPACE?
   DUP  9  =
@@ -232,15 +231,12 @@ VARIABLE TARGET
 : END ['] EXIT C, ;
 
 : COMPILE-ENTRY
-  ['] LIT C, TARGET @ ,
+  ['] LIT C, $4444 , ( placeholder )
   ['] >R C, ['] EXIT C, ;
 
 : COMPILE-HALT ['] LIT C, 0 , ['] HALT C, ;
 
 : COMPILER-LOOP
-  MAIN DP!
-  COMPILE-ENTRY
-  TARGET @ DP!
   BEGIN
     WORD s" BYE" STR= INVERT
   WHILE
@@ -263,24 +259,28 @@ VARIABLE TARGET
 
 ENTRY
 
+\ Compile initial jump code with a placeholder address.
+\ The address will be filled by ENTRY.
+MAIN DP! COMPILE-ENTRY
+
+\ Same source code is used for stage1 and stage2 compiler.
+\ Use different target address depending the stage.
+STEPPER BOOTSTRAP-ADDR >= IF
+  STAGE1-TARGET DP! \ We're in stage1 compiler
+ELSE
+  STAGE2-TARGET DP ! \ We're in stage2 compiler
+THEN
+
+0  LAST !
+10 BASE !
+
+\ Layout user dictionary structure with essential words.
+
 ( ***************** Dictionary Structure ***************** )
 ( Words:                                                   )
 (  16b            8b 8b                                    )
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
 (   ^---------------------------------------------+        )
-
-\ Same source code is used for stage1 and stage2 compiler.
-\ Use different target address depending the stage.
-STEPPER BOOTSTRAP-ADDR >= IF
-  STAGE1-TARGET TARGET ! \ We're in stage1 compiler
-ELSE
-  STAGE2-TARGET TARGET ! \ We're in stage2 compiler
-THEN
-
-USR-HEAP DP! ( <= User Dictionary Start )
-
-0  LAST !
-10 BASE !
 
 s" :" MAKE-HEADER
   ['] CALL C, ' CREATE  ,
@@ -305,6 +305,7 @@ s" ENTRY" MAKE-HEADER
   ['] !   C,
 END IMMEDIATE
 
+\ After compilation finished (BYE), dump memory to disk.
 COMPILER-LOOP
 DUMP-OUTPUT
 POST-CHECKS
