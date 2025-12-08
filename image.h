@@ -18,6 +18,11 @@
   0x0182  ...           User memory
 */
 
+extern const int MAIN;
+extern const int STACK;
+extern const int RSTACK;
+extern const int HEAP;
+
 typedef struct {
     int major;
     int minor;

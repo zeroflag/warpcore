@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
   Ver ver = read_version(mem);
   if (ver.major == 1) {
     dprint("Image version: %d.%d.\n", ver.major, ver.minor);
-    cell_t result = engage(mem, 0x182, 0x02, 0x42, 0x200);
+    cell_t result = engage(mem, MAIN, STACK, RSTACK, HEAP);
     if (mapping_enabled) {
       sync_mapped_image(mem);
     }
