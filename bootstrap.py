@@ -238,7 +238,7 @@ def create_macros():
                             compile_primitive("DROP"))
   macros[":"] = lambda: def_word(tokens.next())
   macros[";"] = lambda: compile_primitive("EXIT")
-  macros['s"'] = compile_string
+  macros['"'] = compile_string
   macros['('] = lambda: tokens.read_until(')')
   macros['\\'] =  lambda: tokens.read_until("\n")
   macros["ENTRY"] = lambda: compile_entry(dp)

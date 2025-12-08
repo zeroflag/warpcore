@@ -22,15 +22,15 @@
 
 : DAY ( n -- s )
   CASE
-    1 OF s" Monday"  ENDOF
-    2 OF s" Tuesday" ENDOF
-    3 OF s" Wednesday" ENDOF
-    4 OF s" Thursday" ENDOF
-    5 OF s" Friday" ENDOF
-    6 OF s" Saturday" ENDOF
-    7 OF s" Sunday" ENDOF
+    1 OF " Monday"  ENDOF
+    2 OF " Tuesday" ENDOF
+    3 OF " Wednesday" ENDOF
+    4 OF " Thursday" ENDOF
+    5 OF " Friday" ENDOF
+    6 OF " Saturday" ENDOF
+    7 OF " Sunday" ENDOF
    ( number left on stack )
-    s" Unknown day: "
+    " Unknown day: "
   ENDCASE ;
 
 : MIN 2DUP < IF DROP ELSE NIP  THEN ;
@@ -72,9 +72,9 @@ V1 @ 1 + . CR
        line
        comment )
 
-s" Test String"   PRINT CR
-s" Test String"   PRINT CR
-s" Test String 2" PRINT CR
+" Test String"   PRINT CR
+" Test String"   PRINT CR
+" Test String 2" PRINT CR
 
 \ test single line comment
 
@@ -84,12 +84,12 @@ s" Test String 2" PRINT CR
 5 DAY PRINT CR
 8 DAY PRINT . CR
 
-s" Hexa test" PRINT CR
+" Hexa test" PRINT CR
 $FF . CR
 $10 . CR
 $5A . CR
 
-s" Hello World !" LENGTH . CR
+" Hello World !" LENGTH . CR
 
 9 FOR I . NEXT CR
 
@@ -98,7 +98,7 @@ s" Hello World !" LENGTH . CR
 . CR \ 100
 . CR \ 200
 
-s" depth" PRINT CR
+" depth" PRINT CR
 DEPTH . CR
 
 0 HALT

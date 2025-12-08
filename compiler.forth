@@ -144,64 +144,64 @@ VARIABLE BASE
 : CONVERT ( -- n bool ) TIB >NUMBER ;
 
 : >OPCODE ( s -- opcode / 0 )
-  DUP s" +"        STR= IF DROP $01 EXIT THEN
-  DUP s" -"        STR= IF DROP $02 EXIT THEN
-  DUP s" *"        STR= IF DROP $03 EXIT THEN
-  DUP s" /"        STR= IF DROP $04 EXIT THEN
-  DUP s" 1+"       STR= IF DROP $05 EXIT THEN
-  DUP s" 1-"       STR= IF DROP $06 EXIT THEN
-  DUP s" DUP"      STR= IF DROP $07 EXIT THEN
-  DUP s" DROP"     STR= IF DROP $08 EXIT THEN
-  DUP s" SWAP"     STR= IF DROP $09 EXIT THEN
-  DUP s" NIP"      STR= IF DROP $0A EXIT THEN
-  DUP s" OVER"     STR= IF DROP $0B EXIT THEN
-  DUP s" ROT"      STR= IF DROP $0C EXIT THEN
-  DUP s" TUCK"     STR= IF DROP $0D EXIT THEN
-  DUP s" INVERT"   STR= IF DROP $0E EXIT THEN
-  DUP s" AND"      STR= IF DROP $0F EXIT THEN
-  DUP s" OR"       STR= IF DROP $10 EXIT THEN
-  DUP s" XOR"      STR= IF DROP $11 EXIT THEN
-  DUP s" >"        STR= IF DROP $12 EXIT THEN
-  DUP s" >="       STR= IF DROP $13 EXIT THEN
-  DUP s" <"        STR= IF DROP $14 EXIT THEN
-  DUP s" <="       STR= IF DROP $15 EXIT THEN
-  DUP s" ="        STR= IF DROP $16 EXIT THEN
-  DUP s" <>"       STR= IF DROP $17 EXIT THEN
-  DUP s" JMP"      STR= IF DROP $18 EXIT THEN
-  DUP s" JZ"       STR= IF DROP $19 EXIT THEN
-  DUP s" JNZ"      STR= IF DROP $1A EXIT THEN
-  DUP s" CALL"     STR= IF DROP $1B EXIT THEN
-  DUP s" EXIT"     STR= IF DROP $1C EXIT THEN
-  DUP s" EMIT"     STR= IF DROP $1D EXIT THEN
-  DUP s" LIT"      STR= IF DROP $1E EXIT THEN
-  DUP s" %"        STR= IF DROP $1F EXIT THEN
-  DUP s" KEY"      STR= IF DROP $20 EXIT THEN
-  DUP s" SP"       STR= IF DROP $21 EXIT THEN
-  DUP s" SP!"      STR= IF DROP $22 EXIT THEN
-  DUP s" HALT"     STR= IF DROP $23 EXIT THEN
-  DUP s" LSHIFT"   STR= IF DROP $24 EXIT THEN
-  DUP s" RSHIFT"   STR= IF DROP $25 EXIT THEN
-  DUP s" !"        STR= IF DROP $26 EXIT THEN
-  DUP s" C!"       STR= IF DROP $27 EXIT THEN
-  DUP s" @"        STR= IF DROP $28 EXIT THEN
-  DUP s" C@"       STR= IF DROP $29 EXIT THEN
-  DUP s" DP"       STR= IF DROP $2A EXIT THEN
-  DUP s" DP!"      STR= IF DROP $2B EXIT THEN
-  DUP s" >R"       STR= IF DROP $2C EXIT THEN
-  DUP s" R>"       STR= IF DROP $2D EXIT THEN
-  DUP s" R@"       STR= IF DROP $2E EXIT THEN
-  DUP s" I"        STR= IF DROP $2E EXIT THEN \ Alias to R@
-  DUP s" DUMP"     STR= IF DROP $2F EXIT THEN
-  DUP s" ABORT"    STR= IF DROP $30 EXIT THEN
-  DUP s" [']"      STR= IF DROP $31 EXIT THEN
-  DUP s" '"        STR= IF DROP $32 EXIT THEN
+  DUP " +"        STR= IF DROP $01 EXIT THEN
+  DUP " -"        STR= IF DROP $02 EXIT THEN
+  DUP " *"        STR= IF DROP $03 EXIT THEN
+  DUP " /"        STR= IF DROP $04 EXIT THEN
+  DUP " 1+"       STR= IF DROP $05 EXIT THEN
+  DUP " 1-"       STR= IF DROP $06 EXIT THEN
+  DUP " DUP"      STR= IF DROP $07 EXIT THEN
+  DUP " DROP"     STR= IF DROP $08 EXIT THEN
+  DUP " SWAP"     STR= IF DROP $09 EXIT THEN
+  DUP " NIP"      STR= IF DROP $0A EXIT THEN
+  DUP " OVER"     STR= IF DROP $0B EXIT THEN
+  DUP " ROT"      STR= IF DROP $0C EXIT THEN
+  DUP " TUCK"     STR= IF DROP $0D EXIT THEN
+  DUP " INVERT"   STR= IF DROP $0E EXIT THEN
+  DUP " AND"      STR= IF DROP $0F EXIT THEN
+  DUP " OR"       STR= IF DROP $10 EXIT THEN
+  DUP " XOR"      STR= IF DROP $11 EXIT THEN
+  DUP " >"        STR= IF DROP $12 EXIT THEN
+  DUP " >="       STR= IF DROP $13 EXIT THEN
+  DUP " <"        STR= IF DROP $14 EXIT THEN
+  DUP " <="       STR= IF DROP $15 EXIT THEN
+  DUP " ="        STR= IF DROP $16 EXIT THEN
+  DUP " <>"       STR= IF DROP $17 EXIT THEN
+  DUP " JMP"      STR= IF DROP $18 EXIT THEN
+  DUP " JZ"       STR= IF DROP $19 EXIT THEN
+  DUP " JNZ"      STR= IF DROP $1A EXIT THEN
+  DUP " CALL"     STR= IF DROP $1B EXIT THEN
+  DUP " EXIT"     STR= IF DROP $1C EXIT THEN
+  DUP " EMIT"     STR= IF DROP $1D EXIT THEN
+  DUP " LIT"      STR= IF DROP $1E EXIT THEN
+  DUP " %"        STR= IF DROP $1F EXIT THEN
+  DUP " KEY"      STR= IF DROP $20 EXIT THEN
+  DUP " SP"       STR= IF DROP $21 EXIT THEN
+  DUP " SP!"      STR= IF DROP $22 EXIT THEN
+  DUP " HALT"     STR= IF DROP $23 EXIT THEN
+  DUP " LSHIFT"   STR= IF DROP $24 EXIT THEN
+  DUP " RSHIFT"   STR= IF DROP $25 EXIT THEN
+  DUP " !"        STR= IF DROP $26 EXIT THEN
+  DUP " C!"       STR= IF DROP $27 EXIT THEN
+  DUP " @"        STR= IF DROP $28 EXIT THEN
+  DUP " C@"       STR= IF DROP $29 EXIT THEN
+  DUP " DP"       STR= IF DROP $2A EXIT THEN
+  DUP " DP!"      STR= IF DROP $2B EXIT THEN
+  DUP " >R"       STR= IF DROP $2C EXIT THEN
+  DUP " R>"       STR= IF DROP $2D EXIT THEN
+  DUP " R@"       STR= IF DROP $2E EXIT THEN
+  DUP " I"        STR= IF DROP $2E EXIT THEN \ Alias to R@
+  DUP " DUMP"     STR= IF DROP $2F EXIT THEN
+  DUP " ABORT"    STR= IF DROP $30 EXIT THEN
+  DUP " [']"      STR= IF DROP $31 EXIT THEN
+  DUP " '"        STR= IF DROP $32 EXIT THEN
   DROP 0
 ;
 
 : FIND-PRIMITIVE ( -- opcode / 0 ) TIB >OPCODE ;
 
 : ??? ( s -- )
-  TIB PRINT s"  ? - Unknown word." PRINT CR ;
+  TIB PRINT "  ? - Unknown word." PRINT CR ;
 
 : COMPILE ( -- )
   TIB FIND
@@ -242,7 +242,7 @@ VARIABLE BASE
 
 : COMPILER-LOOP
   BEGIN
-    WORD s" BYE" STR= INVERT
+    WORD " BYE" STR= INVERT
   WHILE
     COMPILE
   REPEAT ;
@@ -250,13 +250,13 @@ VARIABLE BASE
 : DUMP-OUTPUT
   VMPARAM-ADDR DUMP
   INVERT IF
-    s" Dump failed." PRINT CR
+    " Dump failed." PRINT CR
     ABORT
   THEN ;
 
 : POST-CHECKS
   DEPTH 0 <> IF
-    s" Non Empty stack: " PRINT DEPTH . CR
+    " Non Empty stack: " PRINT DEPTH . CR
     ABORT
   THEN ;
 
@@ -286,24 +286,24 @@ THEN
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
 (   ^---------------------------------------------+        )
 
-s" :" MAKE-HEADER
+" :" MAKE-HEADER
   ['] CALL C, ' CREATE  ,
 END IMMEDIATE
 
-s" ;" MAKE-HEADER
+" ;" MAKE-HEADER
   ['] LIT  C, ['] EXIT ,
   ['] CALL C,  '  C,   ,  \ C, is not a primitive
 END IMMEDIATE
 
-s" IMMEDIATE" MAKE-HEADER
+" IMMEDIATE" MAKE-HEADER
   ['] CALL C, ' IMMEDIATE ,
 END IMMEDIATE
 
-s" CREATE" MAKE-HEADER
+" CREATE" MAKE-HEADER
   ['] CALL C, ' CREATE ,
 END
 
-s" ENTRY" MAKE-HEADER
+" ENTRY" MAKE-HEADER
   ['] DP  C,
   ['] LIT C, MAIN 1+ ,
   ['] !   C,

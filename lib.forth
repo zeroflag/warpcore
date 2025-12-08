@@ -78,7 +78,7 @@
   REPEAT
   DROP ;
 
-: s"
+: "
   ['] LIT C, DP 5 + , ( addr of string )
   ['] JMP C, MARK
   BEGIN
