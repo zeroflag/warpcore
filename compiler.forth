@@ -1,18 +1,21 @@
-( *************************4*********** )
+( ************************************* )
 ( Layout:                               )
-( $0164: USER CODE DEFAULT ENTRY        )
+( $0182: USER CODE MAIN ENTRY           )
+( $0200: USER CODE HEAP START           )
 ( ...                                   )
 ( $3000: USER HEAP START                )
-( ...                                   )
-( $7000: COMPILER CODE                  )
+( $6000: STAGE2 COMPILER                )
+( $7000: STAGE1 COMPILER                )
 ( ************************************* )
 : TIB     $102 ;
 : F_IMME   128 ;
 : TRUE      -1 ;
 : FALSE      0 ;
 : USR-HEAP $3000 ;
-: CODE-START $182 ;
-: HEAP-START $200 ;
+: MAIN $182 ;
+: STAGE1-TARGET $6000 ;
+: STAGE2-TARGET $0200 ;
+: BOOTSTRAP-ADDR $7000 ;
 
 VARIABLE POS
 VARIABLE LAST
@@ -235,7 +238,7 @@ VARIABLE TARGET
 : COMPILE-HALT ['] LIT C, 0 , ['] HALT C, ;
 
 : COMPILER-LOOP
-  CODE-START DP!
+  MAIN DP!
   COMPILE-ENTRY
   TARGET @ DP!
   BEGIN
@@ -268,11 +271,10 @@ ENTRY
 
 \ Same source code is used for stage1 and stage2 compiler.
 \ Use different target address depending the stage.
-STEPPER $7000 >= IF
-  $6000 TARGET ! \ We're in stage1 compiler
+STEPPER BOOTSTRAP-ADDR >= IF
+  STAGE1-TARGET TARGET ! \ We're in stage1 compiler
 ELSE
-  ( TODO magic num replace )
-  HEAP-START TARGET ! \ We're in stage2 compiler
+  STAGE2-TARGET TARGET ! \ We're in stage2 compiler
 THEN
 
 USR-HEAP DP! ( <= User Dictionary Start )
@@ -299,7 +301,7 @@ END
 
 s" ENTRY" MAKE-HEADER
   ['] DP  C,
-  ['] LIT C, CODE-START 1+ ,
+  ['] LIT C, MAIN 1+ ,
   ['] !   C,
 END IMMEDIATE
 
