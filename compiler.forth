@@ -14,10 +14,10 @@
 : TRUE      -1 ;
 : FALSE      0 ;
 
-: MAIN           $0182 ;
-: STAGE1-TARGET  $6000 ;
-: STAGE2-TARGET  $0200 ;
-: BOOTSTRAP-ADDR $7000 ;
+: MAIN          $0182 ;
+: STAGE1-TARGET $6000 ;
+: STAGE2-TARGET $0200 ;
+: BOOTSTRAPPER  $7000 ;
 
 VARIABLE POS
 VARIABLE LAST
@@ -199,7 +199,8 @@ VARIABLE BASE
 
 : FIND-PRIMITIVE ( -- opcode / 0 ) TIB >OPCODE ;
 
-: ??? ( s -- ) TIB PRINT 32 EMIT 63 EMIT CR ;
+: ??? ( s -- )
+  TIB PRINT s"  ? - Unknown word." PRINT CR ;
 
 : COMPILE ( -- )
   TIB FIND
@@ -243,8 +244,7 @@ VARIABLE BASE
     WORD s" BYE" STR= INVERT
   WHILE
     COMPILE
-  REPEAT
-  COMPILE-HALT ;
+  REPEAT ;
 
 : DUMP-OUTPUT
   s" output.img" DUMP
@@ -263,11 +263,12 @@ ENTRY
 
 \ Compile initial jump code with a placeholder address.
 \ The address will be filled by ENTRY.
-MAIN DP! COMPILE-ENTRY
+MAIN DP!
+COMPILE-ENTRY
 
 \ Same source code is used for stage1 and stage2 compiler.
 \ Use different target address depending the stage.
-STEPPER BOOTSTRAP-ADDR >= IF
+STEPPER BOOTSTRAPPER >= IF
   STAGE1-TARGET DP! \ We're in stage1 compiler
 ELSE
   STAGE2-TARGET DP ! \ We're in stage2 compiler
@@ -309,6 +310,7 @@ END IMMEDIATE
 
 \ After compilation finished (BYE), dump memory to disk.
 COMPILER-LOOP
+COMPILE-HALT
 DUMP-OUTPUT
 POST-CHECKS
 
