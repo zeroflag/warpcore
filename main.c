@@ -8,6 +8,7 @@
 int verbose = 0;
 int mapping_enabled = 0;
 char* image_path = "image.dat";
+char* vm_params = "";
 
 void dprint(const char *format, ...) {
   if (!verbose) return;
@@ -23,9 +24,21 @@ void parse_args(int argc, char **argv) {
       verbose = 1;
     } else if (strcmp(argv[i], "-m") == 0) {
       mapping_enabled = 1;
+    } else if (strncmp(argv[i], "-P", 2) == 0) {
+      vm_params = argv[i] + 2;
+      dprint("VM param: %s\n", vm_params);
     } else {
       image_path = argv[i];
     }
+  }
+}
+
+void write_vm_params(uint8_t *mem) {
+  unsigned len  = strlen(vm_params);
+  if (len > 0) {
+    unsigned size = len > 128 ? 128 : len;
+    memcpy(&mem[VMPARAMS], vm_params, size);
+    mem[VMPARAMS + size] = 0;
   }
 }
 
@@ -45,6 +58,7 @@ int main(int argc, char **argv) {
   Ver ver = read_version(mem);
   if (ver.major == 1) {
     dprint("Image version: %d.%d.\n", ver.major, ver.minor);
+    write_vm_params(mem);
     cell_t result = engage(mem, MAIN, STACK, RSTACK, HEAP);
     if (mapping_enabled) {
       sync_mapped_image(mem);

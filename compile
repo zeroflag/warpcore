@@ -34,13 +34,16 @@ rm -f "$OUTPUT"
 
 if [[ $input_file == "/dev/stdin" ]]; then
   echo "Type source code."
-elif ! grep -q "ENTRY" "$input_file"; then
-  echo -e "${YELLOW}Warning: '$input_file' does not contain ENTRY.${RESET}" >&2
+else
+  if ! grep -q "ENTRY" "$input_file"; then
+    echo -e "${YELLOW}Warning: '$input_file' does not contain ENTRY.${RESET}" >&2
+  fi
+  OUTPUT="${input_file%.*}.img"
 fi
 
 cat "$LIB"   \
     "$input_file" \
-    | ./warp "$COMPILER"
+    | ./warp "$COMPILER" "-P$OUTPUT"
 
 if $exec_mode; then
   echo "Running compiled image: $OUTPUT"

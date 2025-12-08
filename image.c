@@ -7,10 +7,11 @@
 #include "image.h"
 #include "vm.h"
 
-const int MAIN   = 0x0182;
-const int STACK  = 0x0002;
-const int RSTACK = 0x0042;
-const int HEAP   = 0x0200;
+const int MAIN     = 0x0182;
+const int STACK    = 0x0002;
+const int VMPARAMS = 0x0042;
+const int RSTACK   = 0x00C2;
+const int HEAP     = 0x0200;
 
 Ver read_version(uint8_t *image) {
   Ver ver;

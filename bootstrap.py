@@ -20,6 +20,9 @@ jmp_address = 0
 dp = 0
 mem = [0 for i in range(SIZE)]
 
+VM_PARAM_ADDRESS = 0x42
+DEFAULT_FILENAME = "output.img"
+
 class Tokens:
   @staticmethod
   def parse_file(input_file):
@@ -267,6 +270,8 @@ def make_header():
   compile_primitive(">R")
   compile_primitive("EXIT")
   dp = COMPILER_ENTRY
+  for i in range(len(DEFAULT_FILENAME)):
+    mem[VM_PARAM_ADDRESS + i] = ord(DEFAULT_FILENAME[i])
 
 DEFS = """
 : ,   DP   ! DP 2 + DP! ;
