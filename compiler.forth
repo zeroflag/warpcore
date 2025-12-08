@@ -1,10 +1,12 @@
 ( ************************************* )
 ( Layout:                               )
-( $0182: USER CODE MAIN ENTRY           )
-( $0200: USER CODE HEAP START           )
+( $0182: USER MAIN ENTRY [JUMP TO] +    )
+( $0200: USER DICTIONARY START     |    )
+( ...                              |    )
+( ... CODE START  <----------------+    )
 ( ...                                   )
-( $6000: STAGE2 COMPILER                )
-( $7000: STAGE1 COMPILER                )
+( $6000: STAGE2 COMPILER RESIDUAL       )
+( $7000: STAGE1 COMPILER RESIDUAL       )
 ( ************************************* )
 : TIB     $102 ;
 : F_IMME   128 ;
