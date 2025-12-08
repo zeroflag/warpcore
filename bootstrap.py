@@ -16,6 +16,7 @@ CELL_MAX =  32767
 CELL_MIN = -32768
 COMPILER_ENTRY = 0x7000
 
+jmp_address = 0
 dp = 0
 mem = [0 for i in range(SIZE)]
 
@@ -190,8 +191,8 @@ def compile_string():
     fill_branch_address()
 
 def compile_entry(address):
-  mem[2] = address & 0xFF
-  mem[3] = (address >> 8) & 0xFF
+  mem[jmp_address] = address & 0xFF
+  mem[jmp_address+1] = (address >> 8) & 0xFF
 
 def create_macros():
   macros["IF"] = lambda: compile_forward_jump("JZ")
@@ -256,13 +257,16 @@ def create_macros():
                          compile_primitive("EXIT"))
 
 def make_header():
-  global dp
-  entry = COMPILER_ENTRY
+  global dp, jmp_address
   mem[dp] = 0b00010000 # version
   dp += 1
-  compile_primitive("AJMP")
-  compile_num16(entry)
-  dp = entry
+  mem[dp] = 0xFF
+  dp = 0x182
+  jmp_address = dp + 1
+  compile_lit(0xFF) # placeholder JMP address: 0x183-0x184
+  compile_primitive(">R")
+  compile_primitive("EXIT")
+  dp = COMPILER_ENTRY
 
 DEFS = """
 : ,   DP   ! DP 2 + DP! ;
@@ -286,7 +290,7 @@ DEFS = """
   DROP ;
 
 : /MOD 2DUP % -ROT / ;
-: DEPTH SP $04 - ;
+: DEPTH SP $02 - ;
 
 : . 
     DUP 0 < IF 45 EMIT -1 * THEN

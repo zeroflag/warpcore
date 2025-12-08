@@ -1,7 +1,7 @@
 : ,   DP   ! DP 2 + DP! ;
 : C,  DP  C! DP 1 + DP! ;
 : EXEC >R EXIT ;
-: DEPTH SP $04 - ;
+: DEPTH SP $02 - ;
 : CELL 2 ;
 : CELLS CELL * ;
 : ALLOT DP + DP! ;

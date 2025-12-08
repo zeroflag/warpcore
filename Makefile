@@ -29,7 +29,7 @@ BOLD_RED   = \033[1;31m
 CYAN  = \033[36m
 RESET = \033[0m
 
-all: clean vm test-vm stage1 stage2 test-bootstrap test-stage1 test-stage2
+all: clean vm test-vm test-bootstrap stage1 test-stage1 stage2 test-stage2
 
 vm:
 	@echo "* $(CYAN)Building vm..$(RESET)"

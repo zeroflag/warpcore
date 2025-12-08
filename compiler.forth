@@ -6,11 +6,13 @@
 ( ...                                   )
 ( $7000: COMPILER CODE                  )
 ( ************************************* )
-: TIB      $64 ;
+: TIB     $102 ;
 : F_IMME   128 ;
 : TRUE      -1 ;
 : FALSE      0 ;
 : USR-HEAP $3000 ;
+: CODE-START $182 ;
+: HEAP-START $200 ;
 
 VARIABLE POS
 VARIABLE LAST
@@ -227,11 +229,14 @@ VARIABLE TARGET
 
 : END ['] EXIT C, ;
 
-: COMPILE-AJMP ['] AJMP C, TARGET @ , ;
-: COMPILE-HALT ['] LIT  C, 0 , ['] HALT C, ;
+: COMPILE-AJMP
+  ['] LIT C, TARGET @ ,
+  ['] >R C, ['] EXIT C, ;
+
+: COMPILE-HALT ['] LIT C, 0 , ['] HALT C, ;
 
 : COMPILER-LOOP
-  1 DP!
+  CODE-START DP!
   COMPILE-AJMP
   TARGET @ DP!
   BEGIN
@@ -267,7 +272,8 @@ ENTRY
 STEPPER $7000 >= IF
   $6000 TARGET ! \ We're in stage1 compiler
 ELSE
-  $0164 TARGET ! \ We're in stage2 compiler
+  ( TODO magic num replace )
+  HEAP-START TARGET ! \ We're in stage2 compiler
 THEN
 
 USR-HEAP DP! ( <= User Dictionary Start )
@@ -294,7 +300,7 @@ END
 
 s" ENTRY" MAKE-HEADER
   ['] DP  C,
-  ['] LIT C, $0002 ,
+  ['] LIT C, CODE-START 1+ ,
   ['] !   C,
 END IMMEDIATE
 

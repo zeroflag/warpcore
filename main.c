@@ -42,11 +42,10 @@ int main(int argc, char **argv) {
     load_file(image_path, static_mem);
     mem = static_mem;
   }
-
   Ver ver = read_version(mem);
   if (ver.major == 1) {
     dprint("Image version: %d.%d.\n", ver.major, ver.minor);
-    cell_t result = engage(mem, 0x01, 0x04, 0x44, 0x164);
+    cell_t result = engage(mem, 0x182, 0x02, 0x42, 0x200);
     if (mapping_enabled) {
       sync_mapped_image(mem);
     }

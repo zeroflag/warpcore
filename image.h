@@ -10,12 +10,12 @@
   0x0000  BYTE          Version:
                         high 4bit = major: 1
                         low  4bit = minor: 0
-  0x0001  BYTE          OP_LJMP
-  0x0002  WORD          Absolute address to jump
-  0x0004  32 * CELL     Data stack initial content (32 cells)
-  0x0044  16 * CELL     Return stack initial content (16 cells)
-  0x0064  256 bytes     Scratch buffer (TIB, PAD, temporary space)
-  0x0164  ...           Heap / Dictionary (grows upward)
+  0x0001  BYTE          Reserved: 0xFF
+  0x0002  32 * CELL     Data stack initial content (32 cells)
+  0x0042  128 bytes     Space for CLI parameters
+  0x00C2  32 * CELL     Return stack initial content (32 cells)
+  0x0102  128 bytes     Scratch buffer (TIB, PAD, temporary space)
+  0x0182  ...           User memory
 */
 
 typedef struct {
