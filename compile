@@ -1,23 +1,50 @@
 #!/bin/bash
 
+YELLOW="\033[1;33m"
+RESET="\033[0m"
+
 COMPILER=stage2.img
 OUTPUT=output.img
 LIB="lib.forth"
-INPUT="/dev/stdin"
 
-if [[ -n "$1" && -f "$1" ]]; then
-  INPUT="$1"
-else
-  echo "Usage compile <file.forth>"
+repl_mode=false
+exec_mode=false
+input_file="/dev/stdin"
+
+for arg in "$@"; do
+  case "$arg" in
+    -r|--repl)
+      repl_mode=true
+      ;;
+    -e|--exec)
+      exec_mode=true
+      ;;
+    *)
+      input_file="$arg"
+      ;;
+  esac
+done
+
+if [[ -z "$input_file" ]]; then
+  echo "Usage: $0 [input.forth] [-e]" >&2
   exit 1
 fi
 
 rm -f "$OUTPUT"
 
-echo "Compiling $1.."
+if [[ $input_file == "/dev/stdin" ]]; then
+  echo "Type source code."
+elif ! grep -q "ENTRY" "$input_file"; then
+  echo -e "${YELLOW}Warning: '$input_file' does not contain ENTRY.${RESET}" >&2
+fi
+
 cat "$LIB"   \
-    "$INPUT" \
+    "$input_file" \
     | ./warp "$COMPILER"
 
-echo "Running compiled image: $OUTPUT"
-time ./warp "$OUTPUT"
+if $exec_mode; then
+  echo "Running compiled image: $OUTPUT"
+  time ./warp "$OUTPUT"
+else
+    echo "Output saved as: $OUTPUT"
+fi
