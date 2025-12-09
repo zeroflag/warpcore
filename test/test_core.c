@@ -705,15 +705,6 @@ void test_fetchstore() {
   }));
 }
 
-void test_tosp() {
-  assert(8976 == eval((uint8_t[SIZE]) {
-    LIT16(8976),
-    OP_TOSP,
-    OP_SP,
-    OP_HLT
-  }));
-}
-
 void test_rstack() {
   assert(1289 == eval((uint8_t[SIZE]) {
     LIT16(1289),
@@ -772,7 +763,6 @@ int main() {
   test_shl();
   test_sar();
   test_fetchstore();
-  test_tosp();
   test_rstack();
   return 0;
 }

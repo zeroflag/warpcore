@@ -118,19 +118,14 @@ cell_t engage(uint8_t *mem,
         SET_IP(fetch_cell(ip));
         break;
       }
-      case OP_RET:  SET_IP(RPOP); break;
-      case OP_KEY:  PUSH(getchar());   break;
-      case OP_EMIT: printf("%c", POP); break;
-      case OP_SP:   PUSH((uint8_t*) sp - mem); break;
-      case OP_TOSP: {
-        cell_t new_sp = POP;
-        SET_SP(new_sp);
-        break;
-      }
+      case OP_RET:   SET_IP(RPOP); break;
+      case OP_KEY:   PUSH(getchar());   break;
+      case OP_EMIT:  printf("%c", POP); break;
+      case OP_SP:    PUSH((uint8_t*) sp - mem); break;
       case OP_RPUSH: RPUSH(POP); break;
       case OP_RPOP:  PUSH(RPOP); break;
       case OP_RTOP:  PUSH(*(rp-1)); break;
-      case OP_HLT: return POP;
+      case OP_HLT:   return POP;
       case OP_ABORT:
         breach("ABORTED: ip=0x%x\n", ip - mem);
         break;
