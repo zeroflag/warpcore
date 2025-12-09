@@ -239,19 +239,7 @@ def create_macros():
   macros["ENTRY"] = lambda: compile_entry(dp)
   macros["BYE"] = lambda: 0
   macros["I"] = lambda: compile_primitive("R@")
-  macros[","] = lambda: (compile_primitive("DP"),
-                         compile_primitive("!"),
-                         compile_primitive("DP"),
-                         compile_lit(2),
-                         compile_primitive("+"),
-                         compile_primitive("DP!"))
   macros["DP"] = lambda: compile_lit(VAR_DP)
-  macros["C,"] = lambda: (compile_primitive("DP"),
-                         compile_primitive("C!"),
-                         compile_primitive("DP"),
-                         compile_lit(1),
-                         compile_primitive("+"),
-                         compile_primitive("DP!"))
   macros["EXEC"] = lambda: (compile_primitive(">R"),
                          compile_primitive("EXIT"))
 
