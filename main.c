@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
   if (ver.major == 1) {
     dprint("Image version: %d.%d.\n", ver.major, ver.minor);
     write_vm_params(mem);
-    cell_t result = engage(mem, MAIN, STACK, RSTACK, HEAP);
+    cell_t result = engage(mem, MAIN, STACK, RSTACK);
     if (mapping_enabled) {
       sync_mapped_image(mem);
     }

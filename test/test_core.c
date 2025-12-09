@@ -12,7 +12,7 @@
 #define STACK 50
 
 cell_t eval(uint8_t* code) {
-  return engage(code, 0, STACK, 100, 1024);
+  return engage(code, 0, STACK, 100);
 }
 
 void test_add() {
@@ -705,15 +705,6 @@ void test_fetchstore() {
   }));
 }
 
-void test_todp() {
-  assert(4567 == eval((uint8_t[SIZE]) {
-    LIT16(4567),
-    OP_TODP,
-    OP_DP,
-    OP_HLT
-  }));
-}
-
 void test_tosp() {
   assert(8976 == eval((uint8_t[SIZE]) {
     LIT16(8976),
@@ -781,7 +772,6 @@ int main() {
   test_shl();
   test_sar();
   test_fetchstore();
-  test_todp();
   test_tosp();
   test_rstack();
   return 0;

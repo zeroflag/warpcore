@@ -67,22 +67,19 @@ typedef enum {
   OP_CSTO  = 0x27,  // "C!"
   OP_FETCH = 0x28,  // "@"
   OP_CFTCH = 0x29,  // "C@"
-  OP_DP    = 0x2A,  // "DP"
-  OP_TODP  = 0x2B,  // "DP!"
-  OP_RPUSH = 0x2C,  // ">R"
-  OP_RPOP  = 0x2D,  // "R>"
-  OP_RTOP  = 0x2E,  // "R@"
-  OP_DUMP  = 0x2F,  // "DUMP"
-  OP_ABORT = 0x30,  // "ABORT"
-  OP_BTICK = 0x31,  // "[']"
-  OP_CTICK = 0x32,  // "'"
+  OP_RPUSH = 0x2A,  // ">R"
+  OP_RPOP  = 0x2B,  // "R>"
+  OP_RTOP  = 0x2C,  // "R@"
+  OP_DUMP  = 0x2D,  // "DUMP"
+  OP_ABORT = 0x2E,  // "ABORT"
+  OP_BTICK = 0x2F,  // "[']"
+  OP_CTICK = 0x30,  // "'"
 } Op;
 
 cell_t engage(uint8_t *mem,
               cell_t start_ip,
               cell_t stack,
-              cell_t rstack,
-              cell_t heap);
+              cell_t rstack);
 
 void breach(char* format, ...);
 

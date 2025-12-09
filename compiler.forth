@@ -184,16 +184,14 @@ VARIABLE BASE
   DUP " C!"       STR= IF DROP $27 EXIT THEN
   DUP " @"        STR= IF DROP $28 EXIT THEN
   DUP " C@"       STR= IF DROP $29 EXIT THEN
-  DUP " DP"       STR= IF DROP $2A EXIT THEN
-  DUP " DP!"      STR= IF DROP $2B EXIT THEN
-  DUP " >R"       STR= IF DROP $2C EXIT THEN
-  DUP " R>"       STR= IF DROP $2D EXIT THEN
-  DUP " R@"       STR= IF DROP $2E EXIT THEN
-  DUP " I"        STR= IF DROP $2E EXIT THEN \ Alias to R@
-  DUP " DUMP"     STR= IF DROP $2F EXIT THEN
-  DUP " ABORT"    STR= IF DROP $30 EXIT THEN
-  DUP " [']"      STR= IF DROP $31 EXIT THEN
-  DUP " '"        STR= IF DROP $32 EXIT THEN
+  DUP " >R"       STR= IF DROP $2A EXIT THEN
+  DUP " R>"       STR= IF DROP $2B EXIT THEN
+  DUP " R@"       STR= IF DROP $2C EXIT THEN
+  DUP " I"        STR= IF DROP $2C EXIT THEN \ Alias to R@
+  DUP " DUMP"     STR= IF DROP $2D EXIT THEN
+  DUP " ABORT"    STR= IF DROP $2E EXIT THEN
+  DUP " [']"      STR= IF DROP $2F EXIT THEN
+  DUP " '"        STR= IF DROP $30 EXIT THEN
   DROP 0
 ;
 
@@ -223,7 +221,7 @@ VARIABLE BASE
   THEN ;
 
 : MAKE-HEADER ( name -- )
-  DP
+  DP @
   LAST @ ,
   LAST !
   STR,
@@ -263,13 +261,13 @@ ENTRY
 
 \ Compile initial jump code with a placeholder address.
 \ The address will be filled by ENTRY.
-MAIN DP!
+MAIN DP !
 COMPILE-ENTRY
 
 \ Same source code is used for stage1 and stage2 compiler.
 \ Use different target address depending the stage.
 STEPPER BOOTSTRAPPER >= IF
-  STAGE1-TARGET DP! \ We're in stage1 compiler
+  STAGE1-TARGET DP ! \ We're in stage1 compiler
 ELSE
   STAGE2-TARGET DP ! \ We're in stage2 compiler
 THEN
@@ -303,7 +301,9 @@ END IMMEDIATE
 END
 
 " ENTRY" MAKE-HEADER
-  ['] DP  C,
+  ['] LIT C,
+  $7E00 ,
+  ['] @  C,
   ['] LIT C, MAIN 1+ ,
   ['] !   C,
 END IMMEDIATE

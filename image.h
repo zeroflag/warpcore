@@ -21,7 +21,6 @@
 extern const int MAIN;
 extern const int STACK;
 extern const int RSTACK;
-extern const int HEAP;
 extern const int VMPARAMS;
 
 typedef struct {

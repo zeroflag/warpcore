@@ -1,44 +1,41 @@
-: ,   DP   ! DP 2 + DP! ;
-: C,  DP  C! DP 1 + DP! ;
+: ++ DUP @ 1+ SWAP ! ;
+
+: ,   $7E00 @  ! $7E00 ++ $7E00 ++ ;
+: C,  $7E00 @ C! $7E00 ++ ;
+
+: DP $7E00 ;
+
 : EXEC >R EXIT ;
 : DEPTH SP $02 - ;
 : CELL 2 ;
 : CELLS CELL * ;
-: ALLOT DP + DP! ;
+: ALLOT DP @ + DP ! ;
 
-: MARK    DP 0 , ;
-: RESOLVE DP OVER - SWAP ! ;
+: MARK    DP @ 0 , ;
+: RESOLVE DP @ OVER - SWAP ! ;
 : IF      ['] JZ  C, MARK ; IMMEDIATE
 : ELSE    ['] JMP C, MARK SWAP RESOLVE ; IMMEDIATE
 : THEN    RESOLVE ; IMMEDIATE
-: BEGIN   DP ; IMMEDIATE
-: UNTIL   ['] JZ  C, DP - , ; IMMEDIATE
-: AGAIN   ['] JMP C, DP - , ; IMMEDIATE
+: BEGIN   DP @ ; IMMEDIATE
+: UNTIL   ['] JZ  C, DP @ - , ; IMMEDIATE
+: AGAIN   ['] JMP C, DP @ - , ; IMMEDIATE
 : WHILE   ['] JZ C, MARK ; IMMEDIATE
-: REPEAT  SWAP ['] JMP C, DP - , RESOLVE ; IMMEDIATE
-: FOR     ['] >R C, DP ; IMMEDIATE
+: REPEAT  SWAP ['] JMP C, DP @ - , RESOLVE ; IMMEDIATE
+: FOR     ['] >R C, DP @ ; IMMEDIATE
 : NEXT
   ['] R@ C, ['] JZ  C, MARK
   ['] R> C, ['] LIT C, 1 , ['] - C, ['] >R C,
   SWAP
-  ['] JMP C, DP - ,
+  ['] JMP C, DP @ - ,
   RESOLVE
   ['] R> C, ['] DROP C,
 ; IMMEDIATE
   
 : VARIABLE
   CREATE
-  ['] LIT  C, DP 3 + ,
+  ['] LIT  C, DP @ 3 + ,
   ['] EXIT C,
-  DP 2 + DP!
-; IMMEDIATE 
-
-: CONSTANT
-  DP 2 - @ >R
-  DP 3 - DP!
-  CREATE
-  ['] LIT  C, R> ,
-  ['] EXIT C,
+  DP @ 2 + DP @ !
 ; IMMEDIATE 
 
 : ( BEGIN KEY 41 = UNTIL ; IMMEDIATE
@@ -79,7 +76,7 @@
   DROP ;
 
 : "
-  ['] LIT C, DP 5 + , ( addr of string )
+  ['] LIT C, DP @ 5 + , ( addr of string )
   ['] JMP C, MARK
   BEGIN
     KEY DUP 34 <>
@@ -100,8 +97,6 @@
 : BETWEEN? OVER >= -ROT <= AND ;
 
 : CR 10 EMIT ;
-
-: ++ ( var -- ) DUP @ 1+ SWAP ! ;
 
 : /MOD 2DUP % -ROT / ;
 

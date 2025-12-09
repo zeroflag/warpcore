@@ -15,6 +15,7 @@ SIZE = 32767
 CELL_MAX =  32767
 CELL_MIN = -32768
 COMPILER_ENTRY = 0x7000
+VAR_DP = 0x7E00
 
 jmp_address = 0
 dp = 0
@@ -161,11 +162,6 @@ def fill_branch_address():
   mem[address] = offset & 0xFF
   mem[address +1] = (offset >> 8) & 0xFF
 
-def def_const(name, val):
-  def_word(name)
-  compile_lit(tonum(val))
-  compile_primitive("EXIT")
-
 def def_var(name):
   # LIT @SLOT EXIT SLOT
   global dp
@@ -210,7 +206,6 @@ def create_macros():
   macros["REPEAT"] = lambda: (swap(),
                               compile_back_jump("JMP"),
                               fill_branch_address())
-  macros["CONSTANT"] = lambda: def_const(tokens.next(), tokens.next())
   macros["VARIABLE"] = lambda: def_var(tokens.next())
   macros["CASE"] = lambda: push(0)
   macros["ENDCASE"] = lambda: [fill_branch_address() for i in range(pop())]
@@ -250,6 +245,7 @@ def create_macros():
                          compile_lit(2),
                          compile_primitive("+"),
                          compile_primitive("DP!"))
+  macros["DP"] = lambda: compile_lit(VAR_DP)
   macros["C,"] = lambda: (compile_primitive("DP"),
                          compile_primitive("C!"),
                          compile_primitive("DP"),
@@ -274,8 +270,9 @@ def make_header():
     mem[VM_PARAM_ADDRESS + i] = ord(DEFAULT_FILENAME[i])
 
 DEFS = """
-: ,   DP   ! DP 2 + DP! ;
-: C,  DP  C! DP 1 + DP! ;
+: ++ DUP @ 1+ SWAP ! ;
+: ,   DP @   ! DP ++ DP ++ ;
+: C,  DP @  C! DP ++ ;
 
 : ?DUP  DUP 0 <> IF DUP THEN ;
 : 2DUP OVER OVER ;
@@ -303,8 +300,6 @@ DEFS = """
     48 + EMIT ;
 
 : BETWEEN? OVER >= -ROT <= AND ;
-
-: ++ ( var -- ) DUP @ 1+ SWAP ! ;
 
 """
 
