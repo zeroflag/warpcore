@@ -75,8 +75,6 @@ typedef enum {
   OP_RTOP  = 0x2C,  // "R@"
   OP_DUMP  = 0x2D,  // "DUMP"
   OP_ABORT = 0x2E,  // "ABORT"
-  OP_BTICK = 0x2F,  // "[']"
-  OP_CTICK = 0x30,  // "'"
 } Op;
 
 cell_t engage(uint8_t *mem,

@@ -1,4 +1,6 @@
-: ++ DUP @ 1+ SWAP ! ;
+: ++  DUP @ 1+ SWAP ! ;
+: ['] R> DUP C@ SWAP 1+ >R ;
+:  '  R> 1+ DUP @ SWAP 2 + >R ;
 
 : ,   $7E00 @  ! $7E00 ++ $7E00 ++ ;
 : C,  $7E00 @ C! $7E00 ++ ;

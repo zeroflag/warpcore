@@ -130,13 +130,6 @@ cell_t engage(uint8_t *mem,
       case OP_RPUSH: RPUSH(POP); break;
       case OP_RPOP:  PUSH(RPOP); break;
       case OP_RTOP:  PUSH(*(rp-1)); break;
-      case OP_BTICK: PUSH(*ip++); break;
-      case OP_CTICK:
-        if (*ip++ != OP_CALL)
-          breach("Expected OP_CALL, got: %x\n", *(ip-1));
-        PUSH(fetch_cell(ip));
-        ip += sizeof(cell_t);
-        break;
       case OP_HLT: return POP;
       case OP_ABORT:
         breach("ABORTED: ip=0x%x\n", ip - mem);
