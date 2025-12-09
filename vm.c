@@ -33,13 +33,10 @@ cell_t engage(uint8_t *mem,
   register cell_t*   rp = (cell_t*)   (mem + rstack);
   register opcode_t* ip = (opcode_t*) (mem + start_ip);
 
-  /* mem[0x7E00] = heap & 0xFF; */
-  /* mem[0x7E01] = (heap >> 8) & 0xFF; */
-
   while (((uint8_t*)ip - mem) < MEM_SIZE) {
     opcode_t code = *ip++;
     #if DEBUG
-      printf("[0x%X] OPCODE: 0x%X\n", (cell_t)(ip - mem), code);
+      printf("[0x%X] OPCODE: 0x%X\n", (cell_t)(ip -1 - mem), code);
     #endif
     switch (code) {
       case OP_ADD:  BINARY(+=);   break;
@@ -130,18 +127,6 @@ cell_t engage(uint8_t *mem,
         sp = new_sp;
         break;
       }
-      /* case OP_DP: { */
-      /*   int addr = 0x7E00; */
-      /*   cell_t val = (uint16_t)mem[addr] | ((uint16_t)mem[addr +1] << 8); */
-      /*   PUSH(val); */
-      /*   break; */
-      /* } */
-      /* case OP_TODP: { */
-      /*   cell_t val = POP; */
-      /*   mem[0x7E00] = LO(val); */
-      /*   mem[0x7E01] = HI(val); */
-      /*   break; */
-      /* } */
       case OP_RPUSH: RPUSH(POP); break;
       case OP_RPOP:  PUSH(RPOP); break;
       case OP_RTOP:  PUSH(*(rp-1)); break;
