@@ -29,9 +29,9 @@ cell_t engage(uint8_t *mem,
               cell_t stack,
               cell_t rstack)
 {
-  register cell_t*   sp = (cell_t*)   (mem + stack);
-  register cell_t*   rp = (cell_t*)   (mem + rstack);
-  register opcode_t* ip = (opcode_t*) (mem + start_ip);
+  register cell_t*   sp = SET_SP(stack);
+  register cell_t*   rp = SET_RP(rstack);
+  register opcode_t* ip = SET_IP(start_ip);
 
   while (((uint8_t*)ip - mem) < MEM_SIZE) {
     opcode_t code = *ip++;
@@ -123,8 +123,8 @@ cell_t engage(uint8_t *mem,
       case OP_EMIT: printf("%c", POP); break;
       case OP_SP:   PUSH((uint8_t*) sp - mem); break;
       case OP_TOSP: {
-        cell_t* new_sp = (cell_t*)(mem + POP);
-        sp = new_sp;
+        cell_t new_sp = POP;
+        SET_SP(new_sp);
         break;
       }
       case OP_RPUSH: RPUSH(POP); break;
@@ -148,7 +148,7 @@ cell_t engage(uint8_t *mem,
       }
       default:
         breach("Unknown opcode: 0x%x at ip=0x%x\n",
-               code, ip - mem);
+               code, ip -1 - mem);
         return 1;
     }
   }
