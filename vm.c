@@ -81,7 +81,7 @@ cell_t engage(uint8_t *mem,
       case OP_JMP:   ip += fetch_cell(ip); break;
       case OP_RET:   SET_IP(RPOP);         break;
       case OP_KEY:   PUSH(getchar());      break;
-      case OP_EMIT:  printf("%c", POP);    break;
+      case OP_EMIT:  putchar(POP);         break;
       case OP_RPUSH: RPUSH(POP);           break;
       case OP_RPOP:  PUSH(RPOP);           break;
       case OP_RTOP:  PUSH(*(rp-1));        break;
