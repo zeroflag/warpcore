@@ -101,6 +101,8 @@
 
 : CR 10 EMIT ;
 
+: ++ ( var -- ) DUP @ 1+ SWAP ! ;
+
 : /MOD 2DUP % -ROT / ;
 
 : . ( n -- )

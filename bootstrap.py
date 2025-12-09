@@ -304,6 +304,8 @@ DEFS = """
 
 : BETWEEN? OVER >= -ROT <= AND ;
 
+: ++ ( var -- ) DUP @ 1+ SWAP ! ;
+
 """
 
 if __name__ == "__main__":

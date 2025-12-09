@@ -31,8 +31,7 @@ VARIABLE BASE
   OVER 10 = OR
   SWAP 13 = OR ;
 
-: POS++ POS @ 1+ POS ! ;
-: STORE POS @ C! POS++ ;
+: STORE POS @ C! POS ++ ;
 : RESET TIB POS ! ;
 
 : C= C@ SWAP C@ = ;
