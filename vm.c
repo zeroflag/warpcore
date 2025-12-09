@@ -86,18 +86,27 @@ cell_t engage(uint8_t *mem,
       case OP_RPOP:  PUSH(RPOP);           break;
       case OP_RTOP:  PUSH(*(rp-1));        break;
       case OP_HLT:   return POP;
-      case OP_SP:
-        PUSH((uint8_t*) sp - mem);
-        break;
-      case OP_TUCK:
-        PUSH(*(sp-1));
-        *(sp-2) = *(sp-3);
-        *(sp-3) = *(sp-1);
-        break;
+      case OP_SP:    PUSH((uint8_t*) sp - mem);
+                     break;
+      case OP_TUCK:  PUSH(*(sp-1));
+                     *(sp-2) = *(sp-3);
+                     *(sp-3) = *(sp-1);
+                     break;
       case OP_LIT:
-        PUSH(fetch_cell(ip));
-        ip += sizeof(cell_t);
+                     PUSH(fetch_cell(ip));
+                     ip += sizeof(cell_t);
+                     break;
+      case OP_ABORT:
+                     breach("ABORTED: ip=0x%x\n", ip - mem);
+                     break;
+      case OP_DUMP:  dump_image(mem, (char *)(POP + mem));
+                     break;
+      case OP_CALL: {
+        cell_t addr = (cell_t) ((uint8_t*)ip - mem + sizeof(cell_t));
+        RPUSH(addr);
+        SET_IP(fetch_cell(ip));
         break;
+      }
       case OP_STO: {
         cell_t addr = POP;
         cell_t val  = POP;
@@ -120,20 +129,6 @@ cell_t engage(uint8_t *mem,
       case OP_CFTCH: {
         opcode_t val = mem[POP];
         PUSH(val);
-        break;
-      }
-      case OP_CALL: {
-        cell_t addr = (cell_t) ((uint8_t*)ip - mem + sizeof(cell_t));
-        RPUSH(addr);
-        SET_IP(fetch_cell(ip));
-        break;
-      }
-      case OP_ABORT:
-        breach("ABORTED: ip=0x%x\n", ip - mem);
-        break;
-      case OP_DUMP: {
-        char *path = (char *)(POP + mem);
-        PUSH((cell_t)dump_image(mem, path));
         break;
       }
       default:

@@ -76,18 +76,14 @@ void sync_mapped_image(uint8_t* mem) {
   msync(mem, MEM_SIZE, MS_SYNC);
 }
 
-int dump_image(const uint8_t* mem, const char* path) {
+void dump_image(const uint8_t* mem, const char* path) {
   FILE *fp = fopen(path, "wb");
   if (!fp) {
     breach("Cannot create dump file: %s", path);
-    return 0;
   }
   size_t written = fwrite(mem, 1, MEM_SIZE, fp);
-  if (written != (size_t)MEM_SIZE) {
-    fprintf(stderr, "Short write: expected %d, wrote %zu\n", MEM_SIZE, written);
-    fclose(fp);
-    return 0;
-  }
   fclose(fp);
-  return -1;
+  if (written != (size_t)MEM_SIZE) {
+    breach("Short write: expected %d, wrote %zu\n", MEM_SIZE, written);
+  }
 }

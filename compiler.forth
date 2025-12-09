@@ -240,13 +240,6 @@ VARIABLE BASE
     COMPILE
   REPEAT ;
 
-: DUMP-OUTPUT
-  VMPARAM-ADDR DUMP
-  INVERT IF
-    " Dump failed." PRINT CR
-    ABORT
-  THEN ;
-
 : POST-CHECKS
   DEPTH 0 <> IF
     " Non Empty stack: " PRINT DEPTH . CR
@@ -307,7 +300,7 @@ END IMMEDIATE
 \ After compilation finished (BYE), dump memory to disk.
 COMPILER-LOOP
 COMPILE-HALT
-DUMP-OUTPUT
+VMPARAM-ADDR DUMP
 POST-CHECKS
 
 0 HALT
