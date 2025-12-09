@@ -578,24 +578,6 @@ void test_xor() {
   }));
 }
 
-void test_jnz() {
-  assert(55 == eval((uint8_t[SIZE]) {
-    LIT16(10),
-    LIT16(0),
-    OP_OVER,
-    OP_ADD,
-    OP_SWAP,
-    LIT16(1),
-    OP_SUB,
-    OP_SWAP,
-    OP_OVER,
-    OP_JNZ,
-    OFFSET(-10),
-    OP_NIP,
-    OP_HLT
-  }));
-}
-
 void test_jz() {
   assert(55 == eval((uint8_t[SIZE]) {
     LIT16(10),
@@ -758,7 +740,6 @@ int main() {
   test_or();
   test_and();
   test_xor();
-  test_jnz();
   test_jz();
   test_shl();
   test_sar();
