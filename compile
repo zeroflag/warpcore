@@ -47,7 +47,7 @@ cat "$LIB"   \
 
 if $exec_mode; then
   echo "Running compiled image: $OUTPUT"
-  time ./warp "$OUTPUT"
+  time ./warp "$OUTPUT" -g
 else
     echo "Output saved as: $OUTPUT"
 fi

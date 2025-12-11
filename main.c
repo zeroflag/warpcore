@@ -4,11 +4,17 @@
 #include <string.h>
 #include "vm.h"
 #include "image.h"
+#include "display.h"
+
+const char VER[] = "0.2";
 
 int verbose = 0;
 int mapping_enabled = 0;
+int gui_enabled = 0;
 char* image_path = "image.dat";
 char* vm_params = "";
+
+VMHooks hooks = { NULL };
 
 void dprint(const char *format, ...) {
   if (!verbose) return;
@@ -24,9 +30,12 @@ void parse_args(int argc, char **argv) {
       verbose = 1;
     } else if (strcmp(argv[i], "-m") == 0) {
       mapping_enabled = 1;
+    } else if (strcmp(argv[i], "-g") == 0) {
+      gui_enabled = 1;
     } else if (strncmp(argv[i], "-P", 2) == 0) {
       vm_params = argv[i] + 2;
       dprint("VM param: %s\n", vm_params);
+    } else if (strncmp(argv[i], "-g", 2) == 0) {
     } else {
       image_path = argv[i];
     }
@@ -47,6 +56,13 @@ int main(int argc, char **argv) {
   uint8_t static_mem[MEM_SIZE];
 
   parse_args(argc, argv);
+
+  dprint("Warpcore ver: %s\n", VER);
+  if (gui_enabled) {
+    dprint("Initializing SDL..");
+    sdl_init();
+    hooks.display = sdl_display;
+  }
   if (mapping_enabled) {
     dprint("MMAP image: %s\n", image_path);
     mem = map_file(image_path);
@@ -59,7 +75,7 @@ int main(int argc, char **argv) {
   if (ver.major == 1) {
     dprint("Image version: %d.%d.\n", ver.major, ver.minor);
     write_vm_params(mem);
-    cell_t result = engage(mem, MAIN, STACK, RSTACK);
+    cell_t result = engage(mem, MAIN, STACK, RSTACK, hooks);
     if (mapping_enabled) {
       sync_mapped_image(mem);
     }
