@@ -26,7 +26,7 @@
 typedef int16_t cell_t;
 
 typedef struct {
-  void (*display)(uint8_t* mem);
+  void (*tick)(uint8_t* mem);
 } VMHooks;
 
 extern const cell_t MEM_SIZE;

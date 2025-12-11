@@ -6,6 +6,6 @@
 #include <stdint.h>
 
 void sdl_init();
-void sdl_display(uint8_t* mem);
+void sdl_tick(uint8_t* mem);
  
 #endif // DISPLAY_H
