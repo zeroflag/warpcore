@@ -24,6 +24,16 @@ inline cell_t fetch_cell(const opcode_t* addr) {
   return (cell_t) ((uint16_t) *addr | ((uint16_t) *(addr+1) << 8));
 }
 
+inline cell_t mem_fetch(cell_t addr, opcode_t *mem) {
+  return (uint16_t)mem[addr] |
+             ((uint16_t)mem[addr +1] << 8);
+}
+
+inline void mem_store(cell_t addr, cell_t val, opcode_t *mem) {
+  mem[addr] = LO(val);
+  mem[addr +1] = HI(val);
+}
+
 inline void swap(cell_t* sp) {
   cell_t tmp = *(sp-1);
   *(sp-1) = *(sp-2);
@@ -110,14 +120,12 @@ cell_t engage(uint8_t *mem,
       case OP_STOR: {
         cell_t addr = POP;
         cell_t val  = POP;
-        mem[addr] = LO(val);
-        mem[addr +1] = HI(val);
+        mem_store(addr, val, mem);
         break;
       }
       case OP_LOAD: {
         cell_t addr = POP;
-        PUSH((uint16_t)mem[addr] |
-             ((uint16_t)mem[addr +1] << 8));
+        PUSH(mem_fetch(addr, mem));
         break;
       }
       default:
