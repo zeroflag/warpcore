@@ -107,14 +107,14 @@ cell_t engage(uint8_t *mem,
         SET_IP(fetch_cell(ip));
         break;
       }
-      case OP_STO: {
+      case OP_STOR: {
         cell_t addr = POP;
         cell_t val  = POP;
         mem[addr] = LO(val);
         mem[addr +1] = HI(val);
         break;
       }
-      case OP_FETCH: {
+      case OP_LOAD: {
         cell_t addr = POP;
         PUSH((uint16_t)mem[addr] |
              ((uint16_t)mem[addr +1] << 8));

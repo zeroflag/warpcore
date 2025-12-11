@@ -662,18 +662,18 @@ void test_fetchstore() {
   assert(-23456 == eval((uint8_t[SIZE]) {
     LIT16(-23456),
     LIT16(1000),
-    OP_STO,
+    OP_STOR,
     LIT16(1000),
-    OP_FETCH,
+    OP_LOAD,
     OP_HLT
   }));
 
   assert(31000 == eval((uint8_t[SIZE]) {
     LIT16(31000),
     LIT16(1000),
-    OP_STO,
+    OP_STOR,
     LIT16(1000),
-    OP_FETCH,
+    OP_LOAD,
     OP_HLT
   }));
 }
