@@ -258,6 +258,7 @@ def make_header():
     mem[VM_PARAM_ADDRESS + i] = ord(DEFAULT_FILENAME[i])
 
 DEFS = """
+: C@  @ $FF AND ;
 : ++ DUP @ 1+ SWAP ! ;
 : ['] R> DUP C@ SWAP 1+ >R ;
 :  '  R> 1+ DUP @ SWAP 2 + >R ;

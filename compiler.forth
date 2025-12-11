@@ -181,7 +181,7 @@ VARIABLE BASE
   DUP " !"        STR= IF DROP $24 EXIT THEN
   DUP " C!"       STR= IF DROP $25 EXIT THEN
   DUP " @"        STR= IF DROP $26 EXIT THEN
-  DUP " C@"       STR= IF DROP $27 EXIT THEN
+  \ DUP " C@"       STR= IF DROP $27 EXIT THEN
   DUP " >R"       STR= IF DROP $28 EXIT THEN
   DUP " R>"       STR= IF DROP $29 EXIT THEN
   DUP " R@"       STR= IF DROP $2A EXIT THEN

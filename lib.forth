@@ -1,3 +1,4 @@
+: C@  @ $FF AND ;
 : ++  DUP @ 1+ SWAP ! ;
 : ['] R> DUP C@ SWAP 1+ >R ;
 :  '  R> 1+ DUP @ SWAP 2 + >R ;
@@ -32,13 +33,13 @@
   RESOLVE
   ['] R> C, ['] DROP C,
 ; IMMEDIATE
-  
+
 : VARIABLE
   CREATE
   ['] LIT  C, DP @ 3 + ,
   ['] EXIT C,
   DP @ 2 + DP @ !
-; IMMEDIATE 
+; IMMEDIATE
 
 : ( BEGIN KEY 41 = UNTIL ; IMMEDIATE
 : \ BEGIN KEY DUP 10 = SWAP 13 = OR UNTIL ; IMMEDIATE

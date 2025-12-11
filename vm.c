@@ -126,11 +126,6 @@ cell_t engage(uint8_t *mem,
              ((uint16_t)mem[addr +1] << 8));
         break;
       }
-      case OP_CFTCH: {
-        opcode_t val = mem[POP];
-        PUSH(val);
-        break;
-      }
       default:
         breach("Unknown opcode: 0x%x at ip=0x%x\n",
                code, ip -1 - mem);

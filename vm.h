@@ -67,7 +67,7 @@ typedef enum {
   OP_STO   = 0x24,  // "!"
   OP_CSTO  = 0x25,  // "C!"
   OP_FETCH = 0x26,  // "@"
-  OP_CFTCH = 0x27,  // "C@"
+  /* OP_CFTCH = 0x27,  // "C@" */
   OP_RPUSH = 0x28,  // ">R"
   OP_RPOP  = 0x29,  // "R>"
   OP_RTOP  = 0x2A,  // "R@"

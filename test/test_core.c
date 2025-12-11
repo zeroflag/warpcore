@@ -659,15 +659,6 @@ void test_sar() {
 }
 
 void test_fetchstore() {
-  assert(42 == eval((uint8_t[SIZE]) {
-    LIT16(42),
-    LIT16(1000),
-    OP_CSTO,
-    LIT16(1000),
-    OP_CFTCH,
-    OP_HLT
-  }));
-
   assert(-23456 == eval((uint8_t[SIZE]) {
     LIT16(-23456),
     LIT16(1000),
