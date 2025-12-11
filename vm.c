@@ -98,10 +98,6 @@ cell_t engage(uint8_t *mem,
       case OP_HLT:   return POP;
       case OP_SP:    PUSH((uint8_t*) sp - mem);
                      break;
-      case OP_TUCK:  PUSH(*(sp-1));
-                     *(sp-2) = *(sp-3);
-                     *(sp-3) = *(sp-1);
-                     break;
       case OP_LIT:
                      PUSH(fetch_cell(ip));
                      ip += sizeof(cell_t);

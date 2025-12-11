@@ -276,6 +276,7 @@ DEFS = """
 : 3DROP DROP DROP DROP ;
 : CR 10 EMIT ;
 : -ROT ROT ROT ;
+: TUCK DUP ROT ROT ;
 
 : NON-ZERO? C@ 0 <> ;
 : PRINT

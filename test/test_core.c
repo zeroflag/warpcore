@@ -274,32 +274,6 @@ void test_rot() {
   }));
 }
 
-void test_tuck() {
-  assert(20 == eval((uint8_t[SIZE]) {
-    LIT16(10),
-    LIT16(20),
-    OP_TUCK,
-    OP_HLT
-  }));
-
-  assert(10 == eval((uint8_t[SIZE]) {
-    LIT16(10),
-    LIT16(20),
-    OP_TUCK,
-    OP_DROP,
-    OP_HLT
-  }));
-
-  assert(20 == eval((uint8_t[SIZE]) {
-    LIT16(10),
-    LIT16(20),
-    OP_TUCK,
-    OP_DROP,
-    OP_DROP,
-    OP_HLT
-  }));
-}
-
 void test_lte() {
   assert(-1 == eval((uint8_t[SIZE]) {
     LIT16(5),
@@ -720,7 +694,6 @@ int main() {
   test_nip();
   test_over();
   test_rot();
-  test_tuck();
   test_lt();
   test_lte();
   test_gt();
