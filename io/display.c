@@ -6,6 +6,10 @@ SDL_Window   *window;
 const char TITLE[] = "WarpCore";
 const int WIDTH  = 512;
 const int HEIGHT = 512;
+const int FPS = 60;
+
+Uint32 last_rendered;
+Uint32 threshold = 1000 / FPS;
 
 void sdl_init() {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -38,14 +42,7 @@ void sdl_init() {
   }
 }
 
-void sdl_display(uint8_t* mem) {
-  SDL_Event event;
-  if (SDL_PollEvent(&event)) {
-    if (event.type == SDL_QUIT) {
-      exit(0);
-    }
-  }
-
+void sdl_render(uint8_t* mem) {
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
   SDL_RenderClear(renderer);
 
@@ -66,8 +63,21 @@ void sdl_display(uint8_t* mem) {
       SDL_RenderFillRect(renderer, &outline);
     }
   }
-   
   SDL_RenderPresent(renderer);
+}
+
+
+void sdl_tick(uint8_t* mem) {
+  SDL_Event event;
+  if (SDL_PollEvent(&event)) {
+    if (event.type == SDL_QUIT) {
+      exit(0);
+    }
+  }
+  if (SDL_GetTicks() - last_rendered > threshold) {
+    sdl_render(mem);
+    last_rendered = SDL_GetTicks();
+  }
 }
 
 void sdl_destroy() {

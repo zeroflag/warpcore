@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
   if (gui_enabled) {
     dprint("Initializing SDL..");
     sdl_init();
-    hooks.display = sdl_display;
+    hooks.tick = sdl_tick;
   }
   if (mapping_enabled) {
     dprint("MMAP image: %s\n", image_path);

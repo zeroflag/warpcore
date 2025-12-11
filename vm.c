@@ -86,15 +86,14 @@ cell_t engage(uint8_t *mem,
   register cell_t*  sp = SET_SP(stack);
   register cell_t*  rp = SET_RP(rstack);
   register uint8_t* ip = SET_IP(start_ip);
-  int instr_counter = 0;
 
   while (((uint8_t*)ip - mem) < MEM_SIZE) {
     uint8_t code = *ip++;
     #if DEBUG
       printf("[0x%X] OPCODE: 0x%X\n", (cell_t)(ip -1 - mem), code);
     #endif
-    if (hooks.display && instr_counter % 50 == 0) {
-      hooks.display(mem);
+    if (hooks.tick) {
+      hooks.tick(mem);
     }
     switch (code) {
       case OP_ADD:   BINARY(+);            break;
