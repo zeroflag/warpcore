@@ -111,12 +111,6 @@ cell_t engage(uint8_t *mem,
                      break;
       case OP_DUMP:  dump_image(mem, (char *)(POP + mem));
                      break;
-      case OP_CALL: {
-        cell_t addr = (cell_t) ((uint8_t*)ip - mem + sizeof(cell_t));
-        RPUSH(addr);
-        SET_IP(fetch_cell(ip));
-        break;
-      }
       case OP_STOR: {
         cell_t addr = POP;
         cell_t val  = POP;
@@ -126,6 +120,12 @@ cell_t engage(uint8_t *mem,
       case OP_LOAD: {
         cell_t addr = POP;
         PUSH(mem_fetch(addr, mem));
+        break;
+      }
+      case OP_CALL: {
+        cell_t addr = (cell_t) ((uint8_t*)ip - mem + sizeof(cell_t));
+        RPUSH(addr);
+        SET_IP(fetch_cell(ip));
         break;
       }
       default:
