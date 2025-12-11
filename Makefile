@@ -2,14 +2,16 @@ USE_MUSL ?= 0
 OPT_LVL  ?= 1
 
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11 -I. -O$(OPT_LVL) -march=native -funroll-loops
+CFLAGS = -Wall -Wextra -std=c11 -I. -I./io -O$(OPT_LVL) -march=native -funroll-loops
 
 ifeq ($(USE_MUSL),1)
 	CC = musl-gcc
 	CFLAGS += -static -s 
 endif
 
+# SRCS = $(shell find . -name '*.c' ! -name 'main.c' ! -path './test/*')
 SRCS = $(filter-out main.c, $(wildcard *.c))
+
 OBJS = $(SRCS:.c=.o)
 IMGS = $(wildcard *.img)
 PYTHON = python
@@ -35,7 +37,7 @@ all: clean vm test-vm test-bootstrap stage1 test-stage1 stage2 test-stage2
 
 vm:
 	@echo "* $(CYAN)Building vm..$(RESET)"
-	$(CC) $(CFLAGS) -o $(OUT) $(SRCS) "main.c"
+	$(CC) $(CFLAGS) $(SRCS) io/*.c main.c -o $(OUT) $(shell sdl2-config --cflags --libs)
 
 stage1: vm
 	@echo "* $(CYAN)Building stage1 compiler with bootstrap compiler..$(RESET)"

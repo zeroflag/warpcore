@@ -11,8 +11,10 @@
 #define SIZE SHRT_MAX
 #define STACK 50
 
+VMHooks hooks = { NULL };
+
 cell_t eval(uint8_t* code) {
-  return engage(code, 0, STACK, 100);
+  return engage(code, 0, STACK, 100, hooks);
 }
 
 void test_add() {

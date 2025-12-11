@@ -27,6 +27,10 @@
 typedef int16_t cell_t;
 typedef uint16_t ucell_t;
 
+typedef struct {
+  void (*display)(uint8_t* mem);
+} VMHooks;
+
 extern const cell_t MEM_SIZE;
 
 typedef enum {
@@ -77,7 +81,8 @@ typedef enum {
 cell_t engage(uint8_t *mem,
               cell_t start_ip,
               cell_t stack,
-              cell_t rstack);
+              cell_t rstack,
+              VMHooks hooks);
 
 void breach(char* format, ...);
 
