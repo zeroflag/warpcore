@@ -67,12 +67,11 @@ typedef enum {
   OP_STO   = 0x24,  // "!"
   OP_CSTO  = 0x25,  // "C!"
   OP_FETCH = 0x26,  // "@"
-  /* OP_CFTCH = 0x27,  // "C@" */
-  OP_RPUSH = 0x28,  // ">R"
-  OP_RPOP  = 0x29,  // "R>"
-  OP_RTOP  = 0x2A,  // "R@"
-  OP_DUMP  = 0x2B,  // "DUMP"
-  OP_ABORT = 0x2C,  // "ABORT"
+  OP_RPUSH = 0x27,  // ">R"
+  OP_RPOP  = 0x28,  // "R>"
+  OP_RTOP  = 0x29,  // "R@"
+  OP_DUMP  = 0x2A,  // "DUMP"
+  OP_ABORT = 0x2B,  // "ABORT"
 } Op;
 
 cell_t engage(uint8_t *mem,
