@@ -20,16 +20,16 @@ void breach(char* format, ...) {
   exit(1);
 }
 
-inline cell_t fetch_cell(const opcode_t* addr) {
+inline cell_t fetch_cell(const uint8_t* addr) {
   return (cell_t) ((uint16_t) *addr | ((uint16_t) *(addr+1) << 8));
 }
 
-inline cell_t mem_fetch(cell_t addr, opcode_t *mem) {
+inline cell_t mem_fetch(cell_t addr, uint8_t *mem) {
   return (uint16_t)mem[addr] |
              ((uint16_t)mem[addr +1] << 8);
 }
 
-inline void mem_store(cell_t addr, cell_t val, opcode_t *mem) {
+inline void mem_store(cell_t addr, cell_t val, uint8_t *mem) {
   mem[addr] = LO(val);
   mem[addr +1] = HI(val);
 }
@@ -54,10 +54,10 @@ cell_t engage(uint8_t *mem,
 {
   register cell_t*   sp = SET_SP(stack);
   register cell_t*   rp = SET_RP(rstack);
-  register opcode_t* ip = SET_IP(start_ip);
+  register uint8_t* ip = SET_IP(start_ip);
 
   while (((uint8_t*)ip - mem) < MEM_SIZE) {
-    opcode_t code = *ip++;
+    uint8_t code = *ip++;
     #if DEBUG
       printf("[0x%X] OPCODE: 0x%X\n", (cell_t)(ip -1 - mem), code);
     #endif

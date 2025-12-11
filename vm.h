@@ -19,12 +19,11 @@
 #define COMPARE(operator) ( *(sp-2) = *(sp-2) operator *(sp-1) ? TRUE : FALSE, sp-- )
 #define JUMP_IF(cond) (ip += (cond) ? fetch_cell(ip) : (int)sizeof(cell_t))
 
-#define SET_IP(val) (ip = (opcode_t *) (mem + (val)))
+#define SET_IP(val) (ip = (uint8_t *) (mem + (val)))
 #define SET_SP(val) (sp = (cell_t *) (mem + (val)))
 #define SET_RP(val) (rp = (cell_t *) (mem + (val)))
 
 typedef int16_t cell_t;
-typedef uint8_t opcode_t;
 
 extern const cell_t MEM_SIZE;
 
