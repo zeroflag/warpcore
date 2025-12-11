@@ -114,12 +114,6 @@ cell_t engage(uint8_t *mem,
         mem[addr +1] = HI(val);
         break;
       }
-      case OP_CSTO: {
-        cell_t addr = POP;
-        cell_t val  = POP;
-        mem[addr] = LO(val);
-        break;
-      }
       case OP_FETCH: {
         cell_t addr = POP;
         PUSH((uint16_t)mem[addr] |

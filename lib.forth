@@ -1,3 +1,8 @@
+: C!
+  DUP @ $FF00 AND
+  ROT $FF AND OR
+  SWAP ! ;
+
 : C@  @ $FF AND ;
 : ++  DUP @ 1+ SWAP ! ;
 : ['] R> DUP C@ SWAP 1+ >R ;

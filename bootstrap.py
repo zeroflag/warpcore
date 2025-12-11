@@ -12,7 +12,7 @@ macros = {}
 stack = []
 
 SIZE = 32767
-CELL_MAX =  32767
+CELL_MAX =  65535
 CELL_MIN = -32768
 COMPILER_ENTRY = 0x7000
 VAR_DP = 0x7E00
@@ -258,6 +258,10 @@ def make_header():
     mem[VM_PARAM_ADDRESS + i] = ord(DEFAULT_FILENAME[i])
 
 DEFS = """
+: C!
+  DUP @ $FF00 AND
+  ROT $FF AND OR
+  SWAP ! ;
 : C@  @ $FF AND ;
 : ++ DUP @ 1+ SWAP ! ;
 : ['] R> DUP C@ SWAP 1+ >R ;
@@ -286,7 +290,7 @@ DEFS = """
 : /MOD 2DUP % -ROT / ;
 : DEPTH SP $02 - ;
 
-: . 
+: .
     DUP 0 < IF 45 EMIT -1 * THEN
     10 /MOD ?DUP IF . THEN
     48 + EMIT ;
