@@ -54,7 +54,7 @@ typedef enum {
   OP_JZ    = 0x18,  // "JZ"
   OP_CALL  = 0x19,  // "CALL"
   OP_RET   = 0x1A,  // "EXIT"
-  OP_EMIT  = 0x1B,  // "EMIT"
+  OP_OUT   = 0x1B,  // "OUT"
   OP_LIT   = 0x1C,  // "LIT"
   OP_MOD   = 0x1D,  // "%"
   OP_KEY   = 0x1E,  // "KEY"

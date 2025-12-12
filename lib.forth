@@ -1,3 +1,4 @@
+: EMIT 1 OUT ;
 : C!
   DUP @ $FF00 AND
   ROT $FF AND OR

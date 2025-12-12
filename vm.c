@@ -47,6 +47,14 @@ inline void rot(cell_t* sp) {
   *(sp-1) = tmp;
 }
 
+inline void out(cell_t port, cell_t data) {
+  switch (port) {
+    case 1:
+      putchar(data);
+      break;
+  }
+}
+
 cell_t engage(uint8_t *mem,
               cell_t start_ip,
               cell_t stack,
@@ -91,11 +99,15 @@ cell_t engage(uint8_t *mem,
       case OP_JMP:   ip += fetch_cell(ip); break;
       case OP_RET:   SET_IP(RPOP);         break;
       case OP_KEY:   PUSH(getchar());      break;
-      case OP_EMIT:  putchar(POP);         break;
       case OP_RPUSH: RPUSH(POP);           break;
       case OP_RPOP:  PUSH(RPOP);           break;
       case OP_RTOP:  PUSH(*(rp-1));        break;
       case OP_HLT:   return POP;
+      case OP_OUT:
+                     cell_t port = POP;
+                     cell_t data = POP;
+                     out(port, data);
+                     break;
       case OP_SP:    PUSH((uint8_t*) sp - mem);
                      break;
       case OP_LIT:
