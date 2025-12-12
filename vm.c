@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <time.h>
 #include "vm.h"
 #include "image.h"
 
@@ -8,6 +9,7 @@
 
 #define PORT_STDOUT 1
 #define PORT_STDIN  2
+#define PORT_RND    3
 
 const cell_t MEM_SIZE = SHRT_MAX;
 
@@ -54,6 +56,8 @@ inline cell_t in(cell_t port) {
   switch (port) {
     case PORT_STDIN:
       return getchar();
+    case PORT_RND:
+      return (cell_t)(rand() % 65536 - 32768);
     default:
       breach("Invalid input port number: %d\n", port);
       return 0;
