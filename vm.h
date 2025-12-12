@@ -57,7 +57,7 @@ typedef enum {
   OP_OUT   = 0x1B,  // "OUT"
   OP_LIT   = 0x1C,  // "LIT"
   OP_MOD   = 0x1D,  // "%"
-  OP_KEY   = 0x1E,  // "KEY"
+  OP_IN    = 0x1E,  // "IN"
   OP_SP    = 0x1F,  // "SP"
   OP_HLT   = 0x20,  // "HALT"
   OP_SHL   = 0x21,  // "LSHIFT"

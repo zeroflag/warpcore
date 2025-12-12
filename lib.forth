@@ -1,3 +1,4 @@
+: KEY  2 IN  ;
 : EMIT 1 OUT ;
 : C!
   DUP @ $FF00 AND

@@ -6,6 +6,9 @@
 
 #define DEBUG 0
 
+#define PORT_STDOUT 1
+#define PORT_STDIN  2
+
 const cell_t MEM_SIZE = SHRT_MAX;
 
 const cell_t TRUE  = -1;
@@ -47,11 +50,23 @@ inline void rot(cell_t* sp) {
   *(sp-1) = tmp;
 }
 
+inline cell_t in(cell_t port) {
+  switch (port) {
+    case PORT_STDIN:
+      return getchar();
+    default:
+      breach("Invalid input port number: %d\n", port);
+      return 0;
+  }
+}
+
 inline void out(cell_t port, cell_t data) {
   switch (port) {
-    case 1:
+    case PORT_STDOUT:
       putchar(data);
       break;
+    default:
+      breach("Invalid output port number: %d\n", port);
   }
 }
 
@@ -98,27 +113,30 @@ cell_t engage(uint8_t *mem,
       case OP_JZ:    JUMP_IF(POP == 0);    break;
       case OP_JMP:   ip += fetch_cell(ip); break;
       case OP_RET:   SET_IP(RPOP);         break;
-      case OP_KEY:   PUSH(getchar());      break;
       case OP_RPUSH: RPUSH(POP);           break;
       case OP_RPOP:  PUSH(RPOP);           break;
       case OP_RTOP:  PUSH(*(rp-1));        break;
       case OP_HLT:   return POP;
-      case OP_OUT:
-                     cell_t port = POP;
-                     cell_t data = POP;
-                     out(port, data);
-                     break;
       case OP_SP:    PUSH((uint8_t*) sp - mem);
                      break;
-      case OP_LIT:
-                     PUSH(fetch_cell(ip));
+      case OP_LIT:   PUSH(fetch_cell(ip));
                      ip += sizeof(cell_t);
                      break;
-      case OP_ABORT:
-                     breach("ABORTED: ip=0x%x\n", ip - mem);
+      case OP_ABORT: breach("ABORTED: ip=0x%x\n", ip - mem);
                      break;
       case OP_DUMP:  dump_image(mem, (char *)(POP + mem));
                      break;
+      case OP_IN: {
+        cell_t port = POP;
+        PUSH(in(port));
+        break;
+      }
+      case OP_OUT: {
+        cell_t port = POP;
+        cell_t data = POP;
+        out(port, data);
+        break;
+      }
       case OP_STOR: {
         cell_t addr = POP;
         cell_t val  = POP;
