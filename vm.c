@@ -79,8 +79,8 @@ cell_t engage(uint8_t *mem,
               cell_t stack,
               cell_t rstack)
 {
-  register cell_t*   sp = SET_SP(stack);
-  register cell_t*   rp = SET_RP(rstack);
+  register cell_t*  sp = SET_SP(stack);
+  register cell_t*  rp = SET_RP(rstack);
   register uint8_t* ip = SET_IP(start_ip);
 
   while (((uint8_t*)ip - mem) < MEM_SIZE) {
