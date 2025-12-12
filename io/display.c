@@ -16,8 +16,8 @@ const int N_TILES_Y = 30;
 const int WIDTH  = N_TILES_X * TILE_WIDTH;
 const int HEIGHT = N_TILES_Y * TILE_HEIGHT;
 
-const int VRAM = 0x3000;
-const int TILESET = 0x4000;
+const int VRAM = 0x5000;
+const int TILESET = 0x6000;
 
 const int SCALE = 3;
 
@@ -27,39 +27,18 @@ Uint32 threshold = 1000 / FPS;
 SDL_Texture* framebuffer;
 
 uint32_t palette[32] = {
-  0xFF000000, // 0  black
-  0xFFFFFFFF, // 1  white
-  0xFFFF0000, // 2  red
-  0xFF00FF00, // 3  green
-  0xFF0000FF, // 4  blue
-  0xFFFFFF00, // 5  yellow
-  0xFFFF00FF, // 6  magenta
-  0xFF00FFFF, // 7  cyan
-
-  0xFF7F0000, // 8  dark red
-  0xFF007F00, // 9  dark green
-  0xFF00007F, // 10 dark blue
-  0xFF7F7F00, // 11 olive
-  0xFF7F007F, // 12 purple
-  0xFF007F7F, // 13 teal
-  0xFF7F7F7F, // 14 gray
-  0xFF3F3F3F, // 15 dark gray
-
-  0xFFFF7F7F, // 16 light red
-  0xFF7FFF7F, // 17 light green
-  0xFF7F7FFF, // 18 light blue
-  0xFFFFFF7F, // 19 light yellow
-  0xFFFF7FFF, // 20 light magenta
-  0xFF7FFFFF, // 21 light cyan
-  0xFFBFBFBF, // 22 light gray
-
-  0xFF3F0000, // 23 very dark red
-  0xFF003F00, // 24 very dark green
-  0xFF00003F, // 25 very dark blue
-  0xFF3F3F00, // 26 dark olive
-  0xFF3F003F, // 27 dark purple
-  0xFF003F3F, // 28 dark teal
-  0xFF1F1F1F  // 29 near-black
+  // grayscale
+  0xFF000000, 0xFF555555, 0xFFAAAAAA, 0xFFFFFFFF,
+  // primary
+  0xFFFF0000, 0xFF00FF00, 0xFF0000FF, 0xFFFFFF00,
+  0xFFFF00FF, 0xFF00FFFF, 0xFF800000, 0xFF008000,
+  0xFF000080, 0xFF808000, 0xFF800080, 0xFF008080,
+  // bright versions
+  0xFFFF8080, 0xFF80FF80, 0xFF8080FF, 0xFFFFFF80,
+  0xFFFF80FF, 0xFF80FFFF, 0xFFC0C0C0, 0xFF404040,
+  // retro/dark tones
+  0xFF804000, 0xFF408000, 0xFF400080, 0xFF008040,
+  0xFF804080, 0xFF408080, 0xFF808040, 0xFF804040
 };
 
 void sdl_init() {
