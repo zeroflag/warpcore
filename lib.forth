@@ -32,7 +32,7 @@
 : FOR     ['] >R C, DP @ ; IMMEDIATE
 : NEXT
   ['] R@ C, ['] JZ  C, MARK
-  ['] R> C, ['] 1- C, ['] >R C,
+  ['] R> C, ['] 1-  C, ['] >R C,
   SWAP
   ['] JMP C, DP @ - ,
   RESOLVE
