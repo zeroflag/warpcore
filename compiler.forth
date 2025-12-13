@@ -14,7 +14,7 @@
 : TRUE      -1 ;
 : FALSE      0 ;
 
-: MAIN          $0182 ;
+: MAIN          $0190 ;
 : STAGE1-TARGET $6000 ;
 : STAGE2-TARGET $0200 ;
 : BOOTSTRAPPER  $7000 ;

@@ -248,7 +248,7 @@ def make_header():
   mem[dp] = 0b00010000 # version
   dp += 1
   mem[dp] = 0xFF
-  dp = 0x182
+  dp = 0x190
   jmp_address = dp + 1
   compile_lit(0xFF) # placeholder JMP address: 0x183-0x184
   compile_primitive(">R")

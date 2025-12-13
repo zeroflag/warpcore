@@ -16,6 +16,8 @@
   0x00C2  32 * CELL     Return stack initial content (32 cells)
   0x0102  128 bytes     Scratch buffer (TIB, PAD, temporary space)
   0x0182  ...           User memory
+  0x0190  ...           User memory
+  0x0200  ...
 */
 
 extern const int MAIN;
