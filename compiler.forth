@@ -244,7 +244,7 @@ VARIABLE BASE
   THEN ;
 
 : FILL
-  DP  ( save current DP )
+  DP @ ( save current DP )
   WORD >NUMBER IF DP ! ELSE ABORT THEN
   BEGIN
     WORD DUP " .END" STR= INVERT
