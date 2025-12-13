@@ -15,9 +15,9 @@
   0x0042  128 bytes     Space for CLI parameters
   0x00C2  32 * CELL     Return stack initial content (32 cells)
   0x0102  128 bytes     Scratch buffer (TIB, PAD, temporary space)
-  0x0182  ...           User memory
-  0x0190  ...           User memory
-  0x0200  ...
+  0x0182  14  bytes     Memory mapped registers (DP)
+  0x0190  ...           Initialization (JMP)
+  0x0200  ...           User memory (dictionary / code start)
 */
 
 extern const int MAIN;
