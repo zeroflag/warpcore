@@ -3,16 +3,16 @@
 /*
 ** VRAM: 32x32 x 8BIT (TILE-INDEX) = 1K
 ** TILESET:
-**   One tile: 8x8 16 colors: 32b total
-**   256 tiles total = 8K
+**   One tile: 8x8 16 colors: 32byte / tile
+**   384 tiles total
 ** SPRITES
-**   256 sprites. 8K total
+**   128 sprites. 8K total
 ** 8+8 + 1 = 17K
 **
 **      -$2000 CODE
-** $2000-$4000 SPRITES
-** $4000-$6000 TILES
-** $6000-$7000 SCREEN
+** $2000-$3000 SPRITES  ( 4K  )
+** $3000-$6000 TILES    ( 12K )
+** $6000-$6800 SCREEN   ( 2K )
 ** 
 */
 
@@ -24,7 +24,7 @@ const int FPS = 60;
 
 const int TILE_WIDTH  = 8;
 const int TILE_HEIGHT = 8;
-const int TILE_SIZE   = TILE_WIDTH * TILE_HEIGHT;
+const int TILE_SIZE_B = TILE_WIDTH / 2 * TILE_HEIGHT;
 
 const int N_TILES_X = 32;
 const int N_TILES_Y = 32;
@@ -33,7 +33,7 @@ const int WIDTH  = N_TILES_X * TILE_WIDTH;
 const int HEIGHT = N_TILES_Y * TILE_HEIGHT;
 
 const int VRAM = 0x6000;
-const int TILESET = 0x4000;
+const int TILESET = 0x3000;
 
 const int SCALE = 3;
 
@@ -110,20 +110,12 @@ void draw_tile(uint8_t* tile, int tx, int ty, uint8_t* pixels, int pitch) {
   int py = ty * TILE_HEIGHT;
   for (int row = 0; row < TILE_HEIGHT; row++) {
     uint32_t* dst = (uint32_t*)(pixels + (py + row) * pitch + px * 4);
-    for (int col = 0; col < TILE_WIDTH; col++) {
-      // Each row has TILE_WIDTH pixels; two pixels per byte
-      int byte_index = row * (TILE_WIDTH / 2) + col / 2;
-      uint8_t packed = tile[byte_index];
-
-      uint8_t index;
-      if (col % 2 == 0) {
-          // high nibble
-          index = (packed >> 4) & 0xF;
-      } else {
-          // low nibble
-          index = packed & 0xF;
-      }
-      dst[col] = palette[index];
+    for (int col = 0; col < TILE_WIDTH / 2; col++) {
+      uint8_t packed = tile[row * (TILE_WIDTH / 2) + col];
+      uint8_t hi = (packed >> 4) & 0xF;
+      uint8_t lo = packed & 0xF;
+      *dst++ = palette[hi];
+      *dst++ = palette[lo];
     }
   }
 }
@@ -141,8 +133,8 @@ void render(uint8_t* mem) {
 
   for (int ty = 0; ty < N_TILES_Y; ty++) {
     for (int tx = 0; tx < N_TILES_X; tx++) {
-      uint8_t tile_index = mem[VRAM + (ty * N_TILES_X) + tx];
-      uint8_t* tile = mem + TILESET + (tile_index * TILE_SIZE);
+      uint16_t tile_index = mem[VRAM + (ty * N_TILES_X) + tx];
+      uint8_t* tile = mem + TILESET + (tile_index * TILE_SIZE_B);
       draw_tile(tile, tx, ty, pixels, pitch);
     }
   }
