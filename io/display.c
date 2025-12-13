@@ -8,6 +8,12 @@
 ** SPRITES
 **   256 sprites. 8K total
 ** 8+8 + 1 = 17K
+**
+**      -$2000 CODE
+** $2000-$4000 SPRITES
+** $4000-$6000 TILES
+** $6000-$7000 SCREEN
+** 
 */
 
 SDL_Renderer *renderer;
