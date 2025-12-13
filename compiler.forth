@@ -243,6 +243,16 @@ VARIABLE BASE
     ABORT
   THEN ;
 
+: FILL
+  DP  ( save current DP )
+  WORD >NUMBER IF DP ! ELSE ABORT THEN
+  BEGIN
+    WORD DUP " .END" STR= INVERT
+  WHILE
+    >NUMBER IF C, ELSE ABORT THEN
+  REPEAT
+  DROP DP ! ( restore DP ) ;
+
 ENTRY
 
 \ Compile initial jump code with a placeholder address.
@@ -285,6 +295,10 @@ END IMMEDIATE
 " CREATE" MAKE-HEADER
   ['] CALL C, ' CREATE ,
 END
+
+" .FILL" MAKE-HEADER
+  ['] CALL C, ' FILL ,
+END IMMEDIATE
 
 " ENTRY" MAKE-HEADER
   ['] LIT C,

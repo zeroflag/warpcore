@@ -17,10 +17,10 @@
 : DP $7E00 ;
 
 : EXEC >R EXIT ;
-: DEPTH SP $02 - ;
 : CELL 2 ;
 : CELLS CELL * ;
 : ALLOT DP @ + DP ! ;
+: DEPTH SP $02 - CELL / ;
 
 : MARK    DP @ 0 , ;
 : RESOLVE DP @ OVER - SWAP ! ;
