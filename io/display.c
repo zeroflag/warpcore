@@ -25,6 +25,7 @@ const int FPS = 60;
 const int TILE_WIDTH  = 8;
 const int TILE_HEIGHT = 8;
 const int TILE_SIZE_B = TILE_WIDTH / 2 * TILE_HEIGHT;
+const int MAX_TILES = 384;
 
 const int N_TILES_X = 32;
 const int N_TILES_Y = 32;
@@ -130,10 +131,13 @@ void render(uint8_t* mem) {
   int pitch;
   clear_screen();
   SDL_LockTexture(framebuffer, NULL, (void**)&pixels, &pitch);
+  uint16_t* screen = (uint16_t*) (mem + VRAM);
 
   for (int ty = 0; ty < N_TILES_Y; ty++) {
     for (int tx = 0; tx < N_TILES_X; tx++) {
-      uint16_t tile_index = mem[VRAM + (ty * N_TILES_X) + tx];
+      uint16_t tile_index = screen[ty * N_TILES_X + tx];
+      if (tile_index >= MAX_TILES)
+        tile_index = 0;
       uint8_t* tile = mem + TILESET + (tile_index * TILE_SIZE_B);
       draw_tile(tile, tx, ty, pixels, pitch);
     }
