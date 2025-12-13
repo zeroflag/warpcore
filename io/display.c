@@ -44,25 +44,22 @@ Uint32 threshold = 1000 / FPS;
 SDL_Texture* framebuffer;
 
 uint32_t palette[16] = {
-  // grayscale
-  0xFF000000,  // black
-  0xFF555555,  // dark gray
-  0xFFAAAAAA,  // light gray
-  0xFFFFFFFF,  // white
-  // primary colors
-  0xFFFF0000,  // red
-  0xFF00FF00,  // green
-  0xFF0000FF,  // blue
-  0xFFFFFF00,  // yellow
-  // secondary / mixed colors
-  0xFFFF00FF,  // magenta
-  0xFF00FFFF,  // cyan
-  0xFF800000,  // dark red
-  0xFF008000,  // dark green
-  0xFF000080,  // dark blue
-  0xFF808000,  // olive
-  0xFF800080,  // purple
-  0xFF008080   // teal
+  0xFF000000, // black
+  0xFFFFFFFF, // white
+  0xFF62748E, // gray
+  0xFFFFDF20, // yellow
+  0xFF8A0194, // purple
+  0xFF9F0712, // dark red
+  0xFFFB2C36, // light red
+  0xFF3C6301, // dark green
+  0xFF7CCF35, // light green
+  0xFF34A6F4, // light blue
+  0xFF432DD7, // dark blue
+  0xFF18786F, // cyan
+  0xFFA86A3E, // brown
+  0xFFE12AFB, // magenta
+  0xFFF5DEB3, // wheat
+  0xFF8B4513, // saddle brown
 };
 
 void sdl_init() {
