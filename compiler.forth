@@ -15,9 +15,8 @@
 : FALSE      0 ;
 
 : MAIN          $0190 ;
-: STAGE1-TARGET $6000 ;
+: STAGE1-TARGET $7000 ;
 : STAGE2-TARGET $0200 ;
-: BOOTSTRAPPER  $7000 ;
 : VMPARAM-ADDR  $0042 ;
 
 VARIABLE POS
@@ -262,10 +261,10 @@ COMPILE-ENTRY
 
 \ Same source code is used for stage1 and stage2 compiler.
 \ Use different target address depending the stage.
-STEPPER BOOTSTRAPPER >= IF
-  STAGE1-TARGET DP ! \ We're in stage1 compiler
-ELSE
+STEPPER STAGE1-TARGET >= IF
   STAGE2-TARGET DP ! \ We're in stage2 compiler
+ELSE
+  STAGE1-TARGET DP ! \ We're in stage1 compiler
 THEN
 
 0  LAST !
