@@ -16,8 +16,8 @@ const int N_TILES_Y = 30;
 const int WIDTH  = N_TILES_X * TILE_WIDTH;
 const int HEIGHT = N_TILES_Y * TILE_HEIGHT;
 
-const int VRAM = 0x5000;
-const int TILESET = 0x6000;
+const int VRAM = 0x3000;
+const int TILESET = 0x5000;
 
 const int SCALE = 3;
 
