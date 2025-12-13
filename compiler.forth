@@ -302,7 +302,7 @@ END IMMEDIATE
 
 " ENTRY" MAKE-HEADER
   ['] LIT C,
-  $7E00 ,
+  $182 ,
   ['] @  C,
   ['] LIT C, MAIN 1+ ,
   ['] !   C,
