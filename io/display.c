@@ -1,5 +1,15 @@
 #include "display.h"
 
+/*
+** VRAM: 32x32 x 8BIT (TILE-INDEX) = 1K
+** TILESET:
+**   One tile: 8x8 16 colors: 32b total
+**   256 tiles total = 8K
+** SPRITES
+**   256 sprites. 8K total
+** 8+8 + 1 = 17K
+*/
+
 SDL_Renderer *renderer;
 SDL_Window   *window;
 
@@ -10,8 +20,8 @@ const int TILE_WIDTH  = 8;
 const int TILE_HEIGHT = 8;
 const int TILE_SIZE   = TILE_WIDTH * TILE_HEIGHT;
 
-const int N_TILES_X = 40;
-const int N_TILES_Y = 30;
+const int N_TILES_X = 32;
+const int N_TILES_Y = 32;
 
 const int WIDTH  = N_TILES_X * TILE_WIDTH;
 const int HEIGHT = N_TILES_Y * TILE_HEIGHT;
@@ -26,19 +36,26 @@ Uint32 threshold = 1000 / FPS;
 
 SDL_Texture* framebuffer;
 
-uint32_t palette[32] = {
+uint32_t palette[16] = {
   // grayscale
-  0xFF000000, 0xFF555555, 0xFFAAAAAA, 0xFFFFFFFF,
-  // primary
-  0xFFFF0000, 0xFF00FF00, 0xFF0000FF, 0xFFFFFF00,
-  0xFFFF00FF, 0xFF00FFFF, 0xFF800000, 0xFF008000,
-  0xFF000080, 0xFF808000, 0xFF800080, 0xFF008080,
-  // bright versions
-  0xFFFF8080, 0xFF80FF80, 0xFF8080FF, 0xFFFFFF80,
-  0xFFFF80FF, 0xFF80FFFF, 0xFFC0C0C0, 0xFF404040,
-  // retro/dark tones
-  0xFF804000, 0xFF408000, 0xFF400080, 0xFF008040,
-  0xFF804080, 0xFF408080, 0xFF808040, 0xFF804040
+  0xFF000000,  // black
+  0xFF555555,  // dark gray
+  0xFFAAAAAA,  // light gray
+  0xFFFFFFFF,  // white
+  // primary colors
+  0xFFFF0000,  // red
+  0xFF00FF00,  // green
+  0xFF0000FF,  // blue
+  0xFFFFFF00,  // yellow
+  // secondary / mixed colors
+  0xFFFF00FF,  // magenta
+  0xFF00FFFF,  // cyan
+  0xFF800000,  // dark red
+  0xFF008000,  // dark green
+  0xFF000080,  // dark blue
+  0xFF808000,  // olive
+  0xFF800080,  // purple
+  0xFF008080   // teal
 };
 
 void sdl_init() {
@@ -88,7 +105,18 @@ void draw_tile(uint8_t* tile, int tx, int ty, uint8_t* pixels, int pitch) {
   for (int row = 0; row < TILE_HEIGHT; row++) {
     uint32_t* dst = (uint32_t*)(pixels + (py + row) * pitch + px * 4);
     for (int col = 0; col < TILE_WIDTH; col++) {
-      uint8_t index = tile[row * TILE_WIDTH + col];
+      // Each row has TILE_WIDTH pixels; two pixels per byte
+      int byte_index = row * (TILE_WIDTH / 2) + col / 2;
+      uint8_t packed = tile[byte_index];
+
+      uint8_t index;
+      if (col % 2 == 0) {
+          // high nibble
+          index = (packed >> 4) & 0xF;
+      } else {
+          // low nibble
+          index = packed & 0xF;
+      }
       dst[col] = palette[index];
     }
   }
