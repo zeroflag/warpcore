@@ -5,6 +5,7 @@
 #include "vm.h"
 #include "image.h"
 #include "display.h"
+#include "ports.h"
 
 const char VER[] = "0.2";
 
@@ -72,6 +73,8 @@ int main(int argc, char **argv) {
       dprint("Initializing SDL..");
       sdl_init(mem);
       hooks.tick = sdl_tick;
+      hooks.port_read  = io_port_read;
+      hooks.port_write = io_port_write;
     }
     dprint("Image version: %d.%d.\n", ver.major, ver.minor);
     write_vm_params(mem);

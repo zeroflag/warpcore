@@ -53,7 +53,7 @@ inline void rot(cell_t* sp) {
   *(sp-1) = tmp;
 }
 
-inline cell_t in(cell_t port) {
+inline cell_t in(cell_t port, VMHooks hooks) {
   switch (port) {
     case PORT_STDIN:
       return getchar();
@@ -62,18 +62,26 @@ inline cell_t in(cell_t port) {
     case PORT_TICKS:
       return (cell_t)clock();
     default:
-      breach("Invalid input port number: %d\n", port);
+      if (hooks.port_read) {
+        return hooks.port_read(port);
+      } else {
+        breach("Invalid input port number: %d\n", port);
+      }
       return 0;
   }
 }
 
-inline void out(cell_t port, cell_t data) {
+inline void out(cell_t port, cell_t data, VMHooks hooks) {
   switch (port) {
     case PORT_STDOUT:
       putchar(data);
       break;
     default:
-      breach("Invalid output port number: %d\n", port);
+      if (hooks.port_write) {
+        hooks.port_write(port, data);
+      } else {
+        breach("Invalid output port number: %d\n", port);
+      }
   }
 }
 
@@ -140,13 +148,13 @@ cell_t engage(uint8_t *mem,
                      break;
       case OP_IN: {
         cell_t port = POP;
-        PUSH(in(port));
+        PUSH(in(port, hooks));
         break;
       }
       case OP_OUT: {
         cell_t port = POP;
         cell_t data = POP;
-        out(port, data);
+        out(port, data, hooks);
         break;
       }
       case OP_STOR: {
