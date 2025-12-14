@@ -4,15 +4,13 @@
 ** VRAM: 32x32 x 8BIT (TILE-INDEX) = 1K
 ** TILESET:
 **   One tile: 8x8 16 colors: 32byte / tile
-**   384 tiles total
-** SPRITES
-**   128 sprites. 8K total
-** 8+8 + 1 = 17K
+**   256 tiles total
 **
 **      -$2000 CODE
-** $2000-$3000 SPRITES  ( 4K  )
-** $3000-$6000 TILES    ( 12K )
-** $6000-$6800 SCREEN   ( 2K )
+** $2000-$3000 
+** $3000-$5000 TILES    ( 8K )
+** $5000-$5200 Palette  ( 512B )
+** $6000-$6400 SCREEN   ( 1K )
 ** 
 */
 
@@ -25,7 +23,6 @@ const int FPS = 60;
 const int TILE_WIDTH  = 8;
 const int TILE_HEIGHT = 8;
 const int TILE_SIZE_B = TILE_WIDTH / 2 * TILE_HEIGHT;
-const int MAX_TILES = 384;
 
 const int N_TILES_X = 32;
 const int N_TILES_Y = 32;
@@ -35,6 +32,7 @@ const int HEIGHT = N_TILES_Y * TILE_HEIGHT;
 
 const int VRAM = 0x6000;
 const int TILESET = 0x3000;
+const int PALETTE = 0x5000;
 
 const int SCALE = 3;
 
@@ -43,26 +41,15 @@ Uint32 threshold = 1000 / FPS;
 
 SDL_Texture* framebuffer;
 
-uint32_t palette[16] = {
-  0xFF000000, // black
-  0xFFFFFFFF, // white
-  0xFF62748E, // gray
-  0xFFFFDF20, // yellow
-  0xFF8A0194, // purple
-  0xFF9F0712, // dark red
-  0xFFFB2C36, // light red
-  0xFF3C6301, // dark green
-  0xFF7CCF35, // light green
-  0xFF34A6F4, // light blue
-  0xFF432DD7, // dark blue
-  0xFF18786F, // cyan
-  0xFFA86A3E, // brown
-  0xFFE12AFB, // magenta
-  0xFFF5DEB3, // wheat
-  0xFF8B4513, // saddle brown
-};
+inline uint8_t* screen(const uint8_t *mem) {
+  return (uint8_t*) (mem + VRAM);
+}
 
-void sdl_init() {
+inline uint32_t* palette(const uint8_t *mem) {
+  return (uint32_t*) (mem + PALETTE);
+}
+
+void sdl_init(uint8_t *mem) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
       printf("SDL_Init Error: %s\n", SDL_GetError());
       return;
@@ -98,14 +85,24 @@ void sdl_init() {
       SDL_TEXTUREACCESS_STREAMING,
       WIDTH, HEIGHT
   );
+  /* SDL_SetTextureBlendMode(framebuffer, SDL_BLENDMODE_BLEND); */
 
   SDL_RenderSetLogicalSize(renderer, WIDTH, HEIGHT);
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0"); // nearest-neighbor
+
+  /* memset(screen(mem), 0, sizeof(uint8_t) * N_TILES_X * N_TILES_Y); */
 }
 
-void draw_tile(uint8_t* tile, int tx, int ty, uint8_t* pixels, int pitch) {
+void draw_tile(const uint8_t* tile,
+               const uint32_t* palette,
+               int tx,
+               int ty,
+               uint8_t* pixels,
+               int pitch)
+{
   int px = tx * TILE_WIDTH;
   int py = ty * TILE_HEIGHT;
+
   for (int row = 0; row < TILE_HEIGHT; row++) {
     uint32_t* dst = (uint32_t*)(pixels + (py + row) * pitch + px * 4);
     for (int col = 0; col < TILE_WIDTH / 2; col++) {
@@ -114,29 +111,29 @@ void draw_tile(uint8_t* tile, int tx, int ty, uint8_t* pixels, int pitch) {
       uint8_t lo = packed & 0xF;
       *dst++ = palette[hi];
       *dst++ = palette[lo];
+
+      /* if (hi != 0) */
+      /*   *dst = palette[hi]; */
+      /* dst++; */
+
+      /* if (lo != 0) */
+      /*   *dst = palette[lo]; */
+      /* dst++; */
     }
   }
 }
 
-inline void clear_screen() {
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-  SDL_RenderClear(renderer);
-}
-
-void render(uint8_t* mem) {
+void render(const uint8_t* mem) {
   uint8_t* pixels;
   int pitch;
-  clear_screen();
   SDL_LockTexture(framebuffer, NULL, (void**)&pixels, &pitch);
-  uint16_t* screen = (uint16_t*) (mem + VRAM);
 
+  const uint8_t* scr = screen(mem);
   for (int ty = 0; ty < N_TILES_Y; ty++) {
     for (int tx = 0; tx < N_TILES_X; tx++) {
-      uint16_t tile_index = screen[ty * N_TILES_X + tx];
-      if (tile_index >= MAX_TILES)
-        tile_index = 0;
-      uint8_t* tile = mem + TILESET + (tile_index * TILE_SIZE_B);
-      draw_tile(tile, tx, ty, pixels, pitch);
+      uint8_t tile_index = scr[ty * N_TILES_X + tx];
+      const uint8_t* tile = mem + TILESET + (tile_index * TILE_SIZE_B);
+      draw_tile(tile, palette(mem), tx, ty, pixels, pitch);
     }
   }
   SDL_UnlockTexture(framebuffer);

@@ -58,11 +58,6 @@ int main(int argc, char **argv) {
   parse_args(argc, argv);
 
   dprint("Warpcore ver: %s\n", VER);
-  if (gui_enabled) {
-    dprint("Initializing SDL..");
-    sdl_init();
-    hooks.tick = sdl_tick;
-  }
   if (mapping_enabled) {
     dprint("MMAP image: %s\n", image_path);
     mem = map_file(image_path);
@@ -73,6 +68,11 @@ int main(int argc, char **argv) {
   }
   Ver ver = read_version(mem);
   if (ver.major == 1) {
+    if (gui_enabled) {
+      dprint("Initializing SDL..");
+      sdl_init(mem);
+      hooks.tick = sdl_tick;
+    }
     dprint("Image version: %d.%d.\n", ver.major, ver.minor);
     write_vm_params(mem);
     cell_t result = engage(mem, MAIN, STACK, RSTACK, hooks);
