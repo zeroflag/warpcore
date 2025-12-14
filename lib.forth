@@ -44,9 +44,9 @@
 
 : VARIABLE
   MAKE-WORD
-  ['] LIT  C, DP @ 3 + ,
+  ['] LIT  C, MARK
   ['] EXIT C,
-  DP @ 2 + DP @ !
+  DP @ SWAP !
 ; IMMEDIATE
 
 : ( BEGIN KEY 41 = UNTIL ; IMMEDIATE
