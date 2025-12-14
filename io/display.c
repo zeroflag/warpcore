@@ -139,30 +139,19 @@ void draw_tile(const uint8_t* tile,
   }
 }
 
-void draw_sprite(uint32_t sprite,
-                 const uint8_t *mem,
-                 uint8_t* pixels,
-                 int pitch)
-{
-  int tile_index = sprite & 0xFF;
-  int x = (sprite >> 8) & 0xFF;
-  int y = (sprite >> 16) & 0xFF;
-  int attr = (sprite >> 24) & 0xFF;
-  if (attr != 0) {
-    draw_tile(tile_at(mem, tile_index),
-              palette(mem),
-              x,
-              y,
-              pixels,
-              pitch,
-              1);
-  }
-}
-
 void draw_sprites(const uint8_t* mem, uint8_t* pixels, int pitch) {
   uint32_t *sprs = sprites(mem);
   for (int i = 0; i < SPRITES_MAX; i++) {
-    draw_sprite(sprs[i], mem, pixels, pitch);
+    uint32_t sprite = sprs[i];
+    int attr = (sprite >> 24) & 0xFF;
+    if (attr == 0) continue;
+    draw_tile(tile_at(mem, sprite & 0xFF),
+              palette(mem),
+              (sprite >> 8) & 0xFF,
+              (sprite >> 16) & 0xFF,
+              pixels,
+              pitch,
+              1);
   }
 }
 
