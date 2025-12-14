@@ -5,11 +5,15 @@
 ** TILESET:
 **   One tile: 8x8 16 colors: 32byte / tile
 **   256 tiles total
+** SPRITES:
+**   (TileIndex X Y Props) 4 byte per sprite
+**   128 Sprites Total = 512B
 **
 **      -$2000 CODE
 ** $2000-$3000 
 ** $3000-$5000 TILES    ( 8K )
 ** $5000-$5200 Palette  ( 512B )
+** $5200-$5400 Sprites  ( 512B )
 ** $6000-$6400 SCREEN   ( 1K )
 ** 
 */
@@ -33,6 +37,8 @@ const int HEIGHT = N_TILES_Y * TILE_HEIGHT;
 const int VRAM = 0x6000;
 const int TILESET = 0x3000;
 const int PALETTE = 0x5000;
+const int SPRITES = 0x5200;
+const int SPRITES_MAX = 64;
 
 const int SCALE = 3;
 
@@ -47,6 +53,16 @@ inline uint8_t* screen(const uint8_t *mem) {
 
 inline uint32_t* palette(const uint8_t *mem) {
   return (uint32_t*) (mem + PALETTE);
+}
+
+inline uint32_t* sprites(const uint8_t *mem) {
+  return (uint32_t*) (mem + SPRITES);
+}
+
+inline const uint8_t* tile_at(const uint8_t* mem,
+                              uint8_t index)
+{
+  return mem + TILESET + (index * TILE_SIZE_B);
 }
 
 void sdl_init(uint8_t *mem) {
@@ -91,20 +107,18 @@ void sdl_init(uint8_t *mem) {
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0"); // nearest-neighbor
 
   /* memset(screen(mem), 0, sizeof(uint8_t) * N_TILES_X * N_TILES_Y); */
+  memset(sprites(mem), 0, sizeof(uint32_t) * SPRITES_MAX);
 }
 
 void draw_tile(const uint8_t* tile,
                const uint32_t* palette,
-               int tx,
-               int ty,
+               int dst_x,
+               int dst_y,
                uint8_t* pixels,
                int pitch)
 {
-  int px = tx * TILE_WIDTH;
-  int py = ty * TILE_HEIGHT;
-
   for (int row = 0; row < TILE_HEIGHT; row++) {
-    uint32_t* dst = (uint32_t*)(pixels + (py + row) * pitch + px * 4);
+    uint32_t* dst = (uint32_t*)(pixels + (dst_y + row) * pitch + dst_x * 4);
     for (int col = 0; col < TILE_WIDTH / 2; col++) {
       uint8_t packed = tile[row * (TILE_WIDTH / 2) + col];
       uint8_t hi = (packed >> 4) & 0xF;
@@ -123,6 +137,32 @@ void draw_tile(const uint8_t* tile,
   }
 }
 
+void draw_sprite(uint32_t sprite,
+                 const uint8_t *mem,
+                 uint8_t* pixels,
+                 int pitch)
+{
+  int tile_index = sprite & 0xFF;
+  int x = (sprite >> 8) & 0xFF;
+  int y = (sprite >> 16) & 0xFF;
+  int attr = (sprite >> 24) & 0xFF;
+  if (attr != 0) {
+    draw_tile(tile_at(mem, tile_index),
+              palette(mem),
+              x,
+              y,
+              pixels,
+              pitch);
+  }
+}
+
+void draw_sprites(const uint8_t* mem, uint8_t* pixels, int pitch) {
+  uint32_t *sprs = sprites(mem);
+  for (int i = 0; i < SPRITES_MAX; i++) {
+    draw_sprite(sprs[i], mem, pixels, pitch);
+  }
+}
+
 void render(const uint8_t* mem) {
   uint8_t* pixels;
   int pitch;
@@ -132,10 +172,15 @@ void render(const uint8_t* mem) {
   for (int ty = 0; ty < N_TILES_Y; ty++) {
     for (int tx = 0; tx < N_TILES_X; tx++) {
       uint8_t tile_index = scr[ty * N_TILES_X + tx];
-      const uint8_t* tile = mem + TILESET + (tile_index * TILE_SIZE_B);
-      draw_tile(tile, palette(mem), tx, ty, pixels, pitch);
+      const uint8_t* tile = tile_at(mem, tile_index);
+      int dst_x = tx * TILE_WIDTH;
+      int dst_y = ty * TILE_HEIGHT;
+      draw_tile(tile, palette(mem), dst_x, dst_y, pixels, pitch);
     }
   }
+
+  draw_sprites(mem, pixels, pitch);
+
   SDL_UnlockTexture(framebuffer);
 
   SDL_RenderCopy(renderer, framebuffer, NULL, NULL);
