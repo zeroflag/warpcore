@@ -115,7 +115,8 @@ void draw_tile(const uint8_t* tile,
                int dst_x,
                int dst_y,
                uint8_t* pixels,
-               int pitch)
+               int pitch,
+               int transparency)
 {
   for (int row = 0; row < TILE_HEIGHT; row++) {
     uint32_t* dst = (uint32_t*)(pixels + (dst_y + row) * pitch + dst_x * 4);
@@ -123,16 +124,17 @@ void draw_tile(const uint8_t* tile,
       uint8_t packed = tile[row * (TILE_WIDTH / 2) + col];
       uint8_t hi = (packed >> 4) & 0xF;
       uint8_t lo = packed & 0xF;
-      *dst++ = palette[hi];
-      *dst++ = palette[lo];
-
-      /* if (hi != 0) */
-      /*   *dst = palette[hi]; */
-      /* dst++; */
-
-      /* if (lo != 0) */
-      /*   *dst = palette[lo]; */
-      /* dst++; */
+      if (transparency) {
+        if (hi != 0)
+          *dst = palette[hi];
+        dst++;
+        if (lo != 0)
+          *dst = palette[lo];
+        dst++;
+      } else {
+        *dst++ = palette[hi];
+        *dst++ = palette[lo];
+      }
     }
   }
 }
@@ -152,7 +154,8 @@ void draw_sprite(uint32_t sprite,
               x,
               y,
               pixels,
-              pitch);
+              pitch,
+              1);
   }
 }
 
@@ -175,7 +178,7 @@ void render(const uint8_t* mem) {
       const uint8_t* tile = tile_at(mem, tile_index);
       int dst_x = tx * TILE_WIDTH;
       int dst_y = ty * TILE_HEIGHT;
-      draw_tile(tile, palette(mem), dst_x, dst_y, pixels, pitch);
+      draw_tile(tile, palette(mem), dst_x, dst_y, pixels, pitch, 0);
     }
   }
 
