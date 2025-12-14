@@ -147,8 +147,8 @@ void draw_sprites(const uint8_t* mem, uint8_t* pixels, int pitch) {
     if (attr == 0) continue;
     draw_tile(tile_at(mem, sprite & 0xFF),
               palette(mem),
-              (sprite >> 8) & 0xFF,
-              (sprite >> 16) & 0xFF,
+              (sprite >>  8) & 0xFF, // X
+              (sprite >> 16) & 0xFF, // Y
               pixels,
               pitch,
               1);
