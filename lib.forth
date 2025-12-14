@@ -11,15 +11,15 @@
 : ['] R> DUP C@ SWAP 1+ >R ;
 :  '  R> 1+ DUP @ SWAP 2 + >R ;
 
-: ,   $182 @  ! $182 ++ $182 ++ ;
-: C,  $182 @ C! $182 ++ ;
-
 : DP $182 ;
 
-: EXEC >R EXIT ;
+: ,   DP @  ! DP ++ DP ++ ;
+: C,  DP @ C! DP ++ ;
+
 : CELL 2 ;
 : CELLS CELL * ;
 : ALLOT DP @ + DP ! ;
+: EXEC >R EXIT ;
 : DEPTH SP $02 - CELL / ;
 
 : MARK    DP @ 0 , ;
@@ -43,7 +43,7 @@
 ; IMMEDIATE
 
 : VARIABLE
-  CREATE
+  MAKE-WORD
   ['] LIT  C, DP @ 3 + ,
   ['] EXIT C,
   DP @ 2 + DP @ !
