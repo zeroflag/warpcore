@@ -219,7 +219,7 @@ VARIABLE BASE
   STR,
   0 ( FLAGS ) C, ;
 
-: MAKE-WORD WORD MAKE-HEADER ;
+: CREATE WORD MAKE-HEADER ;
 
 : END ['] EXIT C, ;
 
@@ -279,7 +279,7 @@ THEN
 (   ^---------------------------------------------+        )
 
 " :" MAKE-HEADER
-  ['] CALL C, ' MAKE-WORD  ,
+  ['] CALL C, ' CREATE  ,
 END IMMEDIATE
 
 " ;" MAKE-HEADER
@@ -291,8 +291,8 @@ END IMMEDIATE
   ['] CALL C, ' IMMEDIATE ,
 END IMMEDIATE
 
-" MAKE-WORD" MAKE-HEADER
-  ['] CALL C, ' MAKE-WORD ,
+" CREATE" MAKE-HEADER
+  ['] CALL C, ' CREATE ,
 END
 
 " .FILL" MAKE-HEADER

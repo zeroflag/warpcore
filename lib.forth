@@ -17,6 +17,9 @@
 : DP $182 ;
 
 : EXEC >R EXIT ;
+: CELL 2 ;
+: CELLS CELL * ;
+: ALLOT DP @ + DP ! ;
 : DEPTH SP $02 - CELL / ;
 
 : MARK    DP @ 0 , ;
@@ -39,27 +42,12 @@
   ['] R> C, ['] DROP C,
 ; IMMEDIATE
 
-: CELL 2 ;
-: CELLS CELL * ;
-: ALLOT DP @ + DP ! ;
-
 : VARIABLE
-  MAKE-WORD
+  CREATE
   ['] LIT  C, DP @ 3 + ,
   ['] EXIT C,
   DP @ 2 + DP @ !
 ; IMMEDIATE
-
-: BUFFER ( N -- )
-  MAKE-WORD
-  ['] LIT  C, MARK
-  ['] EXIT C,
-  DP @ SWAP !
-  CELLS ALLOT
-; IMMEDIATE
-
-: NTH ( index array -- item ) CELLS + @ ;
-: PUT ( elem index array -- ) CELLS + ! ;
 
 : ( BEGIN KEY 41 = UNTIL ; IMMEDIATE
 : \ BEGIN KEY DUP 10 = SWAP 13 = OR UNTIL ; IMMEDIATE
@@ -128,4 +116,3 @@
     DUP 0 < IF 45 EMIT -1 * THEN
     10 /MOD ?DUP IF . THEN
     48 + EMIT ;
-
