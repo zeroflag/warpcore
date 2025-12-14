@@ -10,6 +10,7 @@
 #define PORT_STDOUT 1
 #define PORT_STDIN  2
 #define PORT_RND    3
+#define PORT_TICKS  4
 
 const cell_t MEM_SIZE = SHRT_MAX;
 
@@ -58,6 +59,8 @@ inline cell_t in(cell_t port) {
       return getchar();
     case PORT_RND:
       return (cell_t)(rand() % 65536 - 32768);
+    case PORT_TICKS:
+      return (cell_t)clock();
     default:
       breach("Invalid input port number: %d\n", port);
       return 0;
