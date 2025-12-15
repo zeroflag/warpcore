@@ -129,7 +129,7 @@ cell_t engage(uint8_t *mem,
       case OP_LIT:   PUSH(fetch_cell(ip));
                      ip += sizeof(cell_t);
                      break;
-      case OP_ABORT: breach("ABORTED: ip=0x%x: %s\n", ip -1 - mem, (char *)(POP + mem));
+      case OP_ABORT: breach("ABORTED: IP=0x%X: %s\n", ip -1 - mem, (char *)(POP + mem));
                      break;
       case OP_DUMP:  dump_image(mem, (char *)(POP + mem));
                      break;
@@ -162,7 +162,7 @@ cell_t engage(uint8_t *mem,
         break;
       }
       default:
-        breach("Unknown opcode: 0x%x at ip=0x%x\n",
+        breach("Unknown opcode: 0x%X at IP=0x%X\n",
                code, ip -1 - mem);
     }
   }
