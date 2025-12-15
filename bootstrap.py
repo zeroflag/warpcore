@@ -239,6 +239,8 @@ def create_macros():
   macros['\\'] =  lambda: tokens.read_until("\n")
   macros["ENTRY"] = lambda: compile_entry(dp)
   macros["BYE"] = lambda: 0
+  macros["LITERAL"] = lambda: (compile_primitive('LIT'),
+                               compile_token(','))
   macros["I"] = lambda: compile_primitive("R@")
   macros["DP"] = lambda: compile_lit(VAR_DP)
   macros["EXEC"] = lambda: (compile_primitive(">R"),
