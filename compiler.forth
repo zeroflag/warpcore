@@ -293,24 +293,24 @@ THEN
 (   ^---------------------------------------------+        )
 
 " :" MAKE-HEADER
-  CODE CALL C, ' MAKE-WORD  ,
+  CODE CALL C, SUB MAKE-WORD  ,
 ;; IMMEDIATE
 
 " ;" MAKE-HEADER
   CODE LIT  C, CODE EXIT ,
-  CODE CALL C,  '  C,   ,  \ C, is not a primitive
+  CODE CALL C, SUB  C,   ,  \ C, is not a primitive
 ;; IMMEDIATE
 
 " IMMEDIATE" MAKE-HEADER
-  CODE CALL C, ' IMMEDIATE ,
+  CODE CALL C, SUB IMMEDIATE ,
 ;; IMMEDIATE
 
 " MAKE-WORD" MAKE-HEADER
-  CODE CALL C, ' MAKE-WORD ,
+  CODE CALL C, SUB MAKE-WORD ,
 ;;
 
 " .FILL" MAKE-HEADER
-  CODE CALL C, ' FILL ,
+  CODE CALL C, SUB FILL ,
 ;; IMMEDIATE
 
 " ENTRY" MAKE-HEADER

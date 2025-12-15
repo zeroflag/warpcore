@@ -9,7 +9,7 @@
 : C@  @ $FF AND ;
 : ++  DUP @ 1+ SWAP ! ;
 : CODE R> DUP C@ SWAP 1+ >R ;
-:  '  R> 1+ DUP @ SWAP 2 + >R ;
+: SUB  R> 1+ DUP @ SWAP 2 + >R ;
 
 : DP $182 ;
 
