@@ -14,14 +14,14 @@ EXIT
 : ,   DP @  ! DP ++ DP ++ EXIT
 : C,  DP @ C! DP ++ EXIT
 
-: ; $1E C, EXIT IMMEDIATE
+: CODE R>    DUP C@ SWAP 1+  >R C, EXIT
+: SUB  R> 1+ DUP  @ SWAP 2 + >R  , EXIT
 
-: KEY  2 IN ;
-: RND  3 IN ;
+: ; CODE EXIT EXIT IMMEDIATE
+
+: KEY  2  IN ;
+: RND  3  IN ;
 : EMIT 1 OUT ;
-
-: CODE R>    DUP C@ SWAP 1+  >R C, ;
-: SUB  R> 1+ DUP  @ SWAP 2 + >R  , ;
 
 : LITERAL CODE LIT , ;
 
