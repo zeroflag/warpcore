@@ -156,7 +156,8 @@ VARIABLE BASE
     DROP
     R> DROP
     EXIT
-  ELSE NIP
+  ELSE
+    NIP
   THEN ;
 
 : >OPCODE ( s -- opcode / 0 )
