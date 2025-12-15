@@ -1,12 +1,12 @@
 ( ************************************* )
 ( Layout:                               )
-( $0182: USER MAIN ENTRY [JUMP TO] +    )
+( $0190: USER MAIN ENTRY [JUMP TO] +    )
 ( $0200: USER DICTIONARY START     |    )
 ( ...                              |    )
 ( ... CODE START  <----------------+    )
 ( ...                                   )
-( $6000: STAGE2 COMPILER RESIDUAL       )
-( $7000: STAGE1 COMPILER RESIDUAL       )
+( $6000: STAGE1 COMPILER RESIDUAL       )
+( $7000: STAGE2 COMPILER RESIDUAL       )
 ( ************************************* )
 : TIB     $102 ;
 : F_IMME  %10000000 ;
