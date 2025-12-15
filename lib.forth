@@ -87,8 +87,10 @@
   DROP ;
 
 : "
-  ['] LIT C, DP @ 5 + , ( addr of string )
-  ['] JMP C, MARK
+  ['] LIT C, MARK ( Mark1: addr of string )
+  ['] JMP C, MARK ( Mark2: length )
+  SWAP
+  DP @ SWAP !     ( Resolve Mark1 )
   BEGIN
     KEY DUP 34 <>
   WHILE
@@ -96,7 +98,7 @@
   REPEAT
   DROP
   0 C,
-  RESOLVE
+  RESOLVE         ( Resolve Mark2 )
 ; IMMEDIATE
 
 : ?DUP  DUP 0 <> IF DUP THEN ;
