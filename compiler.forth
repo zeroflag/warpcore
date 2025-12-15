@@ -22,7 +22,6 @@
 VARIABLE POS
 VARIABLE LAST
 VARIABLE STEPPER
-VARIABLE BASE
 
 : SPACE?
   DUP  9  =
@@ -88,51 +87,6 @@ VARIABLE BASE
     STEP
   REPEAT
   DROP 0 ;
-
-: NEG? C@ CHAR - = ;
-: HEX? C@ CHAR $ = ;
-: BIN? C@ CHAR % = ;
-
-: 0..9? CHAR 0 SWAP CHAR 9 BETWEEN? ;
-
-: >DIGIT
-  C@ DUP 0..9? IF
-    CHAR 0 -
-  ELSE
-    CHAR A - 10 +
-  THEN ;
-
-: DIGIT?
-  BASE @ 10 <= IF
-    CHAR 0 SWAP C@ 47 BASE @ + BETWEEN?
-    EXIT
-  THEN
-  BASE @ 16 <= IF
-    C@ DUP 0..9?
-    CHAR A ROT 54 BASE @ + BETWEEN?
-    OR
-    EXIT
-  THEN
-  FALSE ;
-
-: >NUMBER ( s -- n bool )
-  DUP HEX? IF
-    1+ 16
-  ELSE
-    DUP BIN? IF 1+ 2 ELSE 10 THEN
-  THEN
-  BASE !
-  DUP NEG? IF 1+ -1 ELSE 1 THEN
-  SWAP 0
-  ( sign str result )
-  BEGIN
-    OVER NON-ZERO?
-  WHILE
-    OVER DIGIT? INVERT IF 3DROP FALSE EXIT THEN
-    BASE @ * OVER >DIGIT +
-    SWAP 1+ SWAP
-  REPEAT
-  NIP * TRUE ;
 
 : CONVERT ( -- n bool ) TIB >NUMBER ;
 
@@ -242,18 +196,6 @@ VARIABLE BASE
      DEPTH . CR " Non empty stack." ABORT
   THEN ;
 
-: ABORT-NAN " Not a number." ABORT ;
-
-: FILL
-  DP @ ( save current DP )
-  WORD >NUMBER IF DP ! ELSE ABORT-NAN THEN
-  BEGIN
-    WORD DUP " .END" STR= INVERT
-  WHILE
-    >NUMBER IF C, ELSE ABORT-NAN THEN
-  REPEAT
-  DROP DP ! ( restore DP ) ;
-
 : NUKE ( addr len -- )
   FOR
     0 OVER C! 1+
@@ -303,10 +245,6 @@ THEN
 
 " WORD" >DICT
   CODE CALL SUB WORD
-  CODE EXIT
-
-" .FILL" >DICT IMMEDIATE
-  CODE CALL SUB FILL
   CODE EXIT
 
 \ After compilation finished (BYE), dump memory to disk.
