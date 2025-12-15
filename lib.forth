@@ -60,7 +60,7 @@
 ; IMMEDIATE
 
 : ENDOF
-    SWAP 1 + SWAP
+    SWAP 1+ SWAP
     ['] JMP C, MARK SWAP
     RESOLVE
     SWAP
@@ -82,7 +82,7 @@
     DUP NON-ZERO?
   WHILE
     DUP C@ EMIT
-    1 +
+    1+
   REPEAT
   DROP ;
 
