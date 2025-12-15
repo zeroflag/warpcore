@@ -129,7 +129,7 @@ cell_t engage(uint8_t *mem,
       case OP_LIT:   PUSH(fetch_cell(ip));
                      ip += sizeof(cell_t);
                      break;
-      case OP_ABORT: breach("ABORTED: ip=0x%x\n", ip - mem);
+      case OP_ABORT: breach("ABORTED: ip=0x%x: %s\n", ip -1 - mem, (char *)(POP + mem));
                      break;
       case OP_DUMP:  dump_image(mem, (char *)(POP + mem));
                      break;

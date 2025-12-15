@@ -36,7 +36,7 @@ VARIABLE BASE
 : TIBLEN POS @ TIB - ;
 : STORE
   TIBLEN MAX-LINE-LEN > IF
-    ABORT
+    " Input buffer overflow." ABORT
   THEN
   POS @ C! POS ++ ;
 
@@ -251,17 +251,18 @@ VARIABLE BASE
 
 : POST-CHECKS
   DEPTH 0 <> IF
-    " Non Empty stack: " PRINT DEPTH . CR
-    ABORT
+     DEPTH . CR " Non empty stack." ABORT
   THEN ;
+
+: ABORT-NAN " Not a number." ABORT ;
 
 : FILL
   DP @ ( save current DP )
-  WORD >NUMBER IF DP ! ELSE ABORT THEN
+  WORD >NUMBER IF DP ! ELSE ABORT-NAN THEN
   BEGIN
     WORD DUP " .END" STR= INVERT
   WHILE
-    >NUMBER IF C, ELSE ABORT THEN
+    >NUMBER IF C, ELSE ABORT-NAN THEN
   REPEAT
   DROP DP ! ( restore DP ) ;
 
