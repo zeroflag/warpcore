@@ -16,6 +16,8 @@
 : MAIN          $0190 ;
 : STAGE1-TARGET $7000 ;
 : STAGE2-TARGET $0200 ;
+: STAGE1-HOME   $6000 ;
+: STAGE1-SIZE   $1000 ;
 : VMPARAM-ADDR  $0042 ;
 
 VARIABLE POS
@@ -271,6 +273,14 @@ VARIABLE BASE
   REPEAT
   DROP DP ! ( restore DP ) ;
 
+: NUKE ( addr len -- )
+  FOR
+    0 OVER C! 1+
+  NEXT
+  DROP ;
+
+: STAGE2? STEPPER STAGE1-TARGET >= ;
+
 ENTRY
 
 \ Compile initial jump code with a placeholder address.
@@ -280,8 +290,9 @@ COMPILE-ENTRY
 
 \ Same source code is used for stage1 and stage2 compiler.
 \ Use different target address depending the stage.
-STEPPER STAGE1-TARGET >= IF
+STAGE2? IF
   STAGE2-TARGET DP ! \ We're in stage2 compiler
+  STAGE1-HOME STAGE1-SIZE NUKE
 ELSE
   STAGE1-TARGET DP ! \ We're in stage1 compiler
 THEN
