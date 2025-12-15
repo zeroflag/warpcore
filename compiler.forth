@@ -39,28 +39,6 @@ VARIABLE BASE
   THEN
   POS @ C! POS ++ ;
 
-: C= C@ SWAP C@ = ;
-
-: STR=
-  BEGIN
-    2DUP C=
-    OVER NON-ZERO? AND
-    OVER NON-ZERO? AND
-  WHILE
-    1+ SWAP 1+
-  REPEAT
-  C= ;
-
-: STRLEN
-  0
-  BEGIN
-    OVER NON-ZERO?
-  WHILE
-    1+ SWAP
-    1+ SWAP
-  REPEAT
-  NIP ;
-
 : SKIP BEGIN KEY DUP SPACE? WHILE DROP REPEAT STORE ;
 
 : WORD

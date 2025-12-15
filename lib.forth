@@ -123,3 +123,25 @@
     DUP 0 < IF 45 EMIT -1 * THEN
     10 /MOD ?DUP IF . THEN
     48 + EMIT ;
+
+: C= C@ SWAP C@ = ;
+
+: STR=
+  BEGIN
+    2DUP C=
+    OVER NON-ZERO? AND
+    OVER NON-ZERO? AND
+  WHILE
+    1+ SWAP 1+
+  REPEAT
+  C= ;
+
+: STRLEN
+  0
+  BEGIN
+    OVER NON-ZERO?
+  WHILE
+    1+ SWAP
+    1+ SWAP
+  REPEAT
+  NIP ;
