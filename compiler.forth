@@ -13,7 +13,6 @@
 
 : MAX-LINE-LEN 127 ;
 
-: MAIN          $0190 ;
 : STAGE1-TARGET $7000 ;
 : STAGE2-TARGET $0200 ;
 : STAGE1-HOME   $6000 ;
@@ -315,14 +314,6 @@ THEN
 
 " .FILL" MAKE-HEADER
   CODE CALL SUB FILL
-;; IMMEDIATE
-
-" ENTRY" MAKE-HEADER
-  CODE LIT
-  DP ,
-  CODE @
-  CODE LIT MAIN 1+ ,
-  CODE !
 ;; IMMEDIATE
 
 \ After compilation finished (BYE), dump memory to disk.

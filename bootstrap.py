@@ -261,6 +261,7 @@ def make_header():
     mem[VM_PARAM_ADDRESS + i] = ord(DEFAULT_FILENAME[i])
 
 DEFS = """
+: MAIN $0190 ;
 : TRUE -1 ;
 : FALSE 0 ;
 

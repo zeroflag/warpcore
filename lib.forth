@@ -1,3 +1,5 @@
+: MAIN  $0190 ;
+
 : KEY  2 IN  ;
 : RND  3 IN ;
 : EMIT 1 OUT ;
@@ -9,6 +11,8 @@
 : C@  @ $FF AND ;
 : ++  DUP @ 1+ SWAP ! ;
 : DP  $182 ;
+
+: ENTRY DP @ MAIN 1+ ! ; IMMEDIATE
 
 : ,   DP @  ! DP ++ DP ++ ;
 : C,  DP @ C! DP ++ ;
