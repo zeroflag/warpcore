@@ -71,6 +71,8 @@ V1 @ . CR
 
 7 FACTORIAL . CR
 
+CHAR A . CR
+
 ( Test multi
        line
        comment )
