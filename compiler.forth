@@ -301,7 +301,7 @@ END IMMEDIATE
 
 " ENTRY" MAKE-HEADER
   ['] LIT C,
-  $182 ,
+  DP ,
   ['] @  C,
   ['] LIT C, MAIN 1+ ,
   ['] !   C,
