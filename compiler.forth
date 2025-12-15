@@ -221,7 +221,7 @@ VARIABLE BASE
 
 : MAKE-WORD WORD MAKE-HEADER ;
 
-: END ['] EXIT C, ;
+: ;; ['] EXIT C, ;
 
 : COMPILE-ENTRY
   ['] LIT C, $4444 , ( placeholder )
@@ -280,24 +280,24 @@ THEN
 
 " :" MAKE-HEADER
   ['] CALL C, ' MAKE-WORD  ,
-END IMMEDIATE
+;; IMMEDIATE
 
 " ;" MAKE-HEADER
   ['] LIT  C, ['] EXIT ,
   ['] CALL C,  '  C,   ,  \ C, is not a primitive
-END IMMEDIATE
+;; IMMEDIATE
 
 " IMMEDIATE" MAKE-HEADER
   ['] CALL C, ' IMMEDIATE ,
-END IMMEDIATE
+;; IMMEDIATE
 
 " MAKE-WORD" MAKE-HEADER
   ['] CALL C, ' MAKE-WORD ,
-END
+;;
 
 " .FILL" MAKE-HEADER
   ['] CALL C, ' FILL ,
-END IMMEDIATE
+;; IMMEDIATE
 
 " ENTRY" MAKE-HEADER
   ['] LIT C,
@@ -305,7 +305,7 @@ END IMMEDIATE
   ['] @  C,
   ['] LIT C, MAIN 1+ ,
   ['] !   C,
-END IMMEDIATE
+;; IMMEDIATE
 
 \ After compilation finished (BYE), dump memory to disk.
 COMPILER-LOOP
