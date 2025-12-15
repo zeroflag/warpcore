@@ -215,16 +215,14 @@ VARIABLE BASE
     THEN
   THEN ;
 
-: MAKE-HEADER ( name -- )
+: >DICT ( name -- )
   DP @
   LAST @ ,
   LAST !
   STR,
   0 ( FLAGS ) C, ;
 
-: MAKE-WORD WORD MAKE-HEADER ;
-
-: ;; CODE EXIT ;
+: MAKE-WORD WORD >DICT ;
 
 : COMPILE-ENTRY
   CODE LIT $4444 , ( placeholder )
@@ -291,25 +289,25 @@ THEN
 (  LINK "<name1>" 00 FLAG INSTR.1 .. INSTR.N EXIT LINK ... )
 (   ^---------------------------------------------+        )
 
-" :" MAKE-HEADER
+" :" >DICT IMMEDIATE
   CODE CALL SUB MAKE-WORD
-;; IMMEDIATE
+  CODE EXIT
 
-" IMMEDIATE" MAKE-HEADER
+" IMMEDIATE" >DICT IMMEDIATE
   CODE CALL SUB IMMEDIATE
-;; IMMEDIATE
+  CODE EXIT
 
-" MAKE-WORD" MAKE-HEADER
+" MAKE-WORD" >DICT
   CODE CALL SUB MAKE-WORD
-;;
+  CODE EXIT
 
-" WORD" MAKE-HEADER
+" WORD" >DICT
   CODE CALL SUB WORD
-;;
+  CODE EXIT
 
-" .FILL" MAKE-HEADER
+" .FILL" >DICT IMMEDIATE
   CODE CALL SUB FILL
-;; IMMEDIATE
+  CODE EXIT
 
 \ After compilation finished (BYE), dump memory to disk.
 COMPILER-LOOP
