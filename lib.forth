@@ -8,7 +8,7 @@
 
 : C@  @ $FF AND ;
 : ++  DUP @ 1+ SWAP ! ;
-: DP $182 ;
+: DP  $182 ;
 
 : ,   DP @  ! DP ++ DP ++ ;
 : C,  DP @ C! DP ++ ;
