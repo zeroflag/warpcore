@@ -211,8 +211,7 @@ VARIABLE BASE
     DUP IMMEDIATE? IF
       >CFA EXEC
     ELSE
-      CODE CALL C,
-      >CFA ,
+      CODE CALL >CFA ,
     THEN
   ELSE
     FIND-PRIMITIVE
@@ -220,7 +219,7 @@ VARIABLE BASE
       ( OPCODE ) C,
     ELSE CONVERT
       IF
-        CODE LIT C, ( NUM ) ,
+        CODE LIT ( NUM ) ,
       ELSE ??? THEN
     THEN
   THEN ;
@@ -234,13 +233,13 @@ VARIABLE BASE
 
 : MAKE-WORD WORD MAKE-HEADER ;
 
-: ;; CODE EXIT C, ;
+: ;; CODE EXIT ;
 
 : COMPILE-ENTRY
-  CODE LIT C, $4444 , ( placeholder )
-  CODE >R C, CODE EXIT C, ;
+  CODE LIT $4444 , ( placeholder )
+  CODE >R CODE EXIT ;
 
-: COMPILE-HALT CODE LIT C, 0 , CODE HALT C, ;
+: COMPILE-HALT CODE LIT 0 , CODE HALT ;
 
 : COMPILER-LOOP
   BEGIN
@@ -293,32 +292,32 @@ THEN
 (   ^---------------------------------------------+        )
 
 " :" MAKE-HEADER
-  CODE CALL C, SUB MAKE-WORD  ,
+  CODE CALL SUB MAKE-WORD  ,
 ;; IMMEDIATE
 
 " ;" MAKE-HEADER
-  CODE LIT  C, CODE EXIT ,
-  CODE CALL C, SUB  C,   ,  \ C, is not a primitive
+  CODE LIT  " EXIT" >OPCODE ,
+  CODE CALL SUB  C,   ,  \ C, is not a primitive
 ;; IMMEDIATE
 
 " IMMEDIATE" MAKE-HEADER
-  CODE CALL C, SUB IMMEDIATE ,
+  CODE CALL SUB IMMEDIATE ,
 ;; IMMEDIATE
 
 " MAKE-WORD" MAKE-HEADER
-  CODE CALL C, SUB MAKE-WORD ,
+  CODE CALL SUB MAKE-WORD ,
 ;;
 
 " .FILL" MAKE-HEADER
-  CODE CALL C, SUB FILL ,
+  CODE CALL SUB FILL ,
 ;; IMMEDIATE
 
 " ENTRY" MAKE-HEADER
-  CODE LIT C,
+  CODE LIT
   DP ,
-  CODE @  C,
-  CODE LIT C, MAIN 1+ ,
-  CODE !   C,
+  CODE @
+  CODE LIT MAIN 1+ ,
+  CODE !
 ;; IMMEDIATE
 
 \ After compilation finished (BYE), dump memory to disk.
