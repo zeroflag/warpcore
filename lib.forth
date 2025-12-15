@@ -13,8 +13,8 @@
 : ,   DP @  ! DP ++ DP ++ ;
 : C,  DP @ C! DP ++ ;
 
-: CODE R> DUP C@ SWAP 1+ >R C, ;
-: SUB  R> 1+ DUP @ SWAP 2 + >R ;
+: CODE R>    DUP C@ SWAP 1+  >R C, ;
+: SUB  R> 1+ DUP  @ SWAP 2 + >R  , ;
 
 : CELL 2 ;
 : CELLS CELL * ;
