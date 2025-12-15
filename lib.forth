@@ -8,7 +8,7 @@
 
 : C@  @ $FF AND ;
 : ++  DUP @ 1+ SWAP ! ;
-: ['] R> DUP C@ SWAP 1+ >R ;
+: CODE R> DUP C@ SWAP 1+ >R ;
 :  '  R> 1+ DUP @ SWAP 2 + >R ;
 
 : DP $182 ;
@@ -24,28 +24,28 @@
 
 : MARK    DP @ 0 , ;
 : RESOLVE DP @ OVER - SWAP ! ;
-: IF      ['] JZ  C, MARK ; IMMEDIATE
-: ELSE    ['] JMP C, MARK SWAP RESOLVE ; IMMEDIATE
+: IF      CODE JZ  C, MARK ; IMMEDIATE
+: ELSE    CODE JMP C, MARK SWAP RESOLVE ; IMMEDIATE
 : THEN    RESOLVE ; IMMEDIATE
 : BEGIN   DP @ ; IMMEDIATE
-: UNTIL   ['] JZ  C, DP @ - , ; IMMEDIATE
-: AGAIN   ['] JMP C, DP @ - , ; IMMEDIATE
-: WHILE   ['] JZ C, MARK ; IMMEDIATE
-: REPEAT  SWAP ['] JMP C, DP @ - , RESOLVE ; IMMEDIATE
-: FOR     ['] >R C, DP @ ; IMMEDIATE
+: UNTIL   CODE JZ  C, DP @ - , ; IMMEDIATE
+: AGAIN   CODE JMP C, DP @ - , ; IMMEDIATE
+: WHILE   CODE JZ C, MARK ; IMMEDIATE
+: REPEAT  SWAP CODE JMP C, DP @ - , RESOLVE ; IMMEDIATE
+: FOR     CODE >R C, DP @ ; IMMEDIATE
 : NEXT
-  ['] R@ C, ['] JZ  C, MARK
-  ['] R> C, ['] 1-  C, ['] >R C,
+  CODE R@ C, CODE JZ  C, MARK
+  CODE R> C, CODE 1-  C, CODE >R C,
   SWAP
-  ['] JMP C, DP @ - ,
+  CODE JMP C, DP @ - ,
   RESOLVE
-  ['] R> C, ['] DROP C,
+  CODE R> C, CODE DROP C,
 ; IMMEDIATE
 
 : VARIABLE
   MAKE-WORD
-  ['] LIT  C, MARK
-  ['] EXIT C,
+  CODE LIT  C, MARK
+  CODE EXIT C,
   DP @ SWAP !
 ; IMMEDIATE
 
@@ -54,14 +54,14 @@
 
 : CASE 0 ; IMMEDIATE
 : OF
-  ['] OVER C, ['] = C,
-  ['] JZ   C, MARK
-  ['] DROP C,
+  CODE OVER C, CODE = C,
+  CODE JZ   C, MARK
+  CODE DROP C,
 ; IMMEDIATE
 
 : ENDOF
     SWAP 1+ SWAP
-    ['] JMP C, MARK SWAP
+    CODE JMP C, MARK SWAP
     RESOLVE
     SWAP
 ; IMMEDIATE
@@ -87,8 +87,8 @@
   DROP ;
 
 : "
-  ['] LIT C, MARK ( Mark1: addr of string )
-  ['] JMP C, MARK ( Mark2: length )
+  CODE LIT C, MARK ( Mark1: addr of string )
+  CODE JMP C, MARK ( Mark2: length )
   SWAP
   DP @ SWAP !     ( Resolve Mark1 )
   BEGIN
