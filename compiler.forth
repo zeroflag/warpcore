@@ -11,6 +11,8 @@
 : TIB     $102 ;
 : F_IMME  %10000000 ;
 
+: MAX-LINE-LEN 127 ;
+
 : TRUE      -1 ;
 : FALSE      0 ;
 
@@ -30,8 +32,13 @@ VARIABLE BASE
   OVER 10 = OR
   SWAP 13 = OR ;
 
-: STORE POS @ C! POS ++ ;
-: RESET TIB POS ! ;
+: RESET  TIB POS ! ;
+: TIBLEN POS @ TIB - ;
+: STORE
+  TIBLEN MAX-LINE-LEN > IF
+    ABORT
+  THEN
+  POS @ C! POS ++ ;
 
 : C= C@ SWAP C@ = ;
 
