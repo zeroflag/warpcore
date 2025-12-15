@@ -177,8 +177,7 @@ def def_word(name):
     print("Warning: redefined %s" % name)
   words[name] = dp
 
-def compile_string():
-  s = tokens.read_until('"')
+def compile_string(s):
   if pool.get(s):
     compile_lit(pool.get(s))
   else:
@@ -234,7 +233,7 @@ def create_macros():
                             compile_primitive("DROP"))
   macros[":"] = lambda: def_word(tokens.next())
   macros[";"] = lambda: compile_primitive("EXIT")
-  macros['"'] = compile_string
+  macros['"'] = lambda: compile_string(tokens.read_until('"'))
   macros['('] = lambda: tokens.read_until(')')
   macros['\\'] =  lambda: tokens.read_until("\n")
   macros["ENTRY"] = lambda: compile_entry(dp)
@@ -242,6 +241,7 @@ def create_macros():
   macros["LITERAL"] = lambda: (compile_primitive('LIT'),
                                compile_token(','))
   macros["I"] = lambda: compile_primitive("R@")
+  macros["CHAR"] = lambda: compile_lit(ord(tokens.next()))
   macros["DP"] = lambda: compile_lit(VAR_DP)
   macros["EXEC"] = lambda: (compile_primitive(">R"),
                          compile_primitive("EXIT"))

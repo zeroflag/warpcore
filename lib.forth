@@ -145,3 +145,11 @@
     1+ SWAP
   REPEAT
   NIP ;
+
+: CHAR
+  WORD DUP STRLEN 1 <> IF
+    " CHAR needs one character." ABORT
+  ELSE
+    C@ LITERAL
+  THEN
+; IMMEDIATE
