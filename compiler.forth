@@ -151,49 +151,57 @@ VARIABLE BASE
 
 : CONVERT ( -- n bool ) TIB >NUMBER ;
 
+: CHECK-OPCODE
+  -ROT OVER STR= IF
+    DROP
+    R> DROP
+    EXIT
+  ELSE NIP
+  THEN ;
+
 : >OPCODE ( s -- opcode / 0 )
-  DUP " +"        STR= IF DROP $01 EXIT THEN
-  DUP " -"        STR= IF DROP $02 EXIT THEN
-  DUP " *"        STR= IF DROP $03 EXIT THEN
-  DUP " /"        STR= IF DROP $04 EXIT THEN
-  DUP " 1+"       STR= IF DROP $05 EXIT THEN
-  DUP " 1-"       STR= IF DROP $06 EXIT THEN
-  DUP " DUP"      STR= IF DROP $07 EXIT THEN
-  DUP " DROP"     STR= IF DROP $08 EXIT THEN
-  DUP " SWAP"     STR= IF DROP $09 EXIT THEN
-  DUP " NIP"      STR= IF DROP $0A EXIT THEN
-  DUP " OVER"     STR= IF DROP $0B EXIT THEN
-  DUP " ROT"      STR= IF DROP $0C EXIT THEN
-  DUP " INVERT"   STR= IF DROP $0D EXIT THEN
-  DUP " AND"      STR= IF DROP $0E EXIT THEN
-  DUP " OR"       STR= IF DROP $0F EXIT THEN
-  DUP " XOR"      STR= IF DROP $10 EXIT THEN
-  DUP " >"        STR= IF DROP $11 EXIT THEN
-  DUP " >="       STR= IF DROP $12 EXIT THEN
-  DUP " <"        STR= IF DROP $13 EXIT THEN
-  DUP " <="       STR= IF DROP $14 EXIT THEN
-  DUP " ="        STR= IF DROP $15 EXIT THEN
-  DUP " <>"       STR= IF DROP $16 EXIT THEN
-  DUP " JMP"      STR= IF DROP $17 EXIT THEN
-  DUP " JZ"       STR= IF DROP $18 EXIT THEN
-  DUP " CALL"     STR= IF DROP $19 EXIT THEN
-  DUP " IN"       STR= IF DROP $1A EXIT THEN
-  DUP " OUT"      STR= IF DROP $1B EXIT THEN
-  DUP " LIT"      STR= IF DROP $1C EXIT THEN
-  DUP " %"        STR= IF DROP $1D EXIT THEN
-  DUP " EXIT"     STR= IF DROP $1E EXIT THEN
-  DUP " SP"       STR= IF DROP $1F EXIT THEN
-  DUP " HALT"     STR= IF DROP $20 EXIT THEN
-  DUP " LSHIFT"   STR= IF DROP $21 EXIT THEN
-  DUP " RSHIFT"   STR= IF DROP $22 EXIT THEN
-  DUP " !"        STR= IF DROP $23 EXIT THEN
-  DUP " @"        STR= IF DROP $24 EXIT THEN
-  DUP " >R"       STR= IF DROP $25 EXIT THEN
-  DUP " R>"       STR= IF DROP $26 EXIT THEN
-  DUP " R@"       STR= IF DROP $27 EXIT THEN
-  DUP " I"        STR= IF DROP $27 EXIT THEN \ Alias to R@
-  DUP " DUMP"     STR= IF DROP $28 EXIT THEN
-  DUP " ABORT"    STR= IF DROP $29 EXIT THEN
+  " +"      $01   CHECK-OPCODE
+  " -"      $02   CHECK-OPCODE
+  " *"      $03   CHECK-OPCODE
+  " /"      $04   CHECK-OPCODE
+  " 1+"     $05   CHECK-OPCODE
+  " 1-"     $06   CHECK-OPCODE
+  " DUP"    $07   CHECK-OPCODE
+  " DROP"   $08   CHECK-OPCODE
+  " SWAP"   $09   CHECK-OPCODE
+  " NIP"    $0A   CHECK-OPCODE
+  " OVER"   $0B   CHECK-OPCODE
+  " ROT"    $0C   CHECK-OPCODE
+  " INVERT" $0D   CHECK-OPCODE
+  " AND"    $0E   CHECK-OPCODE
+  " OR"     $0F   CHECK-OPCODE
+  " XOR"    $10   CHECK-OPCODE
+  " >"      $11   CHECK-OPCODE
+  " >="     $12   CHECK-OPCODE
+  " <"      $13   CHECK-OPCODE
+  " <="     $14   CHECK-OPCODE
+  " ="      $15   CHECK-OPCODE
+  " <>"     $16   CHECK-OPCODE
+  " JMP"    $17   CHECK-OPCODE
+  " JZ"     $18   CHECK-OPCODE
+  " CALL"   $19   CHECK-OPCODE
+  " IN"     $1A   CHECK-OPCODE
+  " OUT"    $1B   CHECK-OPCODE
+  " LIT"    $1C   CHECK-OPCODE
+  " %"      $1D   CHECK-OPCODE
+  " EXIT"   $1E   CHECK-OPCODE
+  " SP"     $1F   CHECK-OPCODE
+  " HALT"   $20   CHECK-OPCODE
+  " LSHIFT" $21   CHECK-OPCODE
+  " RSHIFT" $22   CHECK-OPCODE
+  " !"      $23   CHECK-OPCODE
+  " @"      $24   CHECK-OPCODE
+  " >R"     $25   CHECK-OPCODE
+  " R>"     $26   CHECK-OPCODE
+  " R@"     $27   CHECK-OPCODE
+  " I"      $27   CHECK-OPCODE \ Alias to R@
+  " DUMP"   $28   CHECK-OPCODE
+  " ABORT"  $29   CHECK-OPCODE
   DROP 0
 ;
 
