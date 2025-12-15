@@ -13,9 +13,6 @@
 
 : MAX-LINE-LEN 127 ;
 
-: TRUE      -1 ;
-: FALSE      0 ;
-
 : MAIN          $0190 ;
 : STAGE1-TARGET $7000 ;
 : STAGE2-TARGET $0200 ;
