@@ -1,21 +1,24 @@
-: MAIN  $0190 ;
-
-: KEY  2 IN  ;
-: RND  3 IN ;
-: EMIT 1 OUT ;
 : C!
   DUP @ $FF00 AND
   ROT $FF AND OR
-  SWAP ! ;
+  SWAP !
+EXIT
 
-: C@  @ $FF AND ;
-: ++  DUP @ 1+ SWAP ! ;
-: DP  $182 ;
+: C@  @ $FF AND EXIT
+: ++  DUP @ 1+ SWAP ! EXIT
+: DP  $182 EXIT
 
-: ENTRY DP @ MAIN 1+ ! ; IMMEDIATE
+: MAIN  $0190 EXIT
+: ENTRY DP @ MAIN 1+ ! EXIT IMMEDIATE
 
-: ,   DP @  ! DP ++ DP ++ ;
-: C,  DP @ C! DP ++ ;
+: ,   DP @  ! DP ++ DP ++ EXIT
+: C,  DP @ C! DP ++ EXIT
+
+: ; $1E C, EXIT IMMEDIATE
+
+: KEY  2 IN ;
+: RND  3 IN ;
+: EMIT 1 OUT ;
 
 : CODE R>    DUP C@ SWAP 1+  >R C, ;
 : SUB  R> 1+ DUP  @ SWAP 2 + >R  , ;
