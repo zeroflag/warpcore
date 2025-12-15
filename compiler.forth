@@ -9,7 +9,7 @@
 ( $7000: STAGE1 COMPILER RESIDUAL       )
 ( ************************************* )
 : TIB     $102 ;
-: F_IMME   128 ;
+: F_IMME  %10000000 ;
 
 : TRUE      -1 ;
 : FALSE      0 ;
@@ -108,6 +108,7 @@ VARIABLE BASE
 
 : NEG? C@ 45 = ;
 : HEX? C@ 36 = ;
+: BIN? C@ 37 = ;
 
 : >DIGIT
   C@ 48 OVER 57 BETWEEN?
@@ -126,8 +127,13 @@ VARIABLE BASE
   FALSE ;
 
 : >NUMBER ( s -- n bool )
-  DUP HEX? IF 1+ 16 ELSE 10 THEN BASE !
-  DUP NEG? IF 1+ -1 ELSE 1  THEN
+  DUP HEX? IF
+    1+ 16
+  ELSE
+    DUP BIN? IF 1+ 2 ELSE 10 THEN
+  THEN
+  BASE !
+  DUP NEG? IF 1+ -1 ELSE 1 THEN
   SWAP 0
   ( sign str result )
   BEGIN

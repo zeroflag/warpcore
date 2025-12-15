@@ -91,6 +91,7 @@ V1 @ . CR
 $FF . CR
 $10 . CR
 $5A . CR
+%101010101 . CR
 
 " Hello World !" LENGTH . CR
 

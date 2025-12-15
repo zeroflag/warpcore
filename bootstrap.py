@@ -91,8 +91,9 @@ def tonum(token):
   if token.lower().startswith("$"):
     base = 16
     token = token[1:]
-  elif token.lower().startswith("0b"):
+  elif token.lower().startswith("%"):
     base = 2
+    token = token[1:]
   else:
     base = 10
   return int(token, base)
