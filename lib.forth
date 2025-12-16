@@ -207,7 +207,7 @@ EXIT
 
 : ERR-NAN " Not a number." ABORT ;
 
-: .FILL
+: .DB
   DP @ ( save current DP )
   WORD >NUMBER IF DP ! ELSE ERR-NAN THEN
   BEGIN
