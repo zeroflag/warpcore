@@ -235,9 +235,24 @@ CREATE MOVING [
 : ANIMATE ( player anim -- )
   DUP STEP FRAME SWAP C! ;
 
+: HEADING
+  VX @ 0 = IF
+    LAST-HEADING @
+  ELSE
+    VX @ VX @ ABS /
+    DUP LAST-HEADING !
+  THEN ;
+
 : PRESSED? ( key -- )
   PORT_KEYBOARD OUT
   PORT_KEYBOARD IN ;
+
+: DAMPEN
+  HEADING 0 > IF
+    VX @ FRICTION - 0 MAX VX !
+  ELSE
+    VX @ FRICTION + 0 MIN VX !
+  THEN ;
 
 : KEYBOARD-INPUT
   KEY_RIGHT PRESSED? IF
@@ -248,20 +263,25 @@ CREATE MOVING [
     VX @ AX -  -70 MAX  VX !
     EXIT
   THEN
-  \ KEY_SPACE PRESSED? IF
-  \   -1 VY !
-  \   EXIT
-  \ THEN
-  VX @ FRICTION - 0 MAX VX !
-;
+  KEY_SPACE PRESSED? IF
+    VY @ AY -  -70 MAX  VY !
+    EXIT
+  THEN
+  DAMPEN ;
 
-: HEADING
-  VX @ 0 = IF
-    LAST-HEADING @
+: UPDATE-HEADING
+  HEADING 0 < IF
+    PLAYER .ATR C@ %00000010 OR
   ELSE
-    VX @ VX @ ABS /
-    DUP LAST-HEADING !
-  THEN ;
+    PLAYER .ATR C@ %11111101 AND
+  THEN
+  PLAYER .ATR C! ;
+
+: UPDATE-ANIMATION
+  VX @ 0 <>
+  VY @ 0 <> OR
+  IF MOVING ELSE IDLE THEN
+  ANIMATION ! ;
 
 ENTRY
 
@@ -277,36 +297,25 @@ $01 PLAYER .ATR C!
 224 PLAYER Y!
 
 BEGIN
-  VX @ 0 <>
-  VY @ 0 <> OR IF
-    MOVING ANIMATION !
-  ELSE
-    IDLE ANIMATION !
-  THEN
-
   TIMER2 @ TICKS - ABS DT !
   DT @ 16 > IF   \ 60 FPS
     KEYBOARD-INPUT
 
     VX @ ABS DT @ * SUB-X +=
     SUB-X @ 1000 >= IF
-      SUB-X @ 1000 / HEADING *  PLAYER .X +=
+      SUB-X @ 1000 /  HEADING *  PLAYER .X +=
       SUB-X @ 1000 % SUB-X !
     THEN
 
-    HEADING 0 < IF
-      PLAYER .ATR C@ %00000010 OR
-    ELSE
-      PLAYER .ATR C@ %11111101 AND
-    THEN
-    PLAYER .ATR C!
-
-    VY @ DT @ * SUB-Y +=
+    VY @ ABS DT @ * SUB-Y +=
     SUB-Y @ 1000 >= IF
-      SUB-Y @ 1000 / PLAYER .Y +=
+      SUB-Y @ 1000 / PLAYER .Y -=
       SUB-Y @ 1000 % SUB-Y !
     THEN
 
+    UPDATE-HEADING
+    UPDATE-ANIMATION
+    
     TICKS TIMER2 !
   THEN
 
