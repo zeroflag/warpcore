@@ -29,6 +29,9 @@ NINE THREE * V1 !
 V1 @ 27 =ASSERT
 V2 @ 42 =ASSERT
 
+8 V2 +=
+V2 @ 50 =ASSERT
+
 13 1- FOR
   BUF1 I + C@ 0 =ASSERT
   $FF BUF1 I + C!
