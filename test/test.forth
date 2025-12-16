@@ -104,6 +104,8 @@ $5A . CR
 . CR \ 100
 . CR \ 200
 
+" -31000" >NUMBER DROP . CR
+
 " depth" PRINT CR
 DEPTH . CR
 
