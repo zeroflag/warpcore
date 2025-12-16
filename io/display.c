@@ -14,7 +14,8 @@
 ** $3000-$5000 TILES    ( 8K )
 ** $5000-$5200 Palette  ( 512B )
 ** $5200-$5400 Sprites  ( 512B )
-** $6000-$6400 SCREEN   ( 1K )
+** $5400-$5800 SCREEN1   ( 1K )
+** $5800-$5C00 SCREEN2   ( 1K )
 ** 
 */
 
@@ -34,7 +35,7 @@ const int N_TILES_Y = 32;
 const int WIDTH  = N_TILES_X * TILE_WIDTH;
 const int HEIGHT = N_TILES_Y * TILE_HEIGHT;
 
-const int VRAM = 0x6000;
+const int VRAM = 0x5800;
 const int TILESET = 0x3000;
 const int PALETTE = 0x5000;
 const int SPRITES = 0x5200;
