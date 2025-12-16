@@ -176,20 +176,21 @@
 .END
 
 VARIABLE TIMER
+VARIABLE TIMER2
 VARIABLE VX
 VARIABLE VY
-VARIABLE SUBX
-VARIABLE SUBY
+VARIABLE SUB-X
+VARIABLE SUB-Y
 VARIABLE DT
 
 [ 1 ] CONSTANT AX
 [ 1 ] CONSTANT AY
-[ 1000 ] CONSTANT SCALE
+[ 6 ] CONSTANT FRICTION
 
 VARIABLE ANIMATION
 
 : ABS DUP 0 < IF -1 * THEN ;
-: TICKS 100 IN ABS ;
+: TICKS 100 IN ;
 
 CREATE IDLE [
   0  C,  ( INDEX )
@@ -210,6 +211,8 @@ CREATE MOVING [
 
 [ SPR ] CONSTANT PLAYER
 
+: .X   ( spr -- )   1+     ;
+: .Y   ( spr -- )   2 +    ;
 : X!   ( spr -- )   1+  C! ;
 : Y!   ( spr -- )   2 + C! ;
 : X@   ( n spr -- ) 1+  C@ ;
@@ -237,20 +240,21 @@ CREATE MOVING [
 
 : KEYBOARD-INPUT
   KEY_RIGHT PRESSED? IF
-    VX @ AX +   100 MIN  VX !
+    VX @ AX +   70 MIN  VX !
     EXIT
   THEN
   KEY_LEFT PRESSED? IF
-    VX @ AX -  -100 MAX  VX !
+    VX @ AX -  -70 MAX  VX !
     EXIT
   THEN
   \ KEY_SPACE PRESSED? IF
   \   -1 VY !
   \   EXIT
   \ THEN
-  0 VX ! 0 VY ! ;
+  VX @ FRICTION - 0 MAX VX !
+;
 
-: SUB
+: SIGN-X VX @ VX @ ABS / ;
 
 ENTRY
 
@@ -273,19 +277,33 @@ BEGIN
     IDLE ANIMATION !
   THEN
 
-  DT @ 150 > IF
+  TIMER2 @ TICKS - ABS DT !
+  DT @ 16 > IF   \ 60 FPS
+    KEYBOARD-INPUT
+
+    VX @ ABS DT @ * SUB-X +=
+    SUB-X @ 1000 >= IF
+      SUB-X @ 1000 / SIGN-X *  PLAYER .X +=
+      SUB-X @ 1000 % SUB-X !
+    THEN
+
+    VY @ DT @ * SUB-Y +=
+    SUB-Y @ 1000 >= IF
+      SUB-Y @ 1000 / PLAYER .Y +=
+      SUB-Y @ 1000 % SUB-Y !
+    THEN
+
+    TICKS TIMER2 !
+  THEN
+
+  TIMER @ TICKS - ABS 150 > IF
     PLAYER ANIMATION @ ANIMATE
     TICKS TIMER !
   THEN
 
-  VX @ DT @ * SCALE / SUBX !
-  VY @ DT @ * SCALE / SUBX !
   
   \ PLAYER UPDATE
 
-
-  KEYBOARD-INPUT
-  TIMER @ TICKS - ABS DT !
 
 AGAIN
 

@@ -43,7 +43,7 @@ const int SPRITES_MAX = 64;
 
 const int SCALE = 3;
 
-Uint32 last_rendered;
+Uint64 last_rendered;
 Uint32 threshold = 1000 / FPS;
 
 SDL_Texture* framebuffer;
@@ -178,11 +178,11 @@ void render(const uint8_t* mem) {
 
   SDL_RenderCopy(renderer, framebuffer, NULL, NULL);
   SDL_RenderPresent(renderer);
-  last_rendered = SDL_GetTicks();
+  last_rendered = SDL_GetTicks64();
 }
 
 inline int should_render() {
-  return SDL_GetTicks() - last_rendered > threshold;
+  return SDL_GetTicks64() - last_rendered > threshold;
 }
 
 void sdl_tick(uint8_t* mem) {
@@ -194,7 +194,7 @@ void sdl_tick(uint8_t* mem) {
   }
   if (should_render()) {
     render(mem);
-    last_rendered = SDL_GetTicks();
+    last_rendered = SDL_GetTicks64();
   }
 }
 
