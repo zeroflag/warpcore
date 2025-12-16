@@ -221,7 +221,6 @@ ELSE
 THEN
 
 0  LAST !
-10 BASE !
 
 \ Layout user dictionary structure with essential words.
 

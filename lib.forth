@@ -188,6 +188,7 @@ VARIABLE BASE
     EXIT
   THEN
   FALSE ;
+
 : >NUMBER ( s -- n bool )
   DUP HEX? IF
     1+ 16
