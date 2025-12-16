@@ -16,6 +16,8 @@ PYTHON = python
 OUT = warp
 STAGE1_IMG="stage1.img"
 STAGE2_IMG="stage2.img"
+BASIC_TESTS="test/test.forth"
+TESTS_STAGE2="test/test_stage2.forth"
 
 TEST_SRCS = $(wildcard test/*.c)
 TEST_OBJS = $(TEST_SRC:.c=.o)
@@ -65,7 +67,7 @@ test-bootstrap:
 
 test-stage1: stage1
 	@echo "* $(CYAN)Running stage1 compiler tests..$(RESET)"
-	@COMPILER_IMAGE=$(STAGE1_IMG) ./test/test_compiler.sh > $(TEST_OUTP)
+	@COMPILER_IMAGE=$(STAGE1_IMG) TEST=$(BASIC_TESTS) ./test/test_compiler.sh > $(TEST_OUTP)
 	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Stage 1 compiler tests failed.$(RESET)"; \
 		exit 1; \
@@ -75,11 +77,12 @@ test-stage1: stage1
 
 test-stage2: stage2
 	@echo "* $(CYAN)Running stage2 compiler tests..$(RESET)"
-	@COMPILER_IMAGE=$(STAGE2_IMG) ./test/test_compiler.sh > $(TEST_OUTP)
+	@COMPILER_IMAGE=$(STAGE2_IMG) TEST=$(BASIC_TESTS) ./test/test_compiler.sh > $(TEST_OUTP)
 	@diff -u ./test/expected.txt $(TEST_OUTP) || { \
 		echo "$(BOLD_RED)✗ Stage 2 compiler tests failed.$(RESET)"; \
 		exit 1; \
 	}
+	@COMPILER_IMAGE=$(STAGE2_IMG) TEST=$(TESTS_STAGE2) ./test/test_compiler.sh > $(TEST_OUTP)
 	@echo "$(BOLD_GREEN)✓ Stage 2 compiler tests passed.$(RESET)"
 	@rm -f $(TEST_OUTP)
 

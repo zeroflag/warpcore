@@ -1,7 +1,6 @@
 #!/bin/bash
 
 OUT_IMAGE="output.img"
-TEST="test/test.forth"
 LIB="lib.forth"
 
 rm -f "$OUT_IMAGE"
