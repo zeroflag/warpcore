@@ -19,6 +19,12 @@
 ** 
 */
 
+#define XCHG(a, b) do { \
+    __typeof__(a) _tmp = (a); \
+    (a) = (b); \
+    (b) = _tmp; \
+} while(0)
+
 SDL_Renderer *renderer;
 SDL_Window   *window;
 
@@ -117,14 +123,21 @@ void draw_tile(const uint8_t* tile,
                int dst_y,
                uint8_t* pixels,
                int pitch,
-               int transparency)
+               int transparency,
+               int flip)
 {
   for (int row = 0; row < TILE_HEIGHT; row++) {
     uint32_t* dst = (uint32_t*)(pixels + (dst_y + row) * pitch + dst_x * 4);
     for (int col = 0; col < TILE_WIDTH / 2; col++) {
-      uint8_t packed = tile[row * (TILE_WIDTH / 2) + col];
+      uint8_t packed = flip
+        ? tile[row * (TILE_WIDTH / 2) + (TILE_WIDTH / 2 - col -1)]
+        : tile[row * (TILE_WIDTH / 2) + col];
+
       uint8_t hi = (packed >> 4) & 0xF;
       uint8_t lo = packed & 0xF;
+
+      if (flip) XCHG(hi, lo);
+      
       if (transparency) {
         if (hi != 0)
           *dst = palette[hi];
@@ -145,14 +158,16 @@ void draw_sprites(const uint8_t* mem, uint8_t* pixels, int pitch) {
   for (int i = 0; i < SPRITES_MAX; i++) {
     uint32_t sprite = sprs[i];
     int attr = (sprite >> 24) & 0xFF;
-    if (attr == 0) continue;
+    if (!(attr & 1))
+      continue;
     draw_tile(tile_at(mem, sprite & 0xFF),
               palette(mem),
               (sprite >>  8) & 0xFF, // X
               (sprite >> 16) & 0xFF, // Y
               pixels,
               pitch,
-              1);
+              1,
+              attr & 2);
   }
 }
 
@@ -168,7 +183,14 @@ void render(const uint8_t* mem) {
       const uint8_t* tile = tile_at(mem, tile_index);
       int dst_x = tx * TILE_WIDTH;
       int dst_y = ty * TILE_HEIGHT;
-      draw_tile(tile, palette(mem), dst_x, dst_y, pixels, pitch, 0);
+      draw_tile(tile,
+                palette(mem),
+                dst_x,
+                dst_y,
+                pixels,
+                pitch,
+                0,
+                0);
     }
   }
 

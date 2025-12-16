@@ -181,6 +181,7 @@ VARIABLE VX
 VARIABLE VY
 VARIABLE SUB-X
 VARIABLE SUB-Y
+VARIABLE LAST-HEADING
 VARIABLE DT
 
 [ 1 ] CONSTANT AX
@@ -213,11 +214,11 @@ CREATE MOVING [
 
 : .X   ( spr -- )   1+     ;
 : .Y   ( spr -- )   2 +    ;
+: .ATR ( n spr -- ) 3 +    ;
 : X!   ( spr -- )   1+  C! ;
 : Y!   ( spr -- )   2 + C! ;
 : X@   ( n spr -- ) 1+  C@ ;
 : Y@   ( n spr -- ) 2 + C@ ;
-: ATR! ( n spr -- ) 3 + C! ;
 
 : STEP ( anim -- )
   DUP     C@ ( INDEX ) 1+
@@ -254,7 +255,13 @@ CREATE MOVING [
   VX @ FRICTION - 0 MAX VX !
 ;
 
-: SIGN-X VX @ VX @ ABS / ;
+: HEADING
+  VX @ 0 = IF
+    LAST-HEADING @
+  ELSE
+    VX @ VX @ ABS /
+    DUP LAST-HEADING !
+  THEN ;
 
 ENTRY
 
@@ -264,7 +271,7 @@ $FF42 PAL 1 CELLS + !
 $D3F2 PAL 2 CELLS + !
 $FF42 PAL 3 CELLS + !
 
-$FF PLAYER ATR!
+$01 PLAYER .ATR C!
 
 0   PLAYER X!
 224 PLAYER Y!
@@ -283,9 +290,16 @@ BEGIN
 
     VX @ ABS DT @ * SUB-X +=
     SUB-X @ 1000 >= IF
-      SUB-X @ 1000 / SIGN-X *  PLAYER .X +=
+      SUB-X @ 1000 / HEADING *  PLAYER .X +=
       SUB-X @ 1000 % SUB-X !
     THEN
+
+    HEADING 0 < IF
+      PLAYER .ATR C@ %00000010 OR
+    ELSE
+      PLAYER .ATR C@ %11111101 AND
+    THEN
+    PLAYER .ATR C!
 
     VY @ DT @ * SUB-Y +=
     SUB-Y @ 1000 >= IF
@@ -301,7 +315,7 @@ BEGIN
     TICKS TIMER !
   THEN
 
-  
+
   \ PLAYER UPDATE
 
 
