@@ -7,6 +7,7 @@ EXIT
 : C@  @ $FF AND EXIT
 : ++  DUP @ 1+ SWAP ! EXIT
 : +=  DUP @ ROT + SWAP ! EXIT
+: -=  DUP @ ROT - SWAP ! EXIT
 : DP  $182 EXIT
 
 : MAIN  $0190 EXIT
