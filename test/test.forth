@@ -33,9 +33,6 @@
     " Unknown day: "
   ENDCASE ;
 
-: MIN 2DUP < IF DROP ELSE NIP  THEN ;
-: MAX 2DUP < IF NIP  ELSE DROP THEN ;
-
 : LENGTH
   0
   BEGIN

@@ -375,6 +375,9 @@ VARIABLE BASE
     SWAP 1+ SWAP
   REPEAT
   NIP * TRUE ;
+
+: MIN OVER OVER < IF DROP ELSE NIP  THEN ;
+: MAX OVER OVER < IF NIP  ELSE DROP THEN ;
 """
 
 if __name__ == "__main__":
