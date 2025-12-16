@@ -9,6 +9,7 @@ EXIT
 : DP  $182 EXIT
 
 : MAIN  $0190 EXIT
+: BASE  $184 EXIT
 : ENTRY DP @ MAIN 1+ ! EXIT IMMEDIATE
 
 : ,   DP @  ! DP ++ DP ++ EXIT
@@ -160,8 +161,6 @@ EXIT
     C@ LITERAL
   THEN
 ; IMMEDIATE
-
-VARIABLE BASE
 
 : NEG? C@ CHAR - = ;
 : HEX? C@ CHAR $ = ;
