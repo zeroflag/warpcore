@@ -12,7 +12,8 @@ int16_t io_port_read(int16_t port) {
     }
     case 200: {
       const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-      return keystate[scancode];
+      Uint8 pressed = keystate[scancode];
+      return pressed ? -1 : 0;
     }
     case 300: {
       Uint64 ticks = SDL_GetTicks64();
