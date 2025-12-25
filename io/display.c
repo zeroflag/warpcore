@@ -2,6 +2,7 @@
 
 /*
 ** TODO: Resolution: 320x200 / 40x25 tiles, 8x8 each.
+** TODO: Resolution: 336x192 / 42x24 tiles, 8x8 each.
 
 ** VRAM: 32x32 x 8BIT (TILE-INDEX) = 1K
 ** TILESET:
