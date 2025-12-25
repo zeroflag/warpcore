@@ -1,6 +1,8 @@
 #include "display.h"
 
 /*
+** TODO: Resolution: 320x200 / 40x25 tiles, 8x8 each.
+
 ** VRAM: 32x32 x 8BIT (TILE-INDEX) = 1K
 ** TILESET:
 **   One tile: 8x8 16 colors: 32byte / tile
