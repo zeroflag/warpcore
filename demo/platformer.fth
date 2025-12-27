@@ -417,13 +417,13 @@ BEGIN
 
     VX @ 0 < IF
       TILE-LEFT SOLID = IF
-        SUB-X @ $F800 AND $0800 + SUB-X !
+        SUB-X @ $F800 AND $0900 + SUB-X !
       THEN
     THEN
     
     VX @ 0 > IF
       TILE-RIGHT SOLID = IF
-        SUB-X @ $F800 AND SUB-X !
+        SUB-X @ $F800 AND $0100 - SUB-X !
       THEN
     THEN
 
