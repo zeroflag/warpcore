@@ -11,7 +11,8 @@
 **   [TileIndex X Y Props] 4 byte per sprite
 **   64 Sprites Total = 256B
 **
-**      -$4000 CODE
+** $0000-$0200 RESERVED (STACK, RSTACK, ETC.)
+** $0200-$4000 USER CODE
 ** $4000-$6000 TILES    ( 8K )
 ** $6000-$6200 Palette  ( 512B )
 ** $6200-$6300 Sprites  ( 256B )
