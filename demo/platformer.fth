@@ -444,7 +444,7 @@ BEGIN
       TILE-TOP-LEFT  SOLID = 
       TILE-TOP-RIGHT SOLID = OR IF
         0 VY !
-        SUB-Y @ $F800 AND $0800 + SUB-Y !
+        SUB-Y @ $F800 AND $0900 + SUB-Y !
       THEN
     THEN
 
