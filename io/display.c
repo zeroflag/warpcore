@@ -11,13 +11,13 @@
 **   [TileIndex X Y Props] 4 byte per sprite
 **   64 Sprites Total = 256B
 **
-**      -$2000 CODE
-** $2000-$3000 
-** $3000-$5000 TILES    ( 8K )
-** $5000-$5200 Palette  ( 512B )
-** $5200-$5300 Sprites  ( 256B )
-** $5300-$5900 SCREEN1  ( 896B )
-** 
+**      -$4000 CODE
+** $4000-$6000 TILES    ( 8K )
+** $6000-$6200 Palette  ( 512B )
+** $6200-$6300 Sprites  ( 256B )
+** $6300-$6680 SCREEN1  ( 896B )
+** $6680-$6A00 SCREEN2  ( 896B )
+** $7000-$8000 COMPILER
 */
 
 #define XCHG(a, b) do { \
@@ -42,10 +42,10 @@ const int N_TILES_Y = 28;
 const int WIDTH  = N_TILES_X * TILE_WIDTH;
 const int HEIGHT = N_TILES_Y * TILE_HEIGHT;
 
-const int VRAM = 0x5300;
-const int TILESET = 0x3000;
-const int PALETTE = 0x5000;
-const int SPRITES = 0x5200;
+const int VRAM = 0x6300;
+const int TILESET = 0x4000;
+const int PALETTE = 0x6000;
+const int SPRITES = 0x6200;
 const int SPRITES_MAX = 64;
 
 const int SCALE = 4;
