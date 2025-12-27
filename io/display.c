@@ -1,24 +1,22 @@
 #include "display.h"
 
 /*
-** TODO: Resolution: 320x200 / 40x25 tiles, 8x8 each.
-** TODO: Resolution: 336x192 / 42x24 tiles, 8x8 each.
-
-** VRAM: 32x32 x 8BIT (TILE-INDEX) = 1K
+** Resolution: 
+** Resolution: 256x224 pixel
+** VRAM: 32x28 x 8BIT (TILE-INDEX) = 896 byte
 ** TILESET:
 **   One tile: 8x8 16 colors: 32byte / tile
 **   256 tiles total
 ** SPRITES:
-**   (TileIndex X Y Props) 4 byte per sprite
-**   128 Sprites Total = 512B
+**   [TileIndex X Y Props] 4 byte per sprite
+**   64 Sprites Total = 256B
 **
 **      -$2000 CODE
 ** $2000-$3000 
 ** $3000-$5000 TILES    ( 8K )
 ** $5000-$5200 Palette  ( 512B )
-** $5200-$5400 Sprites  ( 512B )
-** $5400-$5800 SCREEN1   ( 1K )
-** $5800-$5C00 SCREEN2   ( 1K )
+** $5200-$5300 Sprites  ( 256B )
+** $5300-$5900 SCREEN1  ( 896B )
 ** 
 */
 
@@ -39,18 +37,18 @@ const int TILE_HEIGHT = 8;
 const int TILE_SIZE_B = TILE_WIDTH / 2 * TILE_HEIGHT;
 
 const int N_TILES_X = 32;
-const int N_TILES_Y = 32;
+const int N_TILES_Y = 28;
 
 const int WIDTH  = N_TILES_X * TILE_WIDTH;
 const int HEIGHT = N_TILES_Y * TILE_HEIGHT;
 
-const int VRAM = 0x5800;
+const int VRAM = 0x5300;
 const int TILESET = 0x3000;
 const int PALETTE = 0x5000;
 const int SPRITES = 0x5200;
 const int SPRITES_MAX = 64;
 
-const int SCALE = 3;
+const int SCALE = 4;
 
 Uint64 last_rendered;
 Uint32 threshold = 1000 / FPS;
