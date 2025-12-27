@@ -11,13 +11,13 @@
 **   [TileIndex X Y Props] 4 byte per sprite
 **   64 Sprites Total = 256B
 **
-** $0000-$0200 RESERVED (STACK, RSTACK, ETC.)
-** $0200-$4000 USER CODE
-** $4000-$6000 TILES    ( 8K )
-** $6000-$6200 Palette  ( 512B )
-** $6200-$6300 Sprites  ( 256B )
-** $6300-$6680 SCREEN1  ( 896B )
-** $6680-$6A00 SCREEN2  ( 896B )
+** $0000-$0200 RESERVED  ( 512B  )
+** $0200-$4000 USER CODE ( 15.5K )
+** $4000-$6000 TILES     ( 8K )
+** $6000-$6200 Palette   ( 512B )
+** $6200-$6300 Sprites   ( 256B )
+** $6300-$6680 SCREEN1   ( 896B )
+** $6680-$6A00 SCREEN2   ( 896B )
 ** $7000-$8000 COMPILER
 */
 
@@ -35,7 +35,7 @@ const int FPS = 60;
 
 const int TILE_WIDTH  = 8;
 const int TILE_HEIGHT = 8;
-const int TILE_SIZE_B = TILE_WIDTH / 2 * TILE_HEIGHT;
+const int TILE_SIZE_B = TILE_WIDTH * TILE_HEIGHT / 2;
 
 const int N_TILES_X = 32;
 const int N_TILES_Y = 28;
@@ -95,7 +95,6 @@ void sdl_init(uint8_t *mem) {
     return;
   }
 
-  // Create a renderer (optional, for drawing)
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
   if (!renderer) {
     printf("SDL_CreateRenderer Error: %s\n", SDL_GetError());
