@@ -265,11 +265,18 @@ CREATE MOVING [
   PORT_KEYBOARD OUT
   PORT_KEYBOARD IN ;
 
+: MOVEMENT-RELEASED
+  KEY_RIGHT PRESSED? INVERT
+  KEY_LEFT  PRESSED? INVERT
+  AND ;
+
 : APPLY-FRICTION
-  FACING 0 > IF
-    VX @ FRICTION - 0 MAX VX !
-  ELSE
-    VX @ FRICTION + 0 MIN VX !
+  MOVEMENT-RELEASED IF 
+    FACING 0 > IF
+      VX @ FRICTION - 0 MAX VX !
+    ELSE
+      VX @ FRICTION + 0 MIN VX !
+    THEN
   THEN ;
 
 : TILE-X TILE_WIDTH  / ;
@@ -340,11 +347,6 @@ CREATE MOVING [
     JUMP-TIMER ++
   THEN ;
 
-: MOVEMENT-RELEASED
-  KEY_RIGHT PRESSED? INVERT
-  KEY_LEFT  PRESSED? INVERT
-  AND ;
-
 : JUMP
   ON-GROUND? IF
     START-JUMP
@@ -359,16 +361,16 @@ CREATE MOVING [
     ACCELERATE
   THEN ;
 
-: UPDATE-SX
+: MOVE-X
   VX @ ABS DT @ * FACING * SX += ;
 
-: UPDATE-SY
+: MOVE-Y
   VY @ ABS DT @ * LIFT * SY += ;
 
-: UPDATE-X
+: FINALIZE-X
   SXI PLAYER X! ;
 
-: UPDATE-Y
+: FINALIZE-Y
   SYI PLAYER Y! ;
 
 : UPDATE-FACING
@@ -385,6 +387,36 @@ CREATE MOVING [
   IF MOVING ELSE IDLE THEN
   ANIMATION ! ;
 
+: COLLISION-X
+  VX @ 0 < IF
+    TILE-W SOLID = IF
+      SX @ $F800 AND $0900 + SX !
+      0 VX !
+    THEN
+  THEN
+  VX @ 0 > IF
+    TILE-E SOLID = IF
+      SX @ $F800 AND $0100 - SX !
+      0 VX !
+    THEN
+  THEN ;
+
+: COLLISION-Y
+  VY @ 0 > IF
+    TILE-SW SOLID = 
+    TILE-SE SOLID = OR IF
+      0 VY !
+      SY @ $F800 AND SY !
+    THEN
+  THEN
+  VY @ 0 < IF
+    TILE-NW SOLID = 
+    TILE-NE SOLID = OR IF
+      0 VY !
+      SY @ $F800 AND $0900 + SY !
+    THEN
+  THEN ;
+
 ENTRY
 
 $D3F2 PAL 0 CELLS + !
@@ -399,54 +431,20 @@ BEGIN
   TIMER @ TICKS - ABS DT !
   DT @ 16 > IF   \ 60 FPS
     KEYBOARD-INPUT
-
     UPDATE-FACING
-
-    UPDATE-SX
-    MOVEMENT-RELEASED IF APPLY-FRICTION THEN
-
-    VX @ 0 < IF
-      TILE-W SOLID = IF
-        SX @ $F800 AND $0900 + SX !
-        0 VX !
-      THEN
-    THEN
-    
-    VX @ 0 > IF
-      TILE-E SOLID = IF
-        SX @ $F800 AND $0100 - SX !
-        0 VX !
-      THEN
-    THEN
-
-    UPDATE-X
-
-    UPDATE-SY
+    MOVE-X
+    APPLY-FRICTION
+    COLLISION-X
+    FINALIZE-X
+    MOVE-Y
     APPLY-GRAVITY
-
-    VY @ 0 > IF
-      TILE-SW SOLID = 
-      TILE-SE SOLID = OR IF
-        0 VY !
-        SY @ $F800 AND SY !
-      THEN
-    THEN
-
-    VY @ 0 < IF
-      TILE-NW SOLID = 
-      TILE-NE SOLID = OR IF
-        0 VY !
-        SY @ $F800 AND $0900 + SY !
-      THEN
-    THEN
-
-    UPDATE-Y
-
+    COLLISION-Y
+    FINALIZE-Y
     UPDATE-ANIMATION
 
-    " X=" PRINT PLAYER X@ . "  Y=" PRINT PLAYER Y@ . CR
+    \ " X=" PRINT PLAYER X@ . "  Y=" PRINT PLAYER Y@ . CR
     DEPTH 0 <> IF
-      " ERROR" PRINT CR
+      " ERROR: " PRINT DEPTH . CR
     THEN
     
     PLAYER Y@ 8 + 224 >= IF 0 HALT THEN
