@@ -366,10 +366,10 @@ CREATE MOVING [
   VY @ ABS DT @ * LIFT * SY += ;
 
 : UPDATE-X
-  SX @ HIGH PLAYER X! ;
+  SXI PLAYER X! ;
 
 : UPDATE-Y
-  SY @ HIGH PLAYER Y! ;
+  SYI PLAYER Y! ;
 
 : UPDATE-FACING
   FACING 0 < IF
@@ -408,12 +408,14 @@ BEGIN
     VX @ 0 < IF
       TILE-W SOLID = IF
         SX @ $F800 AND $0900 + SX !
+        0 VX !
       THEN
     THEN
     
     VX @ 0 > IF
       TILE-E SOLID = IF
         SX @ $F800 AND $0100 - SX !
+        0 VX !
       THEN
     THEN
 
