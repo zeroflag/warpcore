@@ -227,12 +227,13 @@ CREATE MOVING [
 : ABS DUP 0 < IF -1 * THEN ;
 : TICKS 100 IN ;
 
-: ATR! ( n spr -- ) 3 + C! ;
-: ATR@ ( n spr -- ) 3 + C@ ;
 : X!   ( spr -- )   1+  C! ;
 : Y!   ( spr -- )   2 + C! ;
 : X@   ( n spr -- ) 1+  C@ ;
 : Y@   ( n spr -- ) 2 + C@ ;
+
+: PROP! ( n spr -- ) 3 + C! ;
+: PROP@ ( n spr -- ) 3 + C@ ;
 
 : STEP ( anim -- )
   DUP     C@ ( INDEX ) 1+
@@ -385,11 +386,11 @@ CREATE MOVING [
 
 : UPDATE-FACING
   FACING 0 < IF
-    PLAYER ATR@ %00000010 OR
+    PLAYER PROP@ %00000010 OR
   ELSE
-    PLAYER ATR@ %11111101 AND
+    PLAYER PROP@ %11111101 AND
   THEN
-  PLAYER ATR! ;
+  PLAYER PROP! ;
 
 : UPDATE-ANIMATION
   VX @ 0 <>
@@ -435,7 +436,7 @@ $FF42 PAL 1 CELLS + !
 $D3F2 PAL 2 CELLS + !
 $FF42 PAL 3 CELLS + !
 
-$01 PLAYER ATR!
+$01 PLAYER PROP!
 
 BEGIN
   TIMER @ TICKS - ABS DT !
