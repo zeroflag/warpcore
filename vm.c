@@ -92,16 +92,17 @@ cell_t engage(uint8_t *mem,
       printf("[0x%X] OPCODE: 0x%X\n", (cell_t)(ip -1 - mem), code);
     #endif
     switch (code) {
-      case OP_ADD:   BINARY(+=);           break;
-      case OP_SUB:   BINARY(-=);           break;
-      case OP_MUL:   BINARY(*=);           break;
-      case OP_DIV:   BINARY(/=);           break;
-      case OP_AND:   BINARY(&=);           break;
-      case OP_OR:    BINARY(|=);           break;
-      case OP_XOR:   BINARY(^=);           break;
-      case OP_MOD:   BINARY(%=);           break;
-      case OP_SHL:   BINARY(<<=);          break;
-      case OP_SAR:   BINARY(>>=);          break;
+      case OP_ADD:   BINARY(+);            break;
+      case OP_SUB:   BINARY(-);            break;
+      case OP_MUL:   BINARY(*);            break;
+      case OP_DIV:   BINARY(/);            break;
+      case OP_AND:   BINARY(&);            break;
+      case OP_OR:    BINARY(|);            break;
+      case OP_XOR:   BINARY(^);            break;
+      case OP_MOD:   BINARY(%);            break;
+      case OP_SHL:   BINARY(<<);           break;
+      case OP_SHR:   UBINARY(>>);          break;
+      case OP_SAR:   BINARY(>>);           break;
       case OP_INC:   UNARY(+=, 1);         break;
       case OP_DEC:   UNARY(-=, 1);         break;
       case OP_EQ:    COMPARE(==);          break;
@@ -113,7 +114,7 @@ cell_t engage(uint8_t *mem,
       case OP_INV:   NULLARY(~);           break;
       case OP_DUP:   PUSH(*(sp-1));        break;
       case OP_OVER:  PUSH(*(sp-2));        break;
-      case OP_NIP:   BINARY(=);            break;
+      case OP_NIP:   NIP;                  break;
       case OP_DROP:  sp--;                 break;
       case OP_SWAP:  swap(sp);             break;
       case OP_ROT:   rot(sp);              break;

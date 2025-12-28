@@ -6,17 +6,18 @@
 
 #define PUSH(val)   ( *sp = (val), sp++ )
 #define POP         ( *(--sp) )
+#define NIP         ( (*(sp-2) = *(sp-1)), sp-- )
 
 #define RPUSH(val)  ( *rp++ = (val) )
 #define RPOP        ( *(--rp) )
 
 #define LO(val)    ((val) & 0xFF)
 #define HI(val)    (((val) >> 8) & 0xFF)
-
-#define BINARY(operator) ( *(sp-2) operator *(sp-1), sp-- )
+#define BINARY(op)  ((*(sp-2) = *(sp-2) op *(sp-1)), sp--)
+#define UBINARY(op) (*(sp-2) = (cell_t)((ucell_t)*(sp-2) op (ucell_t)*(sp-1)), sp--)
 #define UNARY(operator, operand) ( *(sp-1) operator (operand) )
-#define NULLARY(operator) ( *(sp-1) = operator *(sp-1) )
-#define COMPARE(operator) ( *(sp-2) = *(sp-2) operator *(sp-1) ? TRUE : FALSE, sp-- )
+#define NULLARY(op) ( *(sp-1) = op *(sp-1) )
+#define COMPARE(op) ( *(sp-2) = *(sp-2) op *(sp-1) ? TRUE : FALSE, sp-- )
 #define JUMP_IF(cond) (ip += (cond) ? fetch_cell(ip) : (int)sizeof(cell_t))
 
 #define SET_IP(val) (ip = (uint8_t *) (mem + (val)))
@@ -24,6 +25,7 @@
 #define SET_RP(val) (rp = (cell_t *) (mem + (val)))
 
 typedef int16_t cell_t;
+typedef uint16_t ucell_t;
 
 extern const cell_t MEM_SIZE;
 
@@ -61,14 +63,15 @@ typedef enum {
   OP_SP    = 0x1F,  // "SP"
   OP_HLT   = 0x20,  // "HALT"
   OP_SHL   = 0x21,  // "LSHIFT"
-  OP_SAR   = 0x22,  // "RSHIFT"
-  OP_STOR  = 0x23,  // "!"
-  OP_LOAD  = 0x24,  // "@"
-  OP_RPUSH = 0x25,  // ">R"
-  OP_RPOP  = 0x26,  // "R>"
-  OP_RTOP  = 0x27,  // "R@"
-  OP_DUMP  = 0x28,  // "DUMP"
-  OP_ABORT = 0x29,  // "ABORT"
+  OP_SAR   = 0x22,  // "ARSHIFT"
+  OP_SHR   = 0x23,  // "RSHIFT"
+  OP_STOR  = 0x24,  // "!"
+  OP_LOAD  = 0x25,  // "@"
+  OP_RPUSH = 0x26,  // ">R"
+  OP_RPOP  = 0x27,  // "R>"
+  OP_RTOP  = 0x28,  // "R@"
+  OP_DUMP  = 0x29,  // "DUMP"
+  OP_ABORT = 0x2A,  // "ABORT"
 } Op;
 
 cell_t engage(uint8_t *mem,

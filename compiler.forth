@@ -100,48 +100,49 @@ VARIABLE STEPPER
   THEN ;
 
 : >OPCODE ( s -- opcode / 0 )
-  " +"      $01   CHECK-OPCODE
-  " -"      $02   CHECK-OPCODE
-  " *"      $03   CHECK-OPCODE
-  " /"      $04   CHECK-OPCODE
-  " 1+"     $05   CHECK-OPCODE
-  " 1-"     $06   CHECK-OPCODE
-  " DUP"    $07   CHECK-OPCODE
-  " DROP"   $08   CHECK-OPCODE
-  " SWAP"   $09   CHECK-OPCODE
-  " NIP"    $0A   CHECK-OPCODE
-  " OVER"   $0B   CHECK-OPCODE
-  " ROT"    $0C   CHECK-OPCODE
-  " INVERT" $0D   CHECK-OPCODE
-  " AND"    $0E   CHECK-OPCODE
-  " OR"     $0F   CHECK-OPCODE
-  " XOR"    $10   CHECK-OPCODE
-  " >"      $11   CHECK-OPCODE
-  " >="     $12   CHECK-OPCODE
-  " <"      $13   CHECK-OPCODE
-  " <="     $14   CHECK-OPCODE
-  " ="      $15   CHECK-OPCODE
-  " <>"     $16   CHECK-OPCODE
-  " JMP"    $17   CHECK-OPCODE
-  " JZ"     $18   CHECK-OPCODE
-  " CALL"   $19   CHECK-OPCODE
-  " IN"     $1A   CHECK-OPCODE
-  " OUT"    $1B   CHECK-OPCODE
-  " LIT"    $1C   CHECK-OPCODE
-  " %"      $1D   CHECK-OPCODE
-  " EXIT"   $1E   CHECK-OPCODE
-  " SP"     $1F   CHECK-OPCODE
-  " HALT"   $20   CHECK-OPCODE
-  " LSHIFT" $21   CHECK-OPCODE
-  " RSHIFT" $22   CHECK-OPCODE
-  " !"      $23   CHECK-OPCODE
-  " @"      $24   CHECK-OPCODE
-  " >R"     $25   CHECK-OPCODE
-  " R>"     $26   CHECK-OPCODE
-  " R@"     $27   CHECK-OPCODE
-  " I"      $27   CHECK-OPCODE \ Alias to R@
-  " DUMP"   $28   CHECK-OPCODE
-  " ABORT"  $29   CHECK-OPCODE
+  " +"       $01   CHECK-OPCODE
+  " -"       $02   CHECK-OPCODE
+  " *"       $03   CHECK-OPCODE
+  " /"       $04   CHECK-OPCODE
+  " 1+"      $05   CHECK-OPCODE
+  " 1-"      $06   CHECK-OPCODE
+  " DUP"     $07   CHECK-OPCODE
+  " DROP"    $08   CHECK-OPCODE
+  " SWAP"    $09   CHECK-OPCODE
+  " NIP"     $0A   CHECK-OPCODE
+  " OVER"    $0B   CHECK-OPCODE
+  " ROT"     $0C   CHECK-OPCODE
+  " INVERT"  $0D   CHECK-OPCODE
+  " AND"     $0E   CHECK-OPCODE
+  " OR"      $0F   CHECK-OPCODE
+  " XOR"     $10   CHECK-OPCODE
+  " >"       $11   CHECK-OPCODE
+  " >="      $12   CHECK-OPCODE
+  " <"       $13   CHECK-OPCODE
+  " <="      $14   CHECK-OPCODE
+  " ="       $15   CHECK-OPCODE
+  " <>"      $16   CHECK-OPCODE
+  " JMP"     $17   CHECK-OPCODE
+  " JZ"      $18   CHECK-OPCODE
+  " CALL"    $19   CHECK-OPCODE
+  " IN"      $1A   CHECK-OPCODE
+  " OUT"     $1B   CHECK-OPCODE
+  " LIT"     $1C   CHECK-OPCODE
+  " %"       $1D   CHECK-OPCODE
+  " EXIT"    $1E   CHECK-OPCODE
+  " SP"      $1F   CHECK-OPCODE
+  " HALT"    $20   CHECK-OPCODE
+  " LSHIFT"  $21   CHECK-OPCODE
+  " RSHIFT"  $22   CHECK-OPCODE
+  " ARSHIFT" $23   CHECK-OPCODE
+  " !"       $24   CHECK-OPCODE
+  " @"       $25   CHECK-OPCODE
+  " >R"      $26   CHECK-OPCODE
+  " R>"      $27   CHECK-OPCODE
+  " R@"      $28   CHECK-OPCODE
+  " I"       $28   CHECK-OPCODE \ Alias to R@
+  " DUMP"    $29   CHECK-OPCODE
+  " ABORT"   $2A   CHECK-OPCODE
   DROP 0
 ;
 

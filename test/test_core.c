@@ -632,6 +632,36 @@ void test_sar() {
   }));
 }
 
+void test_shr() {
+  assert(0 == eval((uint8_t[SIZE]) {
+    LIT16(0),
+    LIT16(1),
+    OP_SHR,
+    OP_HLT
+  }));
+
+  assert(0 == eval((uint8_t[SIZE]) {
+    LIT16(1),
+    LIT16(1),
+    OP_SHR,
+    OP_HLT
+  }));
+
+  assert(32 == eval((uint8_t[SIZE]) {
+    LIT16(256),
+    LIT16(3),
+    OP_SHR,
+    OP_HLT
+  }));
+
+  assert(128 == eval((uint8_t[SIZE]) {
+    LIT16(2048),
+    LIT16(4),
+    OP_SHR,
+    OP_HLT
+  }));
+}
+
 void test_fetchstore() {
   assert(-23456 == eval((uint8_t[SIZE]) {
     LIT16(-23456),
@@ -707,6 +737,7 @@ int main() {
   test_jz();
   test_shl();
   test_sar();
+  test_shr();
   test_fetchstore();
   test_rstack();
   return 0;
