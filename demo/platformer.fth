@@ -422,6 +422,7 @@ BEGIN
     VX @ 0 > IF
       TILE-RIGHT SOLID = IF
         SUB-X @ $F800 AND $0100 - SUB-X !
+        \ SUB-X @ HIGH . CR
       THEN
     THEN
 
@@ -450,7 +451,7 @@ BEGIN
 
     UPDATE-ANIMATION
 
-    \ " X=" PRINT PLAYER X@ . "  Y=" PRINT PLAYER Y@ . "  TX=" PRINT TILE-X . "  TY=" PRINT TILE-Y . CR
+    \ " X=" PRINT PLAYER X@ . "  Y=" PRINT PLAYER Y@ . CR
     DEPTH 0 <> IF
       " ERROR" CR PRINT
     THEN
