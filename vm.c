@@ -101,8 +101,8 @@ cell_t engage(uint8_t *mem,
       case OP_XOR:   BINARY(^);            break;
       case OP_MOD:   BINARY(%);            break;
       case OP_SHL:   BINARY(<<);           break;
-      case OP_SHR:   UBINARY(>>);          break;
       case OP_SAR:   BINARY(>>);           break;
+      case OP_SHR:   UBINARY(>>);          break;
       case OP_INC:   UNARY(+=, 1);         break;
       case OP_DEC:   UNARY(-=, 1);         break;
       case OP_EQ:    COMPARE(==);          break;
