@@ -1,4 +1,5 @@
 #include "display.h"
+#include "ports.h"
 
 /*
 ** Resolution: 
@@ -180,7 +181,7 @@ void render(const uint8_t* mem) {
   const uint8_t* scr = screen(mem);
   for (int ty = 0; ty < N_TILES_Y; ty++) {
     for (int tx = 0; tx < N_TILES_X; tx++) {
-      uint8_t tile_index = scr[ty * N_TILES_X + tx];
+      uint8_t tile_index = scr[ty * 2 * N_TILES_X + tx + scroll_x];
       const uint8_t* tile = tile_at(mem, tile_index);
       int dst_x = tx * TILE_WIDTH;
       int dst_y = ty * TILE_HEIGHT;

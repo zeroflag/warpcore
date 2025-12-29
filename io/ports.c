@@ -3,6 +3,7 @@
 
 int16_t scancode;
 Uint64 last_tick = 0;
+int16_t scroll_x = 0;
 
 int16_t io_port_read(int16_t port) {
   switch (port) {
@@ -31,6 +32,10 @@ void io_port_write(int16_t port, int16_t data) {
   switch (port) {
     case 200:
       scancode = data;
+      break;
+    case 400:
+      scroll_x = data;
+      break;
     default:
       // TODO
   }
