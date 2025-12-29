@@ -224,8 +224,9 @@ CREATE MOVING [
   $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $88 $88 $00 $08 $88 $8E $80 $87 $87 $88 $E8 $88 $88 $88 $E8 $08 $88 $88 $80
 .END
 
-: ABS DUP 0 < IF -1 * THEN ;
 : TICKS 100 IN ;
+
+: SIGN ?DUP IF ABS / ELSE 0 THEN ;
 
 : X!   ( spr -- )   1+  C! ;
 : Y!   ( spr -- )   2 + C! ;
@@ -250,12 +251,10 @@ CREATE MOVING [
   VX @ 0 = IF
     LAST_FACING @
   ELSE
-    VX @ VX @ ABS /
-    DUP LAST_FACING !
+    VX @ SIGN DUP LAST_FACING !
   THEN ;
 
-: LIFT
-  VY @ 0 = IF 0 ELSE VY @ ABS VY @ / THEN ;
+: LIFT VY @ SIGN ;
 
 : PRESSED? ( key -- )
   PORT_KB OUT
