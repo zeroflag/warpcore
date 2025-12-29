@@ -226,7 +226,7 @@ CREATE RUNNING [
 
 : TICKS 100 IN ;
 
-: SIGN ?DUP IF ABS / ELSE 0 THEN ;
+: SIGN ?DUP IF DUP ABS / ELSE 0 THEN ;
 
 : X!   ( spr -- )   1+  C! ;
 : Y!   ( spr -- )   2 + C! ;
