@@ -302,9 +302,9 @@ CREATE RUNNING [
 
 : TILE-W  PL_WORLD_X @     PL_WORLD_Y @     TILE C@ >TYPE ;
 : TILE-E  PL_WORLD_X @ 7 + PL_WORLD_Y @     TILE C@ >TYPE ;
-: TILE-SW PL_WORLD_X @     PL_WORLD_Y @ 8 + TILE C@ >TYPE ;
+: TILE-SW PL_WORLD_X @ 1+  PL_WORLD_Y @ 8 + TILE C@ >TYPE ;
 : TILE-SE PL_WORLD_X @ 7 + PL_WORLD_Y @ 8 + TILE C@ >TYPE ;
-: TILE-NW PL_WORLD_X @     PL_WORLD_Y @     TILE C@ >TYPE ;
+: TILE-NW PL_WORLD_X @ 1+  PL_WORLD_Y @     TILE C@ >TYPE ;
 : TILE-NE PL_WORLD_X @ 7 + PL_WORLD_Y @     TILE C@ >TYPE ;
 
 : ON-GROUND?
@@ -494,9 +494,9 @@ BEGIN
       THEN
     THEN
     
-    \ " X=" PRINT PLAYER X@ . "  Y=" PRINT PLAYER Y@ .
-    \ "  WX=" PRINT PL_WORLD_X @ . "  WY=" PRINT PL_WORLD_Y @ .
-    \ "  CAM_X=" PRINT CAM_X @ . CR
+    " X=" PRINT PLAYER X@ . "  Y=" PRINT PLAYER Y@ .
+    "  WX=" PRINT PL_WORLD_X @ . "  WY=" PRINT PL_WORLD_Y @ .
+    "  CAM_X=" PRINT CAM_X @ . CR
     DEPTH 0 <> IF
       " ERROR: " PRINT DEPTH . CR
     THEN
