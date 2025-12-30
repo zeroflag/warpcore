@@ -1,6 +1,3 @@
-VARIABLE D
-VARIABLE R
-
 [ $6000 ] CONSTANT PAL
 [ $6200 ] CONSTANT SPR
 
@@ -33,6 +30,7 @@ VARIABLE R
 [ -20 ] CONSTANT  MIN_VX
 [  6  ] CONSTANT  MAX_JUMP
 [ SPR ] CONSTANT  PLAYER
+[ 120 ] CONSTANT  SCROLL_START_X
 
 VARIABLE ANIMATION
 VARIABLE ANIM_TIMER
@@ -46,7 +44,7 @@ VARIABLE SX
 VARIABLE SY
 VARIABLE LAST_FACING
 VARIABLE DT
-VARIABLE VIEWPORT_X
+VARIABLE CAM_X
 
 CREATE IDLE [
   0  C,  ( INDEX )
@@ -261,15 +259,6 @@ CREATE RUNNING [
 
 : LIFT VY @ SIGN ;
 
-: SCROLL_OFFS_X
-  PLAYER X@ 60 > IF
-    PLAYER X@ 60 -
-  ELSE
-    0
-  THEN ;
-
-: SCROLL_X SCROLL_OFFS_X PORT_SCROLL OUT ;
-
 : PRESSED? ( key -- )
   PORT_KB OUT
   PORT_KB IN ;
@@ -292,7 +281,7 @@ CREATE RUNNING [
 : TILE-Y TILE_HEIGHT / ;
 
 : TILE ( x y -- adr )
-  TILE-Y #TILES_X 2 * * SWAP TILE-X + SCROLL_OFFS_X 8 / +
+  TILE-Y #TILES_X 2 * * SWAP TILE-X + CAM_X @ 8 / +
   $6300 + ;
 
 : >TYPE ( n -- n )
@@ -454,9 +443,7 @@ $FF42 PAL 1 CELLS + !
 $D3F2 PAL 2 CELLS + !
 $FF42 PAL 3 CELLS + !
 
-\ PLAYER SHOW
-
-TRUE R !
+PLAYER SHOW
 
 BEGIN
   TIMER @ TICKS - ABS DT !
@@ -479,6 +466,9 @@ BEGIN
         2DROP
       THEN
     THEN
+
+    PLAYER X@ SCROLL_START_X - 0 MAX CAM_X !
+    CAM_X @ PORT_SCROLL OUT
     
     \ " X=" PRINT PLAYER X@ . "  Y=" PRINT PLAYER Y@ . CR
     DEPTH 0 <> IF
@@ -490,9 +480,13 @@ BEGIN
 
     \ SCROLL_OFFS_X . CR
     \ SCROLL_X
-    
-     \ D @ 256 < IF D ++ THEN
-     D @ PORT_SCROLL OUT
+
+     \ D @ PORT_SCROLL OUT
+     \ R @ IF
+     \   D @ 256 < IF D ++ ELSE FALSE R ! THEN
+     \ ELSE
+     \   D @ 0 > IF D @ 1- D ! ELSE TRUE R ! THEN
+     \ THEN
 
   THEN
 
@@ -501,13 +495,13 @@ BEGIN
     TICKS ANIM_TIMER !
 
 
-     KEY_RIGHT PRESSED? IF 
-       D @ 256 < IF D ++ THEN
-     THEN
+     \ KEY_RIGHT PRESSED? IF 
+     \   D @ 256 < IF D ++ THEN
+     \ THEN
 
-     KEY_LEFT PRESSED? IF 
-       D @ 0 > IF D @ 1- D ! THEN
-     THEN
+     \ KEY_LEFT PRESSED? IF 
+     \   D @ 0 > IF D @ 1- D ! THEN
+     \ THEN
 
   THEN
 
