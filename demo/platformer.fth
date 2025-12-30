@@ -1,4 +1,5 @@
 VARIABLE D
+VARIABLE R
 
 [ $6000 ] CONSTANT PAL
 [ $6200 ] CONSTANT SPR
@@ -455,6 +456,8 @@ $FF42 PAL 3 CELLS + !
 
 \ PLAYER SHOW
 
+TRUE R !
+
 BEGIN
   TIMER @ TICKS - ABS DT !
 
@@ -488,14 +491,6 @@ BEGIN
     \ SCROLL_OFFS_X . CR
     \ SCROLL_X
     
-     KEY_RIGHT PRESSED? IF 
-       D @ 256 < IF D ++ THEN
-     THEN
-
-     KEY_LEFT PRESSED? IF 
-       D @ 0 > IF D @ 1- D ! THEN
-     THEN
-
      \ D @ 256 < IF D ++ THEN
      D @ PORT_SCROLL OUT
 
@@ -504,6 +499,16 @@ BEGIN
   ANIM_TIMER @ TICKS - ABS 150 > IF
     PLAYER ANIMATION @ ANIMATE
     TICKS ANIM_TIMER !
+
+
+     KEY_RIGHT PRESSED? IF 
+       D @ 256 < IF D ++ THEN
+     THEN
+
+     KEY_LEFT PRESSED? IF 
+       D @ 0 > IF D @ 1- D ! THEN
+     THEN
+
   THEN
 
 AGAIN

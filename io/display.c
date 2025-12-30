@@ -134,9 +134,8 @@ void draw_tile(const uint8_t* tile,
     uint32_t* dst = (uint32_t*)(pixels + (dst_y + row) * pitch + dst_x * 4);
 
     int start_sub_x = tile_offset_x % 2;
-    for (int col = tile_offset_x / 2; col < tile_len / 2; col++) {
-      int end_sub_x = (tile_len % 2) && (col == tile_len / 2 - 1);
-
+    int col;
+    for (col = tile_offset_x / 2; col < tile_len / 2; col++) {
       uint8_t packed = flip
         ? tile[row * (TILE_WIDTH / 2) + (TILE_WIDTH / 2 - col -1)]
         : tile[row * (TILE_WIDTH / 2) + col];
@@ -150,18 +149,36 @@ void draw_tile(const uint8_t* tile,
         if (hi != 0 && !start_sub_x)
           *dst = palette[hi];
         dst++;
-        if (lo != 0 && !end_sub_x)
+        if (lo != 0)
           *dst = palette[lo];
         dst++;
       } else {
         if (!start_sub_x)
           *dst++ = palette[hi];
-        if (!end_sub_x)
-          *dst++ = palette[lo];
+        *dst++ = palette[lo];
       }
 
       start_sub_x = 0;
     }
+
+    // remainder last column
+    if (tile_len % 2) {
+      uint8_t packed = flip
+        ? tile[row * (TILE_WIDTH / 2) + (TILE_WIDTH / 2 - col -1)]
+        : tile[row * (TILE_WIDTH / 2) + col];
+
+      uint8_t hi = (packed >> 4) & 0xF;
+      uint8_t lo = packed & 0xF;
+
+      if (flip) XCHG(hi, lo);
+      
+      if (transparency && hi != 0) {
+        *dst = palette[hi];
+      } else {
+        *dst = palette[hi];
+      }
+    }
+
   }
 }
 
