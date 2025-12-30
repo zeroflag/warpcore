@@ -284,7 +284,8 @@ CREATE RUNNING [
 : TILE-Y TILE_HEIGHT / ;
 
 : TILE ( x y -- adr )
-  TILE-Y #TILES_X 2 * * SWAP TILE-X + $6300 + ;
+  TILE-Y #TILES_X 2 * * SWAP TILE-X +
+  $6300 + ;
 
 : >TYPE ( n -- n )
   DUP 47 = OVER 38 = OR IF
@@ -401,14 +402,14 @@ CREATE RUNNING [
 : COLLISION-X
   VX @ 0 < IF
     TILE-W SOLID = IF
-      PL_WORLD_X @ $F8 AND $09 + PL_WORLD_X !
+      PL_WORLD_X @ $FFF8 AND $09 + PL_WORLD_X !
       0 PL_WORLD_X_SUB !
       0 VX !
     THEN
   THEN
   VX @ 0 > IF
     TILE-E SOLID = IF
-      PL_WORLD_X @ $F8 AND $01 - PL_WORLD_X !
+      PL_WORLD_X @ $FFF8 AND $01 - PL_WORLD_X !
       0 PL_WORLD_X_SUB !
       0 VX !
     THEN
@@ -445,16 +446,16 @@ CREATE RUNNING [
   FINALIZE-Y ;
 
 : SCROLL
-  PL_WORLD_X @ SCROLL_START_X_LEFT < IF
-    PL_WORLD_X @ SCROLL_START_X_LEFT -
-    0 MAX
-    CAM_X !
-  THEN
-  PL_WORLD_X @ SCROLL_START_X_RIGHT > IF
+  PL_WORLD_X @ SCROLL_START_X_RIGHT > CAM_X @ 256 < AND IF
     PL_WORLD_X @ SCROLL_START_X_RIGHT -
     0 MAX
     CAM_X !
   THEN
+  \ PL_WORLD_X @ SCROLL_START_X_LEFT < CAM_X @ 0 > AND IF
+  \   PL_WORLD_X @ SCROLL_START_X_LEFT -
+  \   0 MAX
+  \   CAM_X !
+  \ THEN
   CAM_X @ PORT_SCROLL OUT ;
 
 ENTRY
@@ -490,39 +491,21 @@ BEGIN
       THEN
     THEN
     
-    \ " X=" PRINT PLAYER X@ . "  Y=" PRINT PLAYER Y@ . "  CAM_X=" PRINT CAM_X @ . CR
+    " X=" PRINT PLAYER X@ . "  Y=" PRINT PLAYER Y@ .
+    "  WX=" PRINT PL_WORLD_X @ . "  WY=" PRINT PL_WORLD_Y @ .
+    "  CAM_X=" PRINT CAM_X @ . CR
     DEPTH 0 <> IF
       " ERROR: " PRINT DEPTH . CR
     THEN
     
-    \ PLAYER Y@ 8 + 224 >= IF 0 HALT THEN
+   \ PLAYER Y@ 8 + 224 >= IF 0 HALT THEN
     TICKS TIMER !
-
-    \ SCROLL_OFFS_X . CR
-    \ SCROLL_X
-
-     \ D @ PORT_SCROLL OUT
-     \ R @ IF
-     \   D @ 256 < IF D ++ ELSE FALSE R ! THEN
-     \ ELSE
-     \   D @ 0 > IF D @ 1- D ! ELSE TRUE R ! THEN
-     \ THEN
 
   THEN
 
   ANIM_TIMER @ TICKS - ABS 150 > IF
     PLAYER ANIMATION @ ANIMATE
     TICKS ANIM_TIMER !
-
-
-     \ KEY_RIGHT PRESSED? IF 
-     \   D @ 256 < IF D ++ THEN
-     \ THEN
-
-     \ KEY_LEFT PRESSED? IF 
-     \   D @ 0 > IF D @ 1- D ! THEN
-     \ THEN
-
   THEN
 
 AGAIN
