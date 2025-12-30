@@ -1,3 +1,5 @@
+VARIABLE D
+
 [ $6000 ] CONSTANT PAL
 [ $6200 ] CONSTANT SPR
 
@@ -258,7 +260,14 @@ CREATE RUNNING [
 
 : LIFT VY @ SIGN ;
 
-: SCROLL_X ( n -- ) PORT_SCROLL OUT ;
+: SCROLL_OFFS_X
+  PLAYER X@ 60 > IF
+    PLAYER X@ 60 -
+  ELSE
+    0
+  THEN ;
+
+: SCROLL_X SCROLL_OFFS_X PORT_SCROLL OUT ;
 
 : PRESSED? ( key -- )
   PORT_KB OUT
@@ -282,7 +291,7 @@ CREATE RUNNING [
 : TILE-Y TILE_HEIGHT / ;
 
 : TILE ( x y -- adr )
-  TILE-Y #TILES_X 2 * * SWAP TILE-X +
+  TILE-Y #TILES_X 2 * * SWAP TILE-X + SCROLL_OFFS_X 8 / +
   $6300 + ;
 
 : >TYPE ( n -- n )
@@ -444,7 +453,7 @@ $FF42 PAL 1 CELLS + !
 $D3F2 PAL 2 CELLS + !
 $FF42 PAL 3 CELLS + !
 
-PLAYER SHOW
+\ PLAYER SHOW
 
 BEGIN
   TIMER @ TICKS - ABS DT !
@@ -473,12 +482,23 @@ BEGIN
       " ERROR: " PRINT DEPTH . CR
     THEN
     
-    PLAYER Y@ 8 + 224 >= IF 0 HALT THEN
+    \ PLAYER Y@ 8 + 224 >= IF 0 HALT THEN
     TICKS TIMER !
 
-    PLAYER X@ 60 > IF
-      PLAYER X@ 60 - 32 MIN SCROLL_X
-    THEN
+    \ SCROLL_OFFS_X . CR
+    \ SCROLL_X
+    
+     \ KEY_RIGHT PRESSED? IF 
+     \   D @ 256 < IF D ++ THEN
+     \ THEN
+
+     \ KEY_LEFT PRESSED? IF 
+     \   D @ 0 > IF D @ 1- D ! THEN
+     \ THEN
+
+     D @ 256 < IF D ++ THEN
+     D @ PORT_SCROLL OUT
+
   THEN
 
   ANIM_TIMER @ TICKS - ABS 150 > IF

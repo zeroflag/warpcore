@@ -126,11 +126,14 @@ void draw_tile(const uint8_t* tile,
                uint8_t* pixels,
                int pitch,
                int transparency,
-               int flip)
+               int flip,
+               uint8_t tile_offset_x,
+               uint8_t tile_len)
 {
   for (int row = 0; row < TILE_HEIGHT; row++) {
     uint32_t* dst = (uint32_t*)(pixels + (dst_y + row) * pitch + dst_x * 4);
-    for (int col = 0; col < TILE_WIDTH / 2; col++) {
+    for (int col = tile_offset_x / 2; col < tile_len / 2; col++) {
+
       uint8_t packed = flip
         ? tile[row * (TILE_WIDTH / 2) + (TILE_WIDTH / 2 - col -1)]
         : tile[row * (TILE_WIDTH / 2) + col];
@@ -169,21 +172,43 @@ void draw_sprites(const uint8_t* mem, uint8_t* pixels, int pitch) {
               pixels,
               pitch,
               1,
-              attr & 2);
+              attr & 2,
+              0,
+              TILE_WIDTH);
   }
 }
 
 void render(const uint8_t* mem) {
+  
   uint8_t* pixels;
   int pitch;
   SDL_LockTexture(framebuffer, NULL, (void**)&pixels, &pitch);
 
   const uint8_t* scr = screen(mem);
+
   for (int ty = 0; ty < N_TILES_Y; ty++) {
-    for (int tx = 0; tx < N_TILES_X; tx++) {
-      uint8_t tile_index = scr[ty * 2 * N_TILES_X + tx + scroll_x];
-      const uint8_t* tile = tile_at(mem, tile_index);
-      int dst_x = tx * TILE_WIDTH;
+
+    uint16_t start_tile_x = scroll_x / TILE_WIDTH;
+    uint16_t addr = ty * 2 * N_TILES_X + start_tile_x ;
+    const uint8_t* tile = tile_at(mem, scr[addr]);
+
+    draw_tile(tile,
+              palette(mem),
+              0,
+              ty * TILE_HEIGHT,
+              pixels,
+              pitch,
+              0,
+              0,
+              scroll_x % TILE_WIDTH,
+              TILE_WIDTH);
+
+    int tx;
+    int dst_x;
+    for (tx = 1; tx < N_TILES_X; tx++) {
+      addr = ty * 2 * N_TILES_X + tx + start_tile_x;
+      tile = tile_at(mem, scr[addr]);
+      dst_x = tx * TILE_WIDTH - (scroll_x % TILE_WIDTH);
       int dst_y = ty * TILE_HEIGHT;
       draw_tile(tile,
                 palette(mem),
@@ -192,8 +217,30 @@ void render(const uint8_t* mem) {
                 pixels,
                 pitch,
                 0,
-                0);
+                0,
+                0,
+                TILE_WIDTH);
+      printf("DST_X %d\n", dst_x);
     }
+
+    if (scroll_x % TILE_WIDTH != 0) {
+      dst_x += TILE_WIDTH;
+      int len = N_TILES_X * TILE_WIDTH - dst_x;
+      
+      addr = ty * 2 * N_TILES_X + tx + start_tile_x;
+      tile = tile_at(mem, scr[addr]);
+      draw_tile(tile,
+                palette(mem),
+                dst_x,
+                ty * TILE_HEIGHT,
+                pixels,
+                pitch,
+                0,
+                0,
+                0,
+                len);
+    }
+
   }
 
   draw_sprites(mem, pixels, pitch);
