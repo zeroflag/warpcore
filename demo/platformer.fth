@@ -488,15 +488,15 @@ BEGIN
     \ SCROLL_OFFS_X . CR
     \ SCROLL_X
     
-     \ KEY_RIGHT PRESSED? IF 
-     \   D @ 256 < IF D ++ THEN
-     \ THEN
+     KEY_RIGHT PRESSED? IF 
+       D @ 256 < IF D ++ THEN
+     THEN
 
-     \ KEY_LEFT PRESSED? IF 
-     \   D @ 0 > IF D @ 1- D ! THEN
-     \ THEN
+     KEY_LEFT PRESSED? IF 
+       D @ 0 > IF D @ 1- D ! THEN
+     THEN
 
-     D @ 256 < IF D ++ THEN
+     \ D @ 256 < IF D ++ THEN
      D @ PORT_SCROLL OUT
 
   THEN

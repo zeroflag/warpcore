@@ -132,7 +132,10 @@ void draw_tile(const uint8_t* tile,
 {
   for (int row = 0; row < TILE_HEIGHT; row++) {
     uint32_t* dst = (uint32_t*)(pixels + (dst_y + row) * pitch + dst_x * 4);
+
+    int start_sub_x = tile_offset_x % 2;
     for (int col = tile_offset_x / 2; col < tile_len / 2; col++) {
+      int end_sub_x = (tile_len % 2) && (col == tile_len / 2 - 1);
 
       uint8_t packed = flip
         ? tile[row * (TILE_WIDTH / 2) + (TILE_WIDTH / 2 - col -1)]
@@ -144,16 +147,20 @@ void draw_tile(const uint8_t* tile,
       if (flip) XCHG(hi, lo);
       
       if (transparency) {
-        if (hi != 0)
+        if (hi != 0 && !start_sub_x)
           *dst = palette[hi];
         dst++;
-        if (lo != 0)
+        if (lo != 0 && !end_sub_x)
           *dst = palette[lo];
         dst++;
       } else {
-        *dst++ = palette[hi];
-        *dst++ = palette[lo];
+        if (!start_sub_x)
+          *dst++ = palette[hi];
+        if (!end_sub_x)
+          *dst++ = palette[lo];
       }
+
+      start_sub_x = 0;
     }
   }
 }
@@ -220,7 +227,6 @@ void render(const uint8_t* mem) {
                 0,
                 0,
                 TILE_WIDTH);
-      printf("DST_X %d\n", dst_x);
     }
 
     if (scroll_x % TILE_WIDTH != 0) {
