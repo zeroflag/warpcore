@@ -419,7 +419,7 @@ CREATE RUNNING [
   VY @ 0 > IF
     TILE-SW SOLID = 
     TILE-SE SOLID = OR IF
-      PL_WORLD_Y @ $F8 AND PL_WORLD_Y !
+      PL_WORLD_Y @ $FFF8 AND PL_WORLD_Y !
       0 VY !
       0 PL_WORLD_Y_SUB !
     THEN
@@ -427,7 +427,7 @@ CREATE RUNNING [
   VY @ 0 < IF
     TILE-NW SOLID = 
     TILE-NE SOLID = OR IF
-      PL_WORLD_Y @ $F8 AND $09 + PL_WORLD_Y !
+      PL_WORLD_Y @ $FFF8 AND $09 + PL_WORLD_Y !
       0 VY !
       0 PL_WORLD_Y_SUB !
     THEN
