@@ -35,7 +35,6 @@
 VARIABLE ANIMATION
 VARIABLE ANIM_TIMER
 VARIABLE JUMP_TIMER
-VARIABLE #KEYS
 VARIABLE TIMER
 VARIABLE DT
 VARIABLE CAM_X
@@ -52,6 +51,7 @@ CREATE PLAYER [
   0     ,  ( VY )
   FALSE ,  ( JUMPING )
   0     ,  ( LAST FACING )
+  0     ,  ( KEYS COLLECTED )
 ]
 
 : .SPR @ ;
@@ -65,6 +65,7 @@ CREATE PLAYER [
 : .VY 8 CELLS + ;
 : .JUMPING 9 CELLS + ;
 : .LAST_FACING 10 CELLS + ;
+: .KEYS 11 CELLS + ;
 
 CREATE IDLE [
   0  C,  ( INDEX )
@@ -426,7 +427,7 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
   ( TODO move cam )
   DUP .EXIT.X PLAYER .WORLD_X !
       .EXIT.Y PLAYER .WORLD_Y !
-  #KEYS -- ;
+  PLAYER .KEYS -- ;
 
 : EXIT-DOOR  ( door - )
   DUP .ENTRY.X PLAYER .WORLD_X !
@@ -434,7 +435,7 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
 
 : NTH-DOOR ( n -- door ) DOORS 1+ SWAP CELLS + @ ;
 
-: HAS-KEY? #KEYS @ 0 > ;
+: HAS-KEY? PLAYER .KEYS @ 0 > ;
 : CAN-ENTER? OPEN? HAS-KEY? OR ;
 : #DOORS DOORS C@ ;
 
@@ -567,7 +568,7 @@ BEGIN
       63 -ROT TILE C!
     ELSE
       2DUP TILE C@ 45 = IF
-        #KEYS ++
+        PLAYER .KEYS ++
         63 -ROT TILE C!
       ELSE
         2DROP
