@@ -41,8 +41,8 @@ VARIABLE CAM_X
 
 CREATE PLAYER [
   SPR   ,  ( SPRITE )
-  0     ,  ( WORLD SUBX )
-  0     ,  ( WORLD SUBY )
+  0     ,  ( WORLD SUBPIXEL X )
+  0     ,  ( WORLD SUBPIXEL Y )
   0     ,  ( WORLD X )
   0     ,  ( WORLD Y )
   8     ,  ( WIDTH )
@@ -54,17 +54,17 @@ CREATE PLAYER [
   0     ,  ( KEYS COLLECTED )
 ]
 
-: .SUB_X CELL + ;
-: .SUB_Y 2 CELLS + ;
-: .WORLD_X 3 CELLS + ;
-: .WORLD_Y 4 CELLS + ;
-: .WIDTH 5 CELLS + ;
-: .HEIGHT 6 CELLS + ;
-: .VX 7 CELLS + ;
-: .VY 8 CELLS + ;
-: .JUMPING 9 CELLS + ;
+: .SUB_X       CELL + ;
+: .SUB_Y       2 CELLS + ;
+: .WORLD_X     3 CELLS + ;
+: .WORLD_Y     4 CELLS + ;
+: .WIDTH       5 CELLS + ;
+: .HEIGHT      6 CELLS + ;
+: .VX          7 CELLS + ;
+: .VY          8 CELLS + ;
+: .JUMPING     9 CELLS + ;
 : .LAST_FACING 10 CELLS + ;
-: .KEYS 11 CELLS + ;
+: .KEYS        11 CELLS + ;
 
 CREATE IDLE [
   0  C,  ( INDEX )
