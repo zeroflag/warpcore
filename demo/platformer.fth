@@ -379,6 +379,7 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
 : .ENTRY.Y ( door -- n )   CELL  + @ TILE_HEIGHT * ;
 : .EXIT.X  ( door -- n ) 2 CELLS + @ TILE_WIDTH  * ;
 : .EXIT.Y  ( door -- n ) 3 CELLS + @ TILE_HEIGHT * ;
+: .STATUS  ( door -- a ) 4 CELLS + ;
 
 : AT-ENTRY? ( door -- bool )
   PL_WORLD_X @ OVER .ENTRY.X PL_WORLD_X @ 8 + BETWEEN?
@@ -390,7 +391,19 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
   PL_WORLD_X @ ROT  .EXIT.Y PL_WORLD_Y @ 8 + BETWEEN?
   AND ;
 
+: OPEN? ( door - bool ) .STATUS C@ ;
+
+: OPEN-DOOR ( door -- )
+  ( TODO update status not TILE )
+  TRUE OVER .STATUS C!
+  DUP .ENTRY.X OVER .ENTRY.Y    TILE 46 SWAP C!
+  DUP .ENTRY.X OVER .ENTRY.Y 1- TILE 37 SWAP C!
+  DUP .EXIT.X  OVER .EXIT.Y     TILE 46 SWAP C! 
+  DUP .EXIT.X  OVER .EXIT.Y  1- TILE 37 SWAP C! 
+  DROP ;
+
 : ENTER-DOOR ( door - )
+  DUP OPEN-DOOR
   DUP .EXIT.X PL_WORLD_X !
       .EXIT.Y PL_WORLD_Y !
   #KEYS -- ;
@@ -402,6 +415,7 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
 : NTH-DOOR ( n -- door ) DOORS 1+ SWAP CELLS + @ ;
 
 : HAS-KEY? #KEYS @ 0 > ;
+: CAN-ENTER? ( door -- bool ) OPEN? HAS-KEY? OR ;
 
 : KEYBOARD-INPUT
   KEY_SPACE PRESSED? IF JUMP ELSE FALSE JUMPING ! THEN
@@ -409,7 +423,7 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
   KEY_UP PRESSED? IF
     DOORS C@ 1- FOR
       I NTH-DOOR
-      DUP AT-ENTRY? HAS-KEY? AND IF
+      DUP AT-ENTRY? OVER CAN-ENTER? AND IF
         ENTER-DOOR
       ELSE
         AT-EXIT? IF EXIT-DOOR THEN
