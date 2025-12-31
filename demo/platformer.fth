@@ -37,7 +37,7 @@ VARIABLE ANIMATION
 VARIABLE ANIM_TIMER
 VARIABLE JUMP_TIMER
 VARIABLE JUMPING
-VARIABLE INVENTORY
+VARIABLE #KEYS
 VARIABLE TIMER
 VARIABLE VX
 VARIABLE VY
@@ -65,6 +65,24 @@ CREATE RUNNING [
   101 C,
   102 C,
 ]
+
+CREATE DOOR_1 [
+  6   ,  ( X ENTRY )
+  22  ,  ( Y ENTRY )
+  28  ,  ( X EXIT )
+  5   ,  ( Y EXIT )
+  0   C, ( STATUS )
+]
+
+CREATE DOOR_2 [
+  40  ,  ( X ENTRY )
+  4   ,  ( Y ENTRY )
+  61  ,  ( X EXIT )
+  22  ,  ( Y EXIT )
+  0   C, ( STATUS )
+]
+
+CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
 
 ( Palette )
 .DB $6000
@@ -357,18 +375,52 @@ CREATE RUNNING [
     BOOST-JUMP
   THEN ;
 
+: DOOR.ENTRY.X ( door -- n )           @ TILE_WIDTH  * ;
+: DOOR.ENTRY.Y ( door -- n )   CELL  + @ TILE_HEIGHT * ;
+: DOOR.EXIT.X  ( door -- n ) 2 CELLS + @ TILE_WIDTH  * ;
+: DOOR.EXIT.Y  ( door -- n ) 3 CELLS + @ TILE_HEIGHT * ;
+
+: DOOR-ENTRY? ( door -- bool )
+  PL_WORLD_X @ OVER DOOR.ENTRY.X PL_WORLD_X @ 8 + BETWEEN?
+  PL_WORLD_X @ ROT  DOOR.ENTRY.Y PL_WORLD_Y @ 8 + BETWEEN?
+  AND ;
+
+: DOOR-EXIT? ( door -- bool )
+  PL_WORLD_X @ OVER DOOR.EXIT.X PL_WORLD_X @ 8 + BETWEEN?
+  PL_WORLD_X @ ROT  DOOR.EXIT.Y PL_WORLD_Y @ 8 + BETWEEN?
+  AND ;
+
+: DOOR.ENTER   ( door - )
+  DUP  DOOR.EXIT.X PL_WORLD_X !
+  SWAP DOOR.EXIT.Y PL_WORLD_Y !
+  -1 #KEYS += ( TODO ADD -- ) ;
+
+: DOOR.EXIT  ( door - )
+  DUP  DOOR.EXIT.X PL_WORLD_X !
+  SWAP DOOR.EXIT.Y PL_WORLD_Y !
+  -1 #KEYS += ( TODO ADD -- ) ;
+
 : KEYBOARD-INPUT
   KEY_SPACE PRESSED? IF JUMP ELSE FALSE JUMPING ! THEN
   ACCELERATE
-  KEY_UP PRESSED?
-  PL_WORLD_X @ PL_WORLD_Y @ TILE C@ 47 = AND ( DOOR )
-  INVENTORY @ 1 = AND IF
-    28 8 * PL_WORLD_X !
-    5  8 * PL_WORLD_Y !
-    46 PL_WORLD_X @ PL_WORLD_Y @ TILE C!    ( OPEN DOOR )
-    37 PL_WORLD_X @ PL_WORLD_Y @ 1- TILE C! ( OPEN DOOR )
-    $FE INVENTORY @ AND INVENTORY !
+  KEY_UP PRESSED? IF
+    DOORS C@ 1- FOR
+      DOORS 1+ I CELLS + @
+      DUP DOOR-ENTRY? #KEYS @ 0 > AND IF
+        DOOR.ENTER
+      ELSE
+        DOOR-EXIT? IF DOOR.EXIT THEN
+      THEN
+    NEXT
   THEN
+  \ PL_WORLD_X @ PL_WORLD_Y @ TILE C@ 47 = AND ( DOOR )
+  \ INVENTORY @ 1 = AND IF
+  \   28 8 * PL_WORLD_X !
+  \   5  8 * PL_WORLD_Y !
+  \   46 PL_WORLD_X @ PL_WORLD_Y @ TILE C!    ( OPEN DOOR )
+  \   37 PL_WORLD_X @ PL_WORLD_Y @ 1- TILE C! ( OPEN DOOR )
+  \   $FE INVENTORY @ AND INVENTORY !
+  \ THEN
   KEY_UP PRESSED?
   PL_WORLD_X @ PL_WORLD_Y @ TILE C@ 43 = AND IF
     0 HALT
@@ -481,20 +533,22 @@ BEGIN
       63 -ROT TILE C!
     ELSE
       2DUP TILE C@ 45 = IF
-        1 INVENTORY !
+        #KEYS ++
         63 -ROT TILE C!
       ELSE
         2DROP
       THEN
     THEN
     
-    " X=" PRINT PLAYER X@ . "  Y=" PRINT PLAYER Y@ .
-    "  WX=" PRINT PL_WORLD_X @ . "  WY=" PRINT PL_WORLD_Y @ .
-    "  CAM_X=" PRINT CAM_X @ . CR
+    \ " X=" PRINT PLAYER X@ . "  Y=" PRINT PLAYER Y@ .
+    \ "  WX=" PRINT PL_WORLD_X @ . "  WY=" PRINT PL_WORLD_Y @ .
+    \ "  CAM_X=" PRINT CAM_X @ . CR
+
     DEPTH 0 <> IF
       " ERROR: " PRINT DEPTH . CR
     THEN
     
+
    \ PLAYER Y@ 8 + 224 >= IF 0 HALT THEN
     TICKS TIMER !
 
