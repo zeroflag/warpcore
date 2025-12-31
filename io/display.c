@@ -2,6 +2,9 @@
 #include "ports.h"
 
 /*
+** TODO:
+**  34x30 single nametable with 32x28 viewport
+**  
 ** Resolution: 
 ** Resolution: 256x224 pixel
 ** VRAM: 32x28 x 8BIT (TILE-INDEX) = 896 byte
