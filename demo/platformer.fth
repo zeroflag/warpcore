@@ -415,10 +415,12 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
 : NTH-DOOR ( n -- door ) DOORS 1+ SWAP CELLS + @ ;
 
 : HAS-KEY? #KEYS @ 0 > ;
-: CAN-ENTER? ( door -- bool ) OPEN? HAS-KEY? OR ;
+: CAN-ENTER? OPEN? HAS-KEY? OR ;
+: #DOORS DOORS C@ ;
 
 : CHECK-DOORS
-  DOORS C@ 1- FOR
+  #DOORS 1-
+  FOR
     I NTH-DOOR
     DUP  AT-ENTRY?
     OVER CAN-ENTER? AND IF
