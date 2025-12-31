@@ -35,6 +35,12 @@ V2 @ 50 =ASSERT
 7 V1 -=
 V1 @ 20 =ASSERT
 
+V1 --
+V1 @ 19 =ASSERT
+
+V1 ++
+V1 @ 20 =ASSERT
+
 13 1- FOR
   BUF1 I + C@ 0 =ASSERT
   $FF BUF1 I + C!
