@@ -375,41 +375,44 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
     BOOST-JUMP
   THEN ;
 
-: DOOR.ENTRY.X ( door -- n )           @ TILE_WIDTH  * ;
-: DOOR.ENTRY.Y ( door -- n )   CELL  + @ TILE_HEIGHT * ;
-: DOOR.EXIT.X  ( door -- n ) 2 CELLS + @ TILE_WIDTH  * ;
-: DOOR.EXIT.Y  ( door -- n ) 3 CELLS + @ TILE_HEIGHT * ;
+: .ENTRY.X ( door -- n )           @ TILE_WIDTH  * ;
+: .ENTRY.Y ( door -- n )   CELL  + @ TILE_HEIGHT * ;
+: .EXIT.X  ( door -- n ) 2 CELLS + @ TILE_WIDTH  * ;
+: .EXIT.Y  ( door -- n ) 3 CELLS + @ TILE_HEIGHT * ;
 
-: DOOR-ENTRY? ( door -- bool )
-  PL_WORLD_X @ OVER DOOR.ENTRY.X PL_WORLD_X @ 8 + BETWEEN?
-  PL_WORLD_X @ ROT  DOOR.ENTRY.Y PL_WORLD_Y @ 8 + BETWEEN?
+: AT-ENTRY? ( door -- bool )
+  PL_WORLD_X @ OVER .ENTRY.X PL_WORLD_X @ 8 + BETWEEN?
+  PL_WORLD_X @ ROT  .ENTRY.Y PL_WORLD_Y @ 8 + BETWEEN?
   AND ;
 
-: DOOR-EXIT? ( door -- bool )
-  PL_WORLD_X @ OVER DOOR.EXIT.X PL_WORLD_X @ 8 + BETWEEN?
-  PL_WORLD_X @ ROT  DOOR.EXIT.Y PL_WORLD_Y @ 8 + BETWEEN?
+: AT-EXIT? ( door -- bool )
+  PL_WORLD_X @ OVER .EXIT.X PL_WORLD_X @ 8 + BETWEEN?
+  PL_WORLD_X @ ROT  .EXIT.Y PL_WORLD_Y @ 8 + BETWEEN?
   AND ;
 
-: DOOR.ENTER   ( door - )
-  DUP  DOOR.EXIT.X PL_WORLD_X !
-  SWAP DOOR.EXIT.Y PL_WORLD_Y !
-  -1 #KEYS += ( TODO ADD -- ) ;
+: ENTER-DOOR ( door - )
+  DUP .EXIT.X PL_WORLD_X !
+      .EXIT.Y PL_WORLD_Y !
+  #KEYS -- ;
 
-: DOOR.EXIT  ( door - )
-  DUP  DOOR.EXIT.X PL_WORLD_X !
-  SWAP DOOR.EXIT.Y PL_WORLD_Y !
-  -1 #KEYS += ( TODO ADD -- ) ;
+: EXIT-DOOR  ( door - )
+  DUP .ENTRY.X PL_WORLD_X !
+      .ENTRY.Y PL_WORLD_Y ! ;
+
+: NTH-DOOR ( n -- door ) DOORS 1+ SWAP CELLS + @ ;
+
+: HAS-KEY? #KEYS @ 0 > ;
 
 : KEYBOARD-INPUT
   KEY_SPACE PRESSED? IF JUMP ELSE FALSE JUMPING ! THEN
   ACCELERATE
   KEY_UP PRESSED? IF
     DOORS C@ 1- FOR
-      DOORS 1+ I CELLS + @
-      DUP DOOR-ENTRY? #KEYS @ 0 > AND IF
-        DOOR.ENTER
+      I NTH-DOOR
+      DUP AT-ENTRY? HAS-KEY? AND IF
+        ENTER-DOOR
       ELSE
-        DOOR-EXIT? IF DOOR.EXIT THEN
+        AT-EXIT? IF EXIT-DOOR THEN
       THEN
     NEXT
   THEN
