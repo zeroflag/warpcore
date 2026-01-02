@@ -497,7 +497,7 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
   THEN
   PLAYER .VX @ 0 > IF
     TILE-E SOLID = IF
-      PLAYER .WX @ $FFF8 AND PLAYER .WX !
+      $FFF8 PLAYER .WX AND!
       0 PLAYER .SX !
       0 PLAYER .VX !
     THEN
@@ -507,7 +507,7 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
   PLAYER .VY @ 0 > IF
     TILE-SW SOLID = 
     TILE-SE SOLID = OR IF
-      PLAYER .WY @ $FFF8 AND PLAYER .WY !
+      $FFF8 PLAYER .WY AND!
       0 PLAYER .VY !
       0 PLAYER .SY !
     THEN
