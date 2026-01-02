@@ -54,7 +54,7 @@ CREATE PLAYER [
   0     ,  ( KEYS COLLECTED )
 ]
 
-: .SX          CELL + ;
+: .SX            CELL  + ;
 : .SY          2 CELLS + ;
 : .WX          3 CELLS + ;
 : .WY          4 CELLS + ;
@@ -269,10 +269,10 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
 
 : SIGN ?DUP IF DUP ABS / ELSE 0 THEN ;
 
-: X!   ( spr -- )   1+  C! ;
-: Y!   ( spr -- )   2 + C! ;
-: X@   ( n spr -- ) 1+  C@ ;
-: Y@   ( n spr -- ) 2 + C@ ;
+: SCR-X! ( spr -- ) 1+  C! ;
+: SCR-Y! ( spr -- ) 2 + C! ;
+: SCR-X@ ( spr -- ) 1+  C@ ;
+: SCR-Y@ ( spr -- ) 2 + C@ ;
 
 : PROP! ( n spr -- ) 3 + C! ;
 : PROP@ ( n spr -- ) 3 + C@ ;
@@ -474,8 +474,8 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
     $FF PLAYER .SY AND!
   THEN ;
 
-: FINALIZE-X PLAYER .WX @ CAM_X @ - PLAYER @ X! ;
-: FINALIZE-Y PLAYER .WY @ PLAYER @ Y! ;
+: FINALIZE-X PLAYER .WX @ CAM_X @ - PLAYER @ SCR-X! ;
+: FINALIZE-Y PLAYER .WY @ PLAYER @ SCR-Y! ;
 
 : FLIP   PLAYER @ PROP@ %00000010 OR  PLAYER @ PROP! ;
 : UNFLIP PLAYER @ PROP@ %11111101 AND PLAYER @ PROP! ;
@@ -574,7 +574,7 @@ BEGIN
       THEN
     THEN
     
-    \ " X=" PRINT PLAYER @ X@ . "  Y=" PRINT PLAYER Y@ .
+    \ " X=" PRINT PLAYER @ SCR-X@ . "  Y=" PRINT PLAYER SCR-Y@ .
     \ "  WX=" PRINT PLAYER .WX @ . "  WY=" PRINT PLAYER .WY @ .
     \ "  CAM_X=" PRINT CAM_X @ . CR
 
