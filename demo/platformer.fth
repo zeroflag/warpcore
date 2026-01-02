@@ -70,8 +70,10 @@ CREATE PLAYER [
   DUP  .WX @ OVER .WIDTH  @ 2 / +
   OVER .WY @ ROT  .HEIGHT @ 2 / + ;
 
-: .CENTER_T ( player -- tx ty )
-  .CENTER TILE_HEIGHT / SWAP TILE_WIDTH / SWAP ;
+: .TILE ( player -- tx ty )
+  .CENTER TILE_HEIGHT /
+   SWAP   TILE_WIDTH  /
+   SWAP ;
 
 CREATE IDLE [
   0  C,  ( INDEX )
@@ -412,12 +414,16 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
   + ;
 
 : AT-ENTRY? ( door -- bool )
-  DUP .ENTRY.TX SWAP .ENTRY.TY
-  PLAYER .CENTER_T DISTANCE DUP . CR 0 = ;
+  DUP    .ENTRY.TX
+  SWAP   .ENTRY.TY
+  PLAYER .TILE
+  DISTANCE DUP . CR 0 = ;
 
 : AT-EXIT? ( door -- bool )
-  DUP .EXIT.TX SWAP .EXIT.TY
-  PLAYER .CENTER_T DISTANCE 0 = ;
+  DUP    .EXIT.TX
+  SWAP   .EXIT.TY
+  PLAYER .TILE
+  DISTANCE 0 = ;
 
 : OPEN? ( door - bool ) .STATUS C@ ;
 
