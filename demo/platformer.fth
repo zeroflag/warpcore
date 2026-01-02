@@ -403,11 +403,14 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
     BOOST-JUMP
   THEN ;
 
-: .ENTRY.TX ( door -- n )           @ ;
-: .ENTRY.TY ( door -- n )   CELL  + @ ;
-: .EXIT.TX  ( door -- n ) 2 CELLS + @ ;
-: .EXIT.TY  ( door -- n ) 3 CELLS + @ ;
-: .STATUS   ( door -- a ) 4 CELLS + ;
+: .ENTRY ( door -- tx ty )
+   DUP @ SWAP CELL + @ ;
+
+: .EXIT  ( door -- tx ty )
+   DUP  2 CELLS + @
+   SWAP 3 CELLS + @ ;
+
+: .STATUS ( door -- a ) 4 CELLS + ;
 
 : DISTANCE ( x1 y1 x2 y2 -- n )
   ROT - ABS  \ |y2 - y1|
@@ -415,17 +418,11 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
   SWAP - ABS \ |x2 - x1|
   + ;
 
-: AT-ENTRY? ( door -- bool )
-  DUP    .ENTRY.TX
-  SWAP   .ENTRY.TY
-  PLAYER .TILE
-  DISTANCE 0 = ;
+: AT-TILE? ( tx ty -- bool )
+  PLAYER .TILE DISTANCE 0 = ;
 
-: AT-EXIT? ( door -- bool )
-  DUP    .EXIT.TX
-  SWAP   .EXIT.TY
-  PLAYER .TILE
-  DISTANCE 0 = ;
+: AT-ENTRY? ( door -- bool ) .ENTRY AT-TILE? ;
+: AT-EXIT?  ( door -- bool ) .EXIT  AT-TILE? ;
 
 : OPEN? ( door - bool ) .STATUS C@ ;
 
@@ -441,13 +438,15 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
 : ENTER-DOOR ( door - )
   DUP OPEN-DOOR
   ( TODO move cam )
-  DUP .EXIT.TX TILE_WIDTH  * PLAYER .WX !
-      .EXIT.TY TILE_HEIGHT * PLAYER .WY !
+  .EXIT
+  TILE_HEIGHT * PLAYER .WY !
+  TILE_WIDTH  * PLAYER .WX !
   PLAYER .KEYS DEC! ;
 
 : EXIT-DOOR  ( door - )
-  DUP .ENTRY.TX PLAYER .WX !
-      .ENTRY.TY PLAYER .WY ! ;
+  .ENTRY
+  TILE_HEIGHT * PLAYER .WY !
+  TILE_WIDTH  * PLAYER .WX ! ;
 
 : NTH-DOOR ( n -- door ) DOORS 1+ SWAP CELLS + @ ;
 
