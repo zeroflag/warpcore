@@ -29,17 +29,23 @@ NINE THREE * V1 !
 V1 @ 27 =ASSERT
 V2 @ 42 =ASSERT
 
-8 V2 +=
+8 V2 +!
 V2 @ 50 =ASSERT
 
-7 V1 -=
+7 V1 -!
 V1 @ 20 =ASSERT
 
-V1 --
+V1 DEC!
 V1 @ 19 =ASSERT
 
-V1 ++
+V1 INC!
 V1 @ 20 =ASSERT
+
+7 V1 AND!
+V1 @ 4  =ASSERT
+
+10 V1 OR!
+V1 @ 14  =ASSERT
 
 13 1- FOR
   BUF1 I + C@ 0 =ASSERT

@@ -5,18 +5,21 @@
 EXIT
 
 : C@  @ $FF AND EXIT
-: ++  DUP @ 1+ SWAP ! EXIT
-: --  DUP @ 1- SWAP ! EXIT
-: +=  DUP @ ROT + SWAP ! EXIT
-: -=  DUP @ ROT - SWAP ! EXIT
+: +!  DUP @ ROT + SWAP ! EXIT
+: -!  DUP @ ROT - SWAP ! EXIT
+: INC! DUP @ 1+ SWAP ! EXIT
+: DEC! DUP @ 1- SWAP ! EXIT
+: AND! DUP @ ROT AND SWAP ! EXIT
+: OR!  DUP @ ROT OR  SWAP ! EXIT
+
 : DP  $182 EXIT
 
 : MAIN  $0190 EXIT
 : BASE  $0184 EXIT
 : ENTRY DP @ MAIN 1+ ! EXIT IMMEDIATE
 
-: ,   DP @  ! DP ++ DP ++ EXIT
-: C,  DP @ C! DP ++ EXIT
+: ,   DP @  ! 2 DP +! EXIT
+: C,  DP @ C! DP INC! EXIT
 
 : CODE R>    DUP C@ SWAP 1+  >R C, EXIT
 : SUB  R> 1+ DUP  @ SWAP 2 + >R  , EXIT
@@ -32,7 +35,7 @@ EXIT
 : TRUE       -1 LITERAL ; IMMEDIATE
 : FALSE       0 LITERAL ; IMMEDIATE
 : CELL        2 LITERAL ; IMMEDIATE
-: SCRATCH $7F7E LITERAL ; IMMEDIATE
+: SCRATCH $7FAE LITERAL ; IMMEDIATE
 
 : CELLS CELL * ;
 : ALLOT DP @ + DP ! ;

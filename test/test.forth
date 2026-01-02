@@ -63,7 +63,7 @@ TEN SUMN . CR
 V1 @ . CR
 V1 @ 1 + . CR
 
-V1 ++ V1 ++
+V1 INC! V1 INC!
 V1 @ . CR
 
 7 FACTORIAL . CR

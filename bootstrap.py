@@ -272,10 +272,10 @@ DEFS = """
   ROT $FF AND OR
   SWAP ! ;
 : C@  @ $FF AND ;
-: ++ DUP @ 1+ SWAP ! ;
+: INC! DUP @ 1+ SWAP ! ;
 
-: ,   DP @   ! DP ++ DP ++ ;
-: C,  DP @  C! DP ++ ;
+: ,   DP @   ! DP INC! DP INC! ;
+: C,  DP @  C! DP INC! ;
 
 : CODE R>    DUP C@ SWAP 1+  >R C, ;
 : SUB  R> 1+ DUP  @ SWAP 2 + >R  , ;
@@ -294,7 +294,7 @@ DEFS = """
     DUP NON-ZERO?
   WHILE
     DUP C@ EMIT
-    1 +
+    1+
   REPEAT
   DROP ;
 
