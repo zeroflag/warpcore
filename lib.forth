@@ -100,6 +100,9 @@ EXIT
   REPEAT
   DROP ;
 
+: CR 10 EMIT ;
+: PRINTLN PRINT CR ;
+
 : "
   CODE LIT MARK ( Mark1: addr of string )
   CODE JMP MARK ( Mark2: length )
@@ -123,8 +126,6 @@ EXIT
 : TUCK  DUP ROT ROT ;
 
 : BETWEEN? OVER >= -ROT <= AND ;
-
-: CR 10 EMIT ;
 
 : /MOD 2DUP % -ROT / ;
 
