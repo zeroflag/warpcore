@@ -431,9 +431,7 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
 : OPEN? ( door - bool ) .STATUS C@ ;
 
 : OPEN-DOOR ( door -- )
-  ( TODO update status not TILE )
-  TRUE OVER .STATUS C!
-  DROP ;
+  TRUE SWAP .STATUS C! ;
 
 : ENTER-DOOR ( door - )
   DUP OPEN-DOOR
