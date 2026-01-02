@@ -41,12 +41,12 @@ VARIABLE CAM_X
 
 CREATE PLAYER [
   SPR   ,  ( SPRITE )
-  0     ,  ( WORLD SUBPIXEL X )
-  0     ,  ( WORLD SUBPIXEL Y )
   0     ,  ( WORLD X COORD. )
   0     ,  ( WORLD Y COORD. )
   8     ,  ( WIDTH )
   8     ,  ( HEIGHT )
+  0     ,  ( WORLD SUBPIXEL X )
+  0     ,  ( WORLD SUBPIXEL Y )
   0     ,  ( VX )
   0     ,  ( VY )
   FALSE ,  ( JUMPING )
@@ -54,17 +54,24 @@ CREATE PLAYER [
   0     ,  ( KEYS COLLECTED )
 ]
 
-: .SX          CELL  + ;
-: .SY        2 CELLS + ;
-: .WX        3 CELLS + ;
-: .WY        4 CELLS + ;
-: .WIDTH     5 CELLS + ;
-: .HEIGHT    6 CELLS + ;
+: .WX          CELL  + ;
+: .WY        2 CELLS + ;
+: .WIDTH     3 CELLS + ;
+: .HEIGHT    4 CELLS + ;
+: .SX        5 CELLS + ;
+: .SY        6 CELLS + ;
 : .VX        7 CELLS + ;
 : .VY        8 CELLS + ;
 : .JUMPING   9 CELLS + ;
 : .FACING    10 CELLS + ;
 : .KEYS      11 CELLS + ;
+
+: .CENTER ( player -- x y )
+  DUP  .WX @ OVER .WIDTH  @ 2 / +
+  OVER .WY @ ROT  .HEIGHT @ 2 / + ;
+
+: .CENTER_T ( player -- tx ty )
+  .CENTER TILE_HEIGHT / SWAP TILE_WIDTH / SWAP ;
 
 CREATE IDLE [
   0  C,  ( INDEX )
@@ -392,45 +399,47 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
     BOOST-JUMP
   THEN ;
 
-: .ENTRY.X ( door -- n )           @ TILE_WIDTH  * ;
-: .ENTRY.Y ( door -- n )   CELL  + @ TILE_HEIGHT * ;
-: .EXIT.X  ( door -- n ) 2 CELLS + @ TILE_WIDTH  * ;
-: .EXIT.Y  ( door -- n ) 3 CELLS + @ TILE_HEIGHT * ;
-: .STATUS  ( door -- a ) 4 CELLS + ;
+: .ENTRY.TX ( door -- n )           @ ;
+: .ENTRY.TY ( door -- n )   CELL  + @ ;
+: .EXIT.TX  ( door -- n ) 2 CELLS + @ ;
+: .EXIT.TY  ( door -- n ) 3 CELLS + @ ;
+: .STATUS   ( door -- a ) 4 CELLS + ;
+
+: DISTANCE ( x1 y1 x2 y2 -- n )
+  ROT - ABS  \ |y2 - y1|
+ -ROT
+  SWAP - ABS \ |x2 - x1|
+  + ;
 
 : AT-ENTRY? ( door -- bool )
-  ( TODO rct )
-  PLAYER .WX @ OVER .ENTRY.X PLAYER .WX @ 8 + BETWEEN?
-  PLAYER .WY @ ROT  .ENTRY.Y PLAYER .WY @ 8 + BETWEEN?
-  AND ;
+  DUP .ENTRY.TX SWAP .ENTRY.TY
+  PLAYER .CENTER_T DISTANCE DUP . CR 0 = ;
 
 : AT-EXIT? ( door -- bool )
-  ( TODO rct )
-  PLAYER .WX @ OVER .EXIT.X PLAYER .WX @ 8 + BETWEEN?
-  PLAYER .WY @ ROT  .EXIT.Y PLAYER .WY @ 8 + BETWEEN?
-  AND ;
+  DUP .EXIT.TX SWAP .EXIT.TY
+  PLAYER .CENTER_T DISTANCE 0 = ;
 
 : OPEN? ( door - bool ) .STATUS C@ ;
 
 : OPEN-DOOR ( door -- )
   ( TODO update status not TILE )
   TRUE OVER .STATUS C!
-  DUP .ENTRY.X OVER .ENTRY.Y    TILE 46 SWAP C!
-  DUP .ENTRY.X OVER .ENTRY.Y 1- TILE 37 SWAP C!
-  DUP .EXIT.X  OVER .EXIT.Y     TILE 46 SWAP C! 
-  DUP .EXIT.X  OVER .EXIT.Y  1- TILE 37 SWAP C! 
+  DUP .ENTRY.TX OVER .ENTRY.TY    TILE 46 SWAP C!
+  DUP .ENTRY.TX OVER .ENTRY.TY 1- TILE 37 SWAP C!
+  DUP .EXIT.TX  OVER .EXIT.TY     TILE 46 SWAP C! 
+  DUP .EXIT.TX  OVER .EXIT.TY  1- TILE 37 SWAP C! 
   DROP ;
 
 : ENTER-DOOR ( door - )
   DUP OPEN-DOOR
   ( TODO move cam )
-  DUP .EXIT.X PLAYER .WX !
-      .EXIT.Y PLAYER .WY !
+  DUP .EXIT.TX PLAYER .WX !
+      .EXIT.TY PLAYER .WY !
   PLAYER .KEYS DEC! ;
 
 : EXIT-DOOR  ( door - )
-  DUP .ENTRY.X PLAYER .WX !
-      .ENTRY.Y PLAYER .WY ! ;
+  DUP .ENTRY.TX PLAYER .WX !
+      .ENTRY.TY PLAYER .WY ! ;
 
 : NTH-DOOR ( n -- door ) DOORS 1+ SWAP CELLS + @ ;
 
@@ -576,6 +585,7 @@ BEGIN
     
     \ " X=" PRINT PLAYER @ SCR-X@ . "  Y=" PRINT PLAYER SCR-Y@ .
     \ "  WX=" PRINT PLAYER .WX @ . "  WY=" PRINT PLAYER .WY @ .
+    \ "  CX=" PRINT PLAYER .CENTER . "  CY=" PRINT .
     \ "  CAM_X=" PRINT CAM_X @ . CR
 
     DEPTH 0 <> IF
