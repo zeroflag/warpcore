@@ -54,17 +54,17 @@ CREATE PLAYER [
   0     ,  ( KEYS COLLECTED )
 ]
 
-: .SX            CELL  + ;
-: .SY          2 CELLS + ;
-: .WX          3 CELLS + ;
-: .WY          4 CELLS + ;
-: .WIDTH       5 CELLS + ;
-: .HEIGHT      6 CELLS + ;
-: .VX          7 CELLS + ;
-: .VY          8 CELLS + ;
-: .JUMPING     9 CELLS + ;
-: .LAST_FACING 10 CELLS + ;
-: .KEYS        11 CELLS + ;
+: .SX          CELL  + ;
+: .SY        2 CELLS + ;
+: .WX        3 CELLS + ;
+: .WY        4 CELLS + ;
+: .WIDTH     5 CELLS + ;
+: .HEIGHT    6 CELLS + ;
+: .VX        7 CELLS + ;
+: .VY        8 CELLS + ;
+: .JUMPING   9 CELLS + ;
+: .FACING    10 CELLS + ;
+: .KEYS      11 CELLS + ;
 
 CREATE IDLE [
   0  C,  ( INDEX )
@@ -290,9 +290,9 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
 
 : FACING
   PLAYER .VX @ 0 = IF
-    PLAYER .LAST_FACING @
+    PLAYER .FACING @
   ELSE
-    PLAYER .VX @ SIGN DUP PLAYER .LAST_FACING !
+    PLAYER .VX @ SIGN DUP PLAYER .FACING !
   THEN ;
 
 : LIFT PLAYER .VY @ SIGN ;
