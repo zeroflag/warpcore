@@ -429,28 +429,28 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
 : AT-ENTRY? ( door -- bool ) .ENTRY AT-TILE? ;
 : AT-EXIT?  ( door -- bool ) .EXIT  AT-TILE? ;
 
-: OPEN? ( door - bool ) .STATUS C@ ;
+: OPEN? ( door - bool ) .STATUS C@ 1 = ;
 
 : OPEN-DOOR ( door -- )
-  TRUE SWAP .STATUS C! ;
+  1 SWAP .STATUS C! ;
 
 : ENTER-DOOR ( door - )
+  DUP OPEN? INVERT IF
+    PLAYER .KEYS DEC!
+  THEN
   DUP OPEN-DOOR
-  ( TODO move cam )
   .EXIT
   TILE_HEIGHT * PLAYER .WY !
   TILE_WIDTH  * PLAYER .WX !
-
+  ( TODO )
   PLAYER .WX @ CAM_X !
-  CAM_X @ PORT_SCROLL OUT
+  CAM_X @ PORT_SCROLL OUT ;
   
-  PLAYER .KEYS DEC! ;
-
 : EXIT-DOOR  ( door - )
   .ENTRY
   TILE_HEIGHT * PLAYER .WY !
   TILE_WIDTH  * PLAYER .WX !
-
+  ( TODO )
   PLAYER .WX @ CAM_X !
   CAM_X @ PORT_SCROLL OUT
 ;
