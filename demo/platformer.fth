@@ -51,7 +51,8 @@ CREATE PLAYER [
   0     ,  ( VY )
   FALSE ,  ( JUMPING )
   0     ,  ( LAST FACING )
-  0     ,  ( KEYS COLLECTED )
+  0     ,  ( KEYS  COLLECTED )
+  0     ,  ( COINS COLLECTED )
 ]
 
 : .WX          CELL  + ;
@@ -65,6 +66,7 @@ CREATE PLAYER [
 : .JUMPING   9 CELLS + ;
 : .FACING    10 CELLS + ;
 : .KEYS      11 CELLS + ;
+: .COINS     12 CELLS + ;
 
 : .CENTER ( player -- x y )
   DUP  .WX @ OVER .WIDTH  @ 2 / +
@@ -417,7 +419,7 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
   DUP    .ENTRY.TX
   SWAP   .ENTRY.TY
   PLAYER .TILE
-  DISTANCE DUP . CR 0 = ;
+  DISTANCE 0 = ;
 
 : AT-EXIT? ( door -- bool )
   DUP    .EXIT.TX
@@ -430,17 +432,17 @@ CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
 : OPEN-DOOR ( door -- )
   ( TODO update status not TILE )
   TRUE OVER .STATUS C!
-  DUP .ENTRY.TX OVER .ENTRY.TY    TILE 46 SWAP C!
-  DUP .ENTRY.TX OVER .ENTRY.TY 1- TILE 37 SWAP C!
-  DUP .EXIT.TX  OVER .EXIT.TY     TILE 46 SWAP C! 
-  DUP .EXIT.TX  OVER .EXIT.TY  1- TILE 37 SWAP C! 
+  \ DUP .ENTRY.TX OVER .ENTRY.TY    TILE 46 SWAP C!
+  \ DUP .ENTRY.TX OVER .ENTRY.TY 1- TILE 37 SWAP C!
+  \ DUP .EXIT.TX  OVER .EXIT.TY     TILE 46 SWAP C! 
+  \ DUP .EXIT.TX  OVER .EXIT.TY  1- TILE 37 SWAP C! 
   DROP ;
 
 : ENTER-DOOR ( door - )
   DUP OPEN-DOOR
   ( TODO move cam )
-  DUP .EXIT.TX PLAYER .WX !
-      .EXIT.TY PLAYER .WY !
+  DUP .EXIT.TX TILE_WIDTH  * PLAYER .WX !
+      .EXIT.TY TILE_HEIGHT * PLAYER .WY !
   PLAYER .KEYS DEC! ;
 
 : EXIT-DOOR  ( door - )
@@ -576,9 +578,9 @@ BEGIN
     SCROLL
     SET-ANIMATION
 
-    PLAYER .WX @ PLAYER .WY @
-    PLAYER .VX @ 0 > IF SWAP 8 + SWAP THEN
+    PLAYER .CENTER
     2DUP TILE C@ 42 = IF
+      PLAYER .COINS INC!
       63 -ROT TILE C!
     ELSE
       2DUP TILE C@ 45 = IF
