@@ -432,10 +432,14 @@ CREATE KEYS   [ 2 C, ( SIZE ) KEY_1   , KEY_2   , ]
     BOOST-JUMP
   THEN ;
 
-: .TPOS ( item -- tx ty ) DUP @ SWAP CELL + @ ;
+: # ( item -- n ) C@ ;
+: NTH-ITEM  ( n items -- item ) 1+ SWAP CELLS + @ ;
+: ITEM-USED? ( item -- bool ) .ITEM-STATUS C@ 1 = ;
+: USE-ITEM ( item -- ) 1 SWAP .ITEM-STATUS C! ;
 
-: .EXIT   ( door -- a ) 2 CELLS + ;
-: .STATUS ( door -- a ) 4 CELLS + ;
+: .ITEM-TPOS ( item -- tx ty ) DUP @ SWAP CELL + @ ;
+: .ITEM-STATUS ( item -- a ) 4 CELLS + ;
+: .DOOR-EXIT   ( door -- a ) 2 CELLS + ;
 
 : DISTANCE ( x1 y1 x2 y2 -- n )
   ROT - ABS  \ |y2 - y1|
@@ -446,15 +450,12 @@ CREATE KEYS   [ 2 C, ( SIZE ) KEY_1   , KEY_2   , ]
 : PLAYER-HERE? ( tx ty -- bool )
   PLAYER .TILE DISTANCE 0 = ;
 
-: ITEM-USED? ( item -- bool ) .STATUS C@ 1 = ;
-: OPEN  ( item -- ) 1 SWAP .STATUS C! ;
-
 : ENTER-DOOR ( door - )
   DUP ITEM-USED? INVERT IF
     PLAYER .KEYS DEC!
   THEN
-  DUP OPEN
-  .EXIT .TPOS
+  DUP USE-ITEM
+  .DOOR-EXIT .ITEM-TPOS
   TILE_HEIGHT * PLAYER .WY !
   TILE_WIDTH  * PLAYER .WX !
   ( TODO )
@@ -462,31 +463,26 @@ CREATE KEYS   [ 2 C, ( SIZE ) KEY_1   , KEY_2   , ]
   CAM_X @ PORT_SCROLL OUT ;
   
 : EXIT-DOOR  ( door - )
-  .TPOS
+  .ITEM-TPOS
   TILE_HEIGHT * PLAYER .WY !
   TILE_WIDTH  * PLAYER .WX !
   ( TODO )
   PLAYER .WX @ CAM_X !
-  CAM_X @ PORT_SCROLL OUT
-;
-
-: NTH-ITEM  ( n items -- item ) 1+ SWAP CELLS + @ ;
+  CAM_X @ PORT_SCROLL OUT ;
 
 : HAS-KEY? PLAYER .KEYS @ 0 > ;
 : CAN-ENTER? ITEM-USED? HAS-KEY? OR ;
-
-: # ( item -- n )  C@ ;
 
 : CHECK-DOORS
   ITEMS_CHECKED @ IF EXIT THEN
   DOORS # 1-
   FOR
     I DOORS NTH-ITEM
-    DUP .TPOS PLAYER-HERE?
+    DUP .ITEM-TPOS PLAYER-HERE?
     OVER CAN-ENTER? AND IF
       ENTER-DOOR
     ELSE
-      DUP .EXIT .TPOS PLAYER-HERE? IF EXIT-DOOR ELSE DROP THEN
+      DUP .DOOR-EXIT .ITEM-TPOS PLAYER-HERE? IF EXIT-DOOR ELSE DROP THEN
     THEN
   NEXT ;
 
@@ -495,7 +491,7 @@ CREATE KEYS   [ 2 C, ( SIZE ) KEY_1   , KEY_2   , ]
   CHESTS # 1-
   FOR
     I CHESTS NTH-ITEM
-    DUP .TPOS PLAYER-HERE? IF OPEN ELSE DROP THEN
+    DUP .ITEM-TPOS PLAYER-HERE? IF USE-ITEM ELSE DROP THEN
   NEXT ;
 
 : KEYBOARD-INPUT
@@ -587,15 +583,15 @@ CREATE KEYS   [ 2 C, ( SIZE ) KEY_1   , KEY_2   , ]
   FOR
     I DOORS NTH-ITEM
     DUP ITEM-USED? IF
-      DUP .TPOS           TXY>TILE 46 SWAP C!
-      DUP .TPOS 1-        TXY>TILE 37 SWAP C!
-      DUP .EXIT .TPOS     TXY>TILE 46 SWAP C!
-          .EXIT .TPOS  1- TXY>TILE 37 SWAP C!
+      DUP .ITEM-TPOS                TXY>TILE 46 SWAP C!
+      DUP .ITEM-TPOS 1-             TXY>TILE 37 SWAP C!
+      DUP .DOOR-EXIT .ITEM-TPOS     TXY>TILE 46 SWAP C!
+          .DOOR-EXIT .ITEM-TPOS  1- TXY>TILE 37 SWAP C!
     ELSE
-      DUP .TPOS           TXY>TILE 47 SWAP C!
-      DUP .TPOS 1-        TXY>TILE 38 SWAP C!
-      DUP .EXIT .TPOS     TXY>TILE 47 SWAP C!
-          .EXIT .TPOS 1-  TXY>TILE 38 SWAP C!
+      DUP .ITEM-TPOS                TXY>TILE 47 SWAP C!
+      DUP .ITEM-TPOS 1-             TXY>TILE 38 SWAP C!
+      DUP .DOOR-EXIT .ITEM-TPOS     TXY>TILE 47 SWAP C!
+          .DOOR-EXIT .ITEM-TPOS 1-  TXY>TILE 38 SWAP C!
     THEN
   NEXT ;
 
@@ -604,9 +600,9 @@ CREATE KEYS   [ 2 C, ( SIZE ) KEY_1   , KEY_2   , ]
   FOR
     I CHESTS NTH-ITEM
     DUP ITEM-USED? IF
-      .TPOS TXY>TILE 44 SWAP C!
+      .ITEM-TPOS TXY>TILE 44 SWAP C!
     ELSE
-      .TPOS TXY>TILE 43 SWAP C!
+      .ITEM-TPOS TXY>TILE 43 SWAP C!
     THEN
   NEXT ;
 
@@ -617,7 +613,7 @@ CREATE KEYS   [ 2 C, ( SIZE ) KEY_1   , KEY_2   , ]
     DUP ITEM-USED? IF
       DROP
     ELSE
-      .TPOS TXY>TILE 45 SWAP C!
+      .ITEM-TPOS TXY>TILE 45 SWAP C!
     THEN
   NEXT ;
 
