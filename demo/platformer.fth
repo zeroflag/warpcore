@@ -676,11 +676,8 @@ BEGIN
     DEPTH 0 <> IF
       " ERROR: " PRINT DEPTH . CR
     THEN
-    
 
-   \ PLAYER @ Y@ 8 + 224 >= IF 0 HALT THEN
     TICKS TIMER !
-
   THEN
 
   ANIM_TIMER @ TICKS - ABS 150 > IF
