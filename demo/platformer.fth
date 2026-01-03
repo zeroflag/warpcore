@@ -432,14 +432,14 @@ CREATE KEYS   [ 2 C, ( SIZE ) KEY_1   , KEY_2   , ]
     BOOST-JUMP
   THEN ;
 
+: .ITEM-TPOS ( item -- tx ty ) DUP @ SWAP CELL + @ ;
+: .ITEM-STATUS ( item -- a ) 4 CELLS + ;
+: .DOOR-EXIT   ( door -- a ) 2 CELLS + ;
+
 : # ( item -- n ) C@ ;
 : NTH-ITEM  ( n items -- item ) 1+ SWAP CELLS + @ ;
 : ITEM-USED? ( item -- bool ) .ITEM-STATUS C@ 1 = ;
 : USE-ITEM ( item -- ) 1 SWAP .ITEM-STATUS C! ;
-
-: .ITEM-TPOS ( item -- tx ty ) DUP @ SWAP CELL + @ ;
-: .ITEM-STATUS ( item -- a ) 4 CELLS + ;
-: .DOOR-EXIT   ( door -- a ) 2 CELLS + ;
 
 : DISTANCE ( x1 y1 x2 y2 -- n )
   ROT - ABS  \ |y2 - y1|
