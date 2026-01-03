@@ -114,14 +114,14 @@ CREATE DOOR_2 [
 CREATE DOORS [ 2 C, ( SIZE ) DOOR_1 , DOOR_2 , ]
 
 CREATE CHEST_1 [
-  26  ,  ( X ENTRY )
-  5   ,  ( Y ENTRY )
+  26  ,  ( X TILE )
+  5   ,  ( Y TILE )
   0   C, ( STATUS )
 ]
 
 CREATE CHEST_2 [
-  59  ,  ( X ENTRY )
-  22  ,  ( Y ENTRY )
+  59  ,  ( X TILE )
+  22  ,  ( Y TILE )
   0   C, ( STATUS )
 ]
 
@@ -341,16 +341,14 @@ CREATE CHESTS [ 2 C, ( SIZE ) CHEST_1 , CHEST_2 , ]
     THEN
   THEN ;
 
-: TILE-X TILE_WIDTH  / ;
-: TILE-Y TILE_HEIGHT / ;
-
-: TILE2 ( tx ty -- adr )
+: TXY>TILE ( tx ty -- adr )
   #TILES_X 2 * * SWAP +
   $6300 + ;
 
-: TILE ( x y -- adr )
-  TILE-Y #TILES_X 2 * * SWAP TILE-X +
-  $6300 + ;
+: WXY>TILE ( x y -- adr )
+  TILE_HEIGHT / SWAP
+  TILE_WIDTH  / SWAP
+  TXY>TILE ;
 
 : >TYPE ( n -- n )
   DUP 47 = OVER 38 = OR OVER 37 = OR IF
@@ -365,12 +363,12 @@ CREATE CHESTS [ 2 C, ( SIZE ) CHEST_1 , CHEST_2 , ]
   THEN
   DROP AIR ;
 
-: TILE-W  PLAYER .WX @     PLAYER .WY @     TILE C@ >TYPE ;
-: TILE-E  PLAYER .WX @ 7 + PLAYER .WY @     TILE C@ >TYPE ;
-: TILE-SW PLAYER .WX @ 1+  PLAYER .WY @ 8 + TILE C@ >TYPE ;
-: TILE-SE PLAYER .WX @ 7 + PLAYER .WY @ 8 + TILE C@ >TYPE ;
-: TILE-NW PLAYER .WX @ 1+  PLAYER .WY @     TILE C@ >TYPE ;
-: TILE-NE PLAYER .WX @ 7 + PLAYER .WY @     TILE C@ >TYPE ;
+: TILE-W  PLAYER .WX @     PLAYER .WY @     WXY>TILE C@ >TYPE ;
+: TILE-E  PLAYER .WX @ 7 + PLAYER .WY @     WXY>TILE C@ >TYPE ;
+: TILE-SW PLAYER .WX @ 1+  PLAYER .WY @ 8 + WXY>TILE C@ >TYPE ;
+: TILE-SE PLAYER .WX @ 7 + PLAYER .WY @ 8 + WXY>TILE C@ >TYPE ;
+: TILE-NW PLAYER .WX @ 1+  PLAYER .WY @     WXY>TILE C@ >TYPE ;
+: TILE-NE PLAYER .WX @ 7 + PLAYER .WY @     WXY>TILE C@ >TYPE ;
 
 : ON-GROUND?
   TILE-SW SOLID =
@@ -579,15 +577,15 @@ CREATE CHESTS [ 2 C, ( SIZE ) CHEST_1 , CHEST_2 , ]
   FOR
     I NTH-DOOR
     DUP OPEN? IF
-      DUP .TPOS           TILE2 46 SWAP C!
-      DUP .TPOS 1-        TILE2 37 SWAP C!
-      DUP .EXIT .TPOS     TILE2 46 SWAP C!
-          .EXIT .TPOS  1- TILE2 37 SWAP C!
+      DUP .TPOS           TXY>TILE 46 SWAP C!
+      DUP .TPOS 1-        TXY>TILE 37 SWAP C!
+      DUP .EXIT .TPOS     TXY>TILE 46 SWAP C!
+          .EXIT .TPOS  1- TXY>TILE 37 SWAP C!
     ELSE
-      DUP .TPOS           TILE2 47 SWAP C!
-      DUP .TPOS 1-        TILE2 38 SWAP C!
-      DUP .EXIT .TPOS     TILE2 47 SWAP C!
-          .EXIT .TPOS 1-  TILE2 38 SWAP C!
+      DUP .TPOS           TXY>TILE 47 SWAP C!
+      DUP .TPOS 1-        TXY>TILE 38 SWAP C!
+      DUP .EXIT .TPOS     TXY>TILE 47 SWAP C!
+          .EXIT .TPOS 1-  TXY>TILE 38 SWAP C!
     THEN
   NEXT ;
 
@@ -596,9 +594,9 @@ CREATE CHESTS [ 2 C, ( SIZE ) CHEST_1 , CHEST_2 , ]
   FOR
     I NTH-CHEST
     DUP OPEN? IF
-      .TPOS TILE2 44 SWAP C!
+      .TPOS TXY>TILE 44 SWAP C!
     ELSE
-      .TPOS TILE2 43 SWAP C!
+      .TPOS TXY>TILE 43 SWAP C!
     THEN
   NEXT ;
 
@@ -636,13 +634,13 @@ BEGIN
     DRAW
 
     PLAYER .CENTER
-    2DUP TILE C@ 42 = IF
+    2DUP WXY>TILE C@ 42 = IF
       PLAYER .COINS INC!
-      63 -ROT TILE C!
+      63 -ROT WXY>TILE C!
     ELSE
-      2DUP TILE C@ 45 = IF
+      2DUP WXY>TILE C@ 45 = IF
         PLAYER .KEYS INC!
-        63 -ROT TILE C!
+        63 -ROT WXY>TILE C!
       ELSE
         2DROP
       THEN
